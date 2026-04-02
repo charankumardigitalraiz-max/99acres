@@ -34,7 +34,7 @@ export default function Customers() {
 
   useEffect(() => {
     if (role) {
-      const formattedRole = role.charAt(0).toUpperCase() + role.slice(1);
+      const formattedRole = role.charAt(0).toUpperCase() + role.slice(1, -1);
       dispatch(setRoleFilter(formattedRole));
     } else {
       dispatch(setRoleFilter('All'));
@@ -46,7 +46,7 @@ export default function Customers() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-black text-slate-900 tracking-tight capitalize">{role ? `${role}s` : 'Customers'}</h2>
+          <h2 className="text-xl font-black text-slate-900 tracking-tight capitalize">{role || 'Customers'}</h2>
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{filtered.length} total active users</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 bg-white text-[10px] font-bold text-slate-600 hover:bg-slate-50 transition-all uppercase tracking-widest shadow-sm">
@@ -89,7 +89,7 @@ export default function Customers() {
           value={statusFilter}
           onChange={e => dispatch(setStatusFilter(e.target.value))}
         >
-          {statuses.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
+          {statuses.map(s => <option key={s}>{s.toUpperCase()}</option>)}
         </select>
       </div>
 

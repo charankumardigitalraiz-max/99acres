@@ -30,9 +30,12 @@ export const userGrowthData = [
 
 // ─── Subscription Breakdown ───────────────────────────────────────────────────
 export const subscriptionPieData = [
-  { name: 'Basic', value: 1840, color: '#94A3B8' },
-  { name: 'Standard', value: 1280, color: '#F59E0B' },
-  { name: 'Premium', value: 721, color: '#2E353A' },
+  { name: 'Agent Basic', value: 840, color: '#94A3B8' },
+  { name: 'Agent Standard', value: 680, color: '#F59E0B' },
+  { name: 'Agent Premium', value: 321, color: '#2E353A' },
+  { name: 'Seller Basic', value: 1000, color: '#CBD5E1' },
+  { name: 'Seller Standard', value: 600, color: '#FCD34D' },
+  { name: 'Seller Premium', value: 400, color: '#475569' },
 ];
 
 // ─── Recent Activity ──────────────────────────────────────────────────────────
@@ -54,57 +57,114 @@ export const topCities = [
   { city: 'Chennai', listings: 2180, revenue: '₹98,500', growth: '+9.3%' },
 ];
 
-// ─── Subscription Plans ───────────────────────────────────────────────────────
-export const plans = [
+// ─── Subscription Plans (Agent) ───────────────────────────────────────────────
+export const agentPlans = [
   {
-    id: 1,
-    name: 'Basic',
-    monthlyPrice: 999,
-    annualPrice: 9999,
+    id: 'a1',
+    name: 'Basic Agent',
+    monthlyPrice: 1499,
+    annualPrice: 14999,
     color: 'slate',
-    subscribers: 1840,
+    subscribers: 840,
     features: [
-      '10 Property Listings',
-      'Basic Analytics',
+      '20 Property Listings',
+      'Basic Agent Profile',
       'Email Support',
       'Standard Visibility',
       '1 Agent Account',
     ],
-    notIncluded: ['Featured Listings', 'Priority Support', 'API Access'],
+    notIncluded: ['Featured Listings', 'Priority Support', 'API Access', 'Lead Management'],
   },
   {
-    id: 2,
-    name: 'Standard',
-    monthlyPrice: 2499,
-    annualPrice: 24999,
+    id: 'a2',
+    name: 'Standard Agent',
+    monthlyPrice: 3499,
+    annualPrice: 34999,
     color: 'amber',
-    subscribers: 1280,
+    subscribers: 680,
     popular: true,
     features: [
-      '50 Property Listings',
-      'Advanced Analytics',
+      '100 Property Listings',
+      'Verified Agent Badge',
       'Priority Email & Chat Support',
       'Enhanced Visibility',
       '5 Agent Accounts',
-      'Featured Listings (5/month)',
+      'Featured Listings (10/month)',
+      'Basic Lead Management',
     ],
-    notIncluded: ['API Access'],
+    notIncluded: ['API Access', 'Dedicated Account Manager'],
   },
   {
-    id: 3,
-    name: 'Premium',
-    monthlyPrice: 4999,
-    annualPrice: 49999,
+    id: 'a3',
+    name: 'Premium Agent',
+    monthlyPrice: 6999,
+    annualPrice: 69999,
     color: 'dark',
-    subscribers: 721,
+    subscribers: 321,
     features: [
       'Unlimited Property Listings',
-      'Full Analytics Suite',
+      'Premium Agent Branding',
       '24/7 Dedicated Support',
       'Top Visibility & Priority Placement',
       'Unlimited Agent Accounts',
       'Featured Listings (Unlimited)',
       'Full API Access',
+      'Advanced Lead Management',
+      'Dedicated Account Manager',
+    ],
+    notIncluded: [],
+  },
+];
+
+// ─── Subscription Plans (Seller) ──────────────────────────────────────────────
+export const sellerPlans = [
+  {
+    id: 's1',
+    name: 'Basic Seller',
+    monthlyPrice: 999,
+    annualPrice: 9999,
+    color: 'slate',
+    subscribers: 1000,
+    features: [
+      '5 Property Listings',
+      'Standard Seller Profile',
+      'Email Support',
+      'Standard Visibility',
+    ],
+    notIncluded: ['Featured Listings', 'Priority Support', 'Urgent Tag'],
+  },
+  {
+    id: 's2',
+    name: 'Standard Seller',
+    monthlyPrice: 2499,
+    annualPrice: 24999,
+    color: 'amber',
+    subscribers: 600,
+    popular: true,
+    features: [
+      '25 Property Listings',
+      'Verified Seller Badge',
+      'Priority Email & Chat Support',
+      'Enhanced Visibility',
+      'Featured Listings (3/month)',
+      'Urgent Tag on Listings',
+    ],
+    notIncluded: ['Top Placement', 'Dedicated Support'],
+  },
+  {
+    id: 's3',
+    name: 'Premium Seller',
+    monthlyPrice: 4999,
+    annualPrice: 49999,
+    color: 'dark',
+    subscribers: 400,
+    features: [
+      '50 Property Listings',
+      'Premium Seller Branding',
+      '24/7 Dedicated Support',
+      'Top Visibility & Priority Placement',
+      'Featured Listings (Unlimited)',
+      'Social Media Promotion',
     ],
     notIncluded: [],
   },
@@ -139,15 +199,6 @@ export const usersData = [
 
 // ─── Subscribers ──────────────────────────────────────────────────────────────
 export const subscribersData = [
-  { id: 1, name: 'Priya Mehta', email: 'priya.mehta@email.com', plan: 'Premium', startDate: '2024-09-01', expiry: '2025-09-01', status: 'Active', amount: '₹49,999', autoRenew: true },
-  { id: 2, name: 'Amit Verma', email: 'amit.verma@email.com', plan: 'Standard', startDate: '2024-10-15', expiry: '2025-10-15', status: 'Active', amount: '₹24,999', autoRenew: true },
-  { id: 3, name: 'Kiran Rao', email: 'kiran.rao@email.com', plan: 'Standard', startDate: '2024-08-20', expiry: '2025-08-20', status: 'Active', amount: '₹24,999', autoRenew: false },
-  { id: 4, name: 'Vikram Singh', email: 'vikram.singh@email.com', plan: 'Premium', startDate: '2024-07-05', expiry: '2025-07-05', status: 'Active', amount: '₹49,999', autoRenew: true },
-  { id: 5, name: 'Suresh Nair', email: 'suresh.nair@email.com', plan: 'Basic', startDate: '2024-11-01', expiry: '2025-11-01', status: 'Active', amount: '₹9,999', autoRenew: true },
-  { id: 6, name: 'Rohit Gupta', email: 'rohit.gupta@email.com', plan: 'Basic', startDate: '2024-03-01', expiry: '2025-03-01', status: 'Expired', amount: '₹9,999', autoRenew: false },
-  { id: 7, name: 'Manoj Kumar', email: 'manoj.kumar@email.com', plan: 'Standard', startDate: '2024-01-15', expiry: '2025-01-15', status: 'Expired', amount: '₹24,999', autoRenew: false },
-  { id: 8, name: 'Divya Reddy', email: 'divya.reddy@email.com', plan: 'Basic', startDate: '2024-12-01', expiry: '2025-12-01', status: 'Active', amount: '₹9,999', autoRenew: true },
-  { id: 9, name: 'Ananya Krishnan', email: 'ananya.k@email.com', plan: 'Premium', startDate: '2024-10-01', expiry: '2025-10-01', status: 'Active', amount: '₹49,999', autoRenew: true },
   { id: 10, name: 'Meena Iyer', email: 'meena.iyer@email.com', plan: 'Standard', startDate: '2024-11-15', expiry: '2025-11-15', status: 'Active', amount: '₹24,999', autoRenew: false },
 ];
 
@@ -573,4 +624,112 @@ export const categoriesData = [
   { id: 7, name: 'Independent House', slug: 'independent-house', status: 'Active', description: 'Standalone independent houses', image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80' },
 
   { id: 8, name: 'Land', slug: 'land', status: 'Active', description: 'Open lands for sale', image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80' }
+];
+
+// ─── Support Tickets ──────────────────────────────────────────────────────────
+export const supportTickets = [
+  {
+    id: 'TKT-101',
+    subject: 'Login issue',
+    user: 'Rahul Sharma',
+    email: 'rahul.sharma@email.com',
+    phone: '+91 98765 43210',
+    priority: 'High',
+    status: 'Open',
+    category: 'Technical',
+    date: '2024-03-28',
+    description: "I am unable to login to my account even after resetting my password. It keeps saying 'Invalid credentials'.",
+    messages: [
+      { sender: 'Rahul Sharma', role: 'user', content: "I am unable to login to my account even after resetting my password. It keeps saying 'Invalid credentials'.", time: '2024-03-28 10:00 AM' },
+    ]
+  },
+  {
+    id: 'TKT-102',
+    subject: 'Refund request',
+    user: 'Priya Mehta',
+    email: 'priya.mehta@email.com',
+    phone: '+91 87654 32109',
+    priority: 'Medium',
+    status: 'In Progress',
+    category: 'Billing',
+    date: '2024-03-29',
+    description: "I was charged twice for the Premium plan this month. Please refund the extra amount.",
+    messages: [
+      { sender: 'Priya Mehta', role: 'user', content: "I was charged twice for the Premium plan this month. Please refund the extra amount.", time: '2024-03-29 02:00 PM' },
+      { sender: 'Admin', role: 'admin', content: "Hello Priya, we are looking into this with our billing partner. We will get back to you shortly.", time: '2024-03-29 03:30 PM' },
+    ]
+  },
+  {
+    id: 'TKT-103',
+    subject: 'Property listing error',
+    user: 'Amit Verma',
+    email: 'amit.verma@email.com',
+    phone: '+91 76543 21098',
+    priority: 'Low',
+    status: 'Closed',
+    category: 'Content',
+    date: '2024-03-25',
+    description: "I am getting an error 'Image size too large' when uploading property photos even though they are under 2MB.",
+    messages: [
+      { sender: 'Amit Verma', role: 'user', content: "I am getting an error 'Image size too large' when uploading property photos even though they are under 2MB.", time: '2024-03-25 09:00 AM' },
+      { sender: 'Admin', role: 'admin', content: "Hi Amit, we have increased the upload limit for your account. Please try again.", time: '2024-03-25 11:45 AM' },
+      { sender: 'Amit Verma', role: 'user', content: "Thanks, it works now!", time: '2024-03-25 12:30 PM' },
+    ]
+  },
+  {
+    id: 'TKT-104',
+    subject: 'Account verification',
+    user: 'Sneha Patel',
+    email: 'sneha.patel@email.com',
+    phone: '+91 65432 10987',
+    priority: 'High',
+    status: 'Open',
+    category: 'Account',
+    date: '2024-03-30',
+    description: "My Aadhaar verification has been pending for over 3 days. Can you please speed it up?",
+    messages: [
+      { sender: 'Sneha Patel', role: 'user', content: "My Aadhaar verification has been pending for over 3 days. Can you please speed it up?", time: '2024-03-30 11:00 AM' },
+    ]
+  },
+  {
+    id: 'TKT-105',
+    subject: 'API access query',
+    user: 'Vikram Singh',
+    email: 'vikram.singh@email.com',
+    phone: '+91 43210 98765',
+    priority: 'Medium',
+    status: 'Open',
+    category: 'Technical',
+    date: '2024-03-31',
+    description: "I want to integrate your property listings into my CRM via API. Can you provide the documentation?",
+    messages: [
+      { sender: 'Vikram Singh', role: 'user', content: "I want to integrate your property listings into my CRM via API. Can you provide the documentation?", time: '2024-03-31 04:00 PM' },
+    ]
+  },
+];
+
+
+// ─── Reviews ──────────────────────────────────────────────────────────────────
+export const reviewsData = [
+  { id: 1, propertyId: 1, property: 'Palm Springs Villa', user: 'Ananya K.', rating: 5, comment: 'Amazing property and very smooth process.', date: '2024-03-15', status: 'Approved' },
+  { id: 2, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rohit G.', rating: 4, comment: 'Great location, but the price is a bit high.', date: '2024-03-18', status: 'Pending' },
+  { id: 3, propertyId: 3, property: 'Commercial Retail Space', user: 'Meena I.', rating: 3, comment: 'The area is good, but maintenance is lacking.', date: '2024-03-20', status: 'Approved' },
+  { id: 4, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Suresh N.', rating: 5, comment: 'Excellent investment opportunity.', date: '2024-03-22', status: 'Approved' },
+  { id: 5, propertyId: 5, property: 'Ocean View Penthouse', user: 'Divya R.', rating: 2, comment: 'Multiple issues with the plumbing.', date: '2024-03-25', status: 'Flagged' },
+];
+
+// ─── Staff ────────────────────────────────────────────────────────────────────
+export const staffRoles = [
+  { id: 1, name: 'Super Admin', members: 2, permissions: ['Full Access', 'User Management', 'Financials', 'System Settings'] },
+  { id: 2, name: 'Moderator', members: 5, permissions: ['Content Approval', 'User Support', 'Review Moderation'] },
+  { id: 3, name: 'Sales Manager', members: 3, permissions: ['Subscription Management', 'Lead Tracking', 'Reports Access'] },
+  { id: 4, name: 'Support Agent', members: 8, permissions: ['Ticket Handling', 'User Communication'] },
+];
+
+export const staffMembers = [
+  { id: 101, name: 'Nitesh Sharma', role: 'Moderator', email: 'nitesh.s@99acres.com', status: 'Active', joined: '2024-01-10', avatar: 'NS' },
+  { id: 102, name: 'Sanjana Rao', role: 'Sales Manager', email: 'sanjana.r@99acres.com', status: 'Active', joined: '2023-11-22', avatar: 'SR' },
+  { id: 103, name: 'Karthik M.', role: 'Support Agent', email: 'karthik.m@99acres.com', status: 'Inactive', joined: '2024-02-05', avatar: 'KM' },
+  { id: 104, name: 'Aavriti Gupta', role: 'Super Admin', email: 'aavriti.g@99acres.com', status: 'Active', joined: '2023-05-18', avatar: 'AG' },
+  { id: 105, name: 'Vikram Aditya', role: 'Moderator', email: 'vikram.a@99acres.com', status: 'Active', joined: '2024-03-01', avatar: 'VA' },
 ];

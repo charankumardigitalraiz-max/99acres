@@ -5,6 +5,7 @@ import { Plus, Edit2, Trash2, Eye, LayoutGrid, CheckCircle, XCircle } from 'luci
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import DeleteModel from '../components/model/DeleteModel';
+import Switch from "react-switch";
 
 export default function Categories() {
     const categories = useSelector(selectFilteredCategories);
@@ -16,6 +17,11 @@ export default function Categories() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [imageUploadMethod, setImageUploadMethod] = useState('url'); // 'url' or 'file'
+
+    const toggleStatus = (category) => {
+        const newStatus = category.status === 'Active' ? 'Inactive' : 'Active';
+        dispatch(updateCategory({ ...category, status: newStatus }));
+    };
 
     const openAddModal = () => {
         setModalMode('add');
@@ -122,6 +128,22 @@ export default function Categories() {
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                            <div className="absolute top-4 left-4 z-10">
+                                <Switch
+                                    onChange={() => toggleStatus(category)}
+                                    checked={category.status === 'Active'}
+                                    onColor="#F59E0B"
+                                    onHandleColor="#fff"
+                                    handleDiameter={18}
+                                    uncheckedIcon={false}
+                                    checkedIcon={false}
+                                    boxShadow="0px 1px 5px rgba(0, 0, 0, 0.4)"
+                                    activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.1)"
+                                    height={18}
+                                    width={36}
+                                    className="react-switch"
+                                />
+                            </div>
                             <div className="absolute top-4 right-4 z-10">
                                 <Badge variant={category.status === 'Active' ? 'green' : 'slate'} className="shadow-lg backdrop-blur-md bg-white">
                                     {category.status}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setPlanFilter, setStatusFilter, setSearch,
-  selectFilteredSubscribers
+  selectFilteredSubscribers, setTypeFilter
 } from '../features/subscriptions/subscriptionsSlice';
 import Badge from '../components/ui/Badge';
 import Avatar from '../components/ui/Avatar';
@@ -11,11 +11,12 @@ import { Search, Download, RefreshCw, AlertCircle } from 'lucide-react';
 import { subscriptionPieData } from '../data/mockData';
 
 const plans = ['All', 'Basic', 'Standard', 'Premium'];
+const types = ['All', 'Agent', 'Seller'];
 const statuses = ['All', 'Active', 'Expired'];
 
 export default function Subscribers() {
   const dispatch = useDispatch();
-  const { planFilter, statusFilter, searchQuery } = useSelector(s => s.subscriptions);
+  const { planFilter, statusFilter, typeFilter, searchQuery } = useSelector(s => s.subscriptions);
   const filtered = useSelector(selectFilteredSubscribers);
 
   // Expiring soon (within 30 days simulation)
@@ -27,7 +28,7 @@ export default function Subscribers() {
       <div className="page-header">
         <div>
           <h2 className="section-title">Subscribers</h2>
-          <p className="section-subtitle">{filtered.length} total subscribers</p>
+          <p className="section-subtitle">{filtered.length} total subscribers matching filters</p>
         </div>
         <div className="flex items-center gap-2">
           {expiringSoon.length > 0 && (
@@ -45,12 +46,12 @@ export default function Subscribers() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {[
-          { label: 'Total Subscribers', value: filtered.length, color: 'text-slate-800' },
+          { label: 'Agent Subs', value: filtered.filter(s => s.type === 'agent').length, color: 'text-slate-800' },
+          { label: 'Seller Subs', value: filtered.filter(s => s.type === 'seller').length, color: 'text-slate-800' },
           { label: 'Active', value: filtered.filter(s => s.status === 'Active').length, color: 'text-emerald-600' },
-          { label: 'Expired', value: filtered.filter(s => s.status === 'Expired').length, color: 'text-red-500' },
           { label: 'Auto-Renew On', value: filtered.filter(s => s.autoRenew).length, color: 'text-primary' },
         ].map(stat => (
-          <div key={stat.label} className="stat-card text-center">
+          <div key={stat.label} className="stat-card text-center hover-lift">
             <p className={`text-xl font-semibold ${stat.color}`}>{stat.value}</p>
             <p className="text-xs text-slate-500 mt-0.5">{stat.label}</p>
           </div>
@@ -61,34 +62,59 @@ export default function Subscribers() {
         {/* Filters + Table */}
         <div className="xl:col-span-2 space-y-4">
           {/* Filter Bar */}
-          <div className="card card-body flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 min-w-44">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="card card-body flex flex-wrap gap-4 items-center glass-card shadow-premium">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
-                className="form-input pl-8"
-                placeholder="Search subscriber..."
+                className="form-input pl-10"
+                placeholder="Search by name or email..."
                 value={searchQuery}
                 onChange={e => dispatch(setSearch(e.target.value))}
               />
             </div>
-            <div className="flex bg-slate-100 rounded-lg p-0.5 gap-0.5">
-              {plans.map(p => (
-                <button
-                  key={p}
-                  onClick={() => dispatch(setPlanFilter(p))}
-                  className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${planFilter === p ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500'}`}
-                >
-                  {p}
-                </button>
-              ))}
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Type</span>
+              <div className="flex bg-slate-100 rounded-lg p-1 gap-1">
+                {types.map(t => (
+                  <button
+                    key={t}
+                    onClick={() => dispatch(setTypeFilter(t))}
+                    className={`px-3 py-1 text-xs rounded-md font-bold transition-all ${typeFilter === t ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'
+                      }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
             </div>
-            <select
-              className="form-input w-auto text-xs"
-              value={statusFilter}
-              onChange={e => dispatch(setStatusFilter(e.target.value))}
-            >
-              {statuses.map(s => <option key={s}>{s}</option>)}
-            </select>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Tier</span>
+              <div className="flex bg-slate-100 rounded-lg p-1 gap-1">
+                {plans.map(p => (
+                  <button
+                    key={p}
+                    onClick={() => dispatch(setPlanFilter(p))}
+                    className={`px-3 py-1 text-xs rounded-md font-bold transition-all ${planFilter === p ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'
+                      }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Status</span>
+              <select
+                className="form-input w-auto text-xs font-bold bg-slate-100 border-none"
+                value={statusFilter}
+                onChange={e => dispatch(setStatusFilter(e.target.value))}
+              >
+                {statuses.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
           </div>
 
           {/* Table */}

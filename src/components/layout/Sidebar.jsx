@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../features/ui/uiSlice';
@@ -12,8 +13,14 @@ const navItems = [
 
   { path: '/subscriptions', label: 'Subscription Plans', icon: CreditCard },
 
-  { path: '/users', label: 'Users', icon: Users },
-
+  {
+    path: '/users', label: 'Customers', icon: Users,
+    children: [
+      { path: '/users/agent', label: 'Agent', icon: UserCircle },
+      { path: '/users/seller', label: 'Seller', icon: UserCircle },
+      { path: '/users/buyer', label: 'Buyer', icon: UserCircle },
+    ]
+  },
   { path: '/subscribers', label: 'Subscribers', icon: Star },
 
   { path: '/categories', label: 'Categories', icon: Users },
@@ -36,6 +43,90 @@ const navItems = [
     ]
   }
 ];
+const SidebarItem = ({ item, collapsed }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const Icon = item.icon;
+  const hasChildren = !!item.children;
+  const isChildrenActive = hasChildren && item.children.some(child => location.pathname.startsWith(child.path));
+
+  useEffect(() => {
+    if (isChildrenActive && !collapsed) {
+      setIsOpen(true);
+    }
+  }, [isChildrenActive, collapsed]);
+
+  if (!hasChildren) {
+    return (
+      <NavLink
+        to={item.path}
+        end={item.path === '/'}
+        className={({ isActive }) =>
+          `sidebar-link relative overflow-hidden group ${isActive ? 'active' : ''} ${collapsed ? 'justify-center px-0' : ''}`
+        }
+        title={collapsed ? item.label : ''}
+      >
+        <Icon size={18} className="flex-shrink-0 relative z-10" />
+        {!collapsed && <span className="relative z-10">{item.label}</span>}
+      </NavLink>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`sidebar-link w-full relative ${(isChildrenActive || isOpen) ? 'bg-white/5 text-white' : ''
+          } ${collapsed ? 'justify-center px-0' : ''}`}
+        title={collapsed ? item.label : ''}
+      >
+        <Icon size={18} className="flex-shrink-0" />
+        {!collapsed && (
+          <>
+            <span className="flex-1 text-left">{item.label}</span>
+            <ChevronRight
+              size={16}
+              className={`transition-transform duration-200 flex-shrink-0 text-slate-400 ${isOpen ? 'rotate-90 text-white' : ''}`}
+            />
+          </>
+        )}
+      </button>
+
+      {!collapsed && (
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 mt-1' : 'max-h-0 opacity-0'
+            }`}
+        >
+          <div className="flex flex-col gap-1 pl-11 pr-2 relative before:absolute before:left-[21px] before:top-0 before:-bottom-2 before:w-px before:bg-white/10">
+            {item.children.map(child => {
+              const ChildIcon = child.icon;
+              return (
+                <NavLink
+                  key={child.path}
+                  to={child.path}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${isActive
+                      ? 'text-white bg-primary'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <ChildIcon size={16} className={`flex-shrink-0 ${isActive ? 'text-white' : ''}`} />
+                      <span>{child.label}</span>
+                    </>
+                  )}
+                </NavLink>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -63,19 +154,8 @@ export default function Sidebar() {
         {!collapsed && (
           <p className="text-2xs font-semibold text-slate-500 uppercase tracking-wider px-2 mb-2">Main Menu</p>
         )}
-        {navItems.map(({ path, label, icon: Icon }) => (
-          <NavLink
-            key={path}
-            to={path}
-            end={path === '/'}
-            className={({ isActive }) =>
-              `sidebar-link ${isActive ? 'active' : ''} ${collapsed ? 'justify-center px-0' : ''}`
-            }
-            title={collapsed ? label : ''}
-          >
-            <Icon size={16} className="flex-shrink-0" />
-            {!collapsed && <span>{label}</span>}
-          </NavLink>
+        {navItems.map((item, index) => (
+          <SidebarItem key={item.path || index} item={item} collapsed={collapsed} />
         ))}
       </nav>
 

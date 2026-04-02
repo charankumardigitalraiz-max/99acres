@@ -46,4 +46,8 @@ export const selectUserById = (state, id) => {
   return state.users.list.find(u => u.id === id);
 };
 
+export const selectUsersByRole = (state, role) => {
+  return state.users.list.filter(u => u.role === role);
+};
+
 export default usersSlice.reducer;
