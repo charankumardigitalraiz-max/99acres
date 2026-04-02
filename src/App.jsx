@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import SubscriptionPlans from './pages/SubscriptionPlans';
 import Users from './pages/Users';
 import UserDetails from './pages/CustomerDetails';
+import CustomerDetails2 from './pages/CustomerDetails2';
 import Subscribers from './pages/Subscribers';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
@@ -28,7 +29,8 @@ export default function App() {
             <Route path="subscriptions" element={<SubscriptionPlans />} />
             <Route path="users" element={<Users />} />
             <Route path="users/:role" element={<Users />} />
-            <Route path="users/:id" element={<UserDetails />} />
+            <Route path="customerDetails/:id" element={<UserDetails />} />
+            <Route path="customerDetails2/:id" element={<CustomerDetails2 />} />
             <Route path="subscribers" element={<Subscribers />} />
             <Route path="categories" element={<Categories />} />
             <Route path="products" element={<Products />} />

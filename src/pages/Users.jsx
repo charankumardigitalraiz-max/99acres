@@ -68,19 +68,19 @@ export default function Customers() {
         </div>
 
         {/* Role Filter */}
-        {/* <div className="flex items-center gap-1.5">
-          <Filter size={12} className="text-slate-400" />
-          <div className="flex bg-slate-100 rounded-lg p-0.5 gap-0.5">
-            {roles.map(r => (
-              <button
-                key={r}
-                onClick={() => dispatch(setRoleFilter(r))}
-                className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${roleFilter === r ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                {r}
-              </button>
-            ))}
-          </div>
+        {/* <div className="flex bg-slate-100/50 p-1 rounded-xl border border-slate-200/50">
+          {roles.map(r => (
+            <button
+              key={r}
+              onClick={() => dispatch(setRoleFilter(r))}
+              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${roleFilter === r
+                ? 'bg-primary text-white shadow-md'
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50'
+                }`}
+            >
+              {r}
+            </button>
+          ))}
         </div> */}
 
         {/* Status Filter */}

@@ -5,7 +5,7 @@ import { toggleSidebar } from '../../features/ui/uiSlice';
 import {
   LayoutDashboard, CreditCard, Users, Star,
   Building2, BarChart3, MessageCircle, MessageSquareText, UserCircle, ChevronLeft,
-  ChevronRight, Home, ShieldCheck, UserCog, Users2
+  ChevronRight, Home, ShieldCheck, UserCog, Users2, UserCheck, Store, ShoppingBag, Tags
 } from 'lucide-react';
 
 const navItems = [
@@ -16,14 +16,14 @@ const navItems = [
   {
     path: '/users', label: 'Customers', icon: Users,
     children: [
-      { path: '/users/agent', label: 'Agent', icon: UserCircle },
-      { path: '/users/seller', label: 'Seller', icon: UserCircle },
-      { path: '/users/buyer', label: 'Buyer', icon: UserCircle },
+      { path: '/users/agent', label: 'Agent', icon: UserCheck },
+      { path: '/users/seller', label: 'Seller', icon: Store },
+      { path: '/users/buyer', label: 'Buyer', icon: ShoppingBag },
     ]
   },
   { path: '/subscribers', label: 'Subscribers', icon: Star },
 
-  { path: '/categories', label: 'Categories', icon: Users },
+  { path: '/categories', label: 'Categories', icon: Tags },
 
   { path: '/products', label: 'Properties', icon: Building2 },
 
@@ -50,6 +50,8 @@ const SidebarItem = ({ item, collapsed }) => {
   const Icon = item.icon;
   const hasChildren = !!item.children;
   const isChildrenActive = hasChildren && item.children.some(child => location.pathname.startsWith(child.path));
+  const isParentActive = item.path && location.pathname === item.path;
+  const isActive = isParentActive || isChildrenActive;
 
   useEffect(() => {
     if (isChildrenActive && !collapsed) {
@@ -77,7 +79,7 @@ const SidebarItem = ({ item, collapsed }) => {
     <div className="flex flex-col gap-1 w-full">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`sidebar-link w-full relative ${(isChildrenActive || isOpen) ? 'bg-white/5 text-white' : ''
+        className={`sidebar-link w-full relative ${isActive ? 'active' : ''} ${isOpen && !isActive ? 'bg-primary text-white' : ''
           } ${collapsed ? 'justify-center px-0' : ''}`}
         title={collapsed ? item.label : ''}
       >

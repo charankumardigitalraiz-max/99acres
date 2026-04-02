@@ -134,7 +134,7 @@ export default function Support() {
                   </td>
                   <td className="text-slate-500">{ticket.date}</td>
                   <td className="text-right">
-                    <button 
+                    <button
                       onClick={() => navigate(`/support/${ticket.id}`)}
                       className="btn-ghost text-primary py-1 px-3"
                     >
