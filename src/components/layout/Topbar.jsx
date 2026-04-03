@@ -55,13 +55,13 @@ export default function Topbar() {
 
   return (
     <header
-      className={`fixed top-0 right-0 z-20 bg-white border-b border-border flex items-center justify-between h-14 px-5 transition-all duration-300 ${collapsed ? 'left-16' : 'left-56'}`}
+      className={`fixed top-0 right-0 z-20 bg-white border-b border-slate-200 flex items-center justify-between h-14 px-5 transition-all duration-300 ${collapsed ? 'left-16' : 'left-56'}`}
     >
       {/* Left */}
       <div className="flex items-center gap-3">
         <div>
           <h1 className="text-sm font-semibold text-slate-800">{pageTitle}</h1>
-          <p className="text-2xs text-slate-400">99Acres Admin Panel</p>
+          <p className="text-2xs text-slate-400">Sherla Properties Admin Panel</p>
         </div>
       </div>
 
@@ -95,8 +95,8 @@ export default function Topbar() {
 
           {/* Smart Notification Dropdown */}
           {isNotificationsOpen && (
-            <div className="absolute top-[calc(100%+8px)] right-0 w-[19rem] bg-white rounded-2xl shadow-2xl border border-border z-50 animate-scale-in overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-slate-50/50">
+            <div className="absolute top-[calc(100%+8px)] right-0 w-[19rem] bg-white rounded-2xl shadow-xl border border-slate-200 z-50 animate-scale-in overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50/50">
                 <h3 className="text-xs font-bold text-slate-800">Notifications</h3>
                 <button
                   onClick={() => {
@@ -114,9 +114,9 @@ export default function Topbar() {
                   <div key={n.id} className="p-3.5 hover:bg-slate-50/80 transition-colors group cursor-pointer">
                     <div className="flex gap-3">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${n.type === 'user' ? 'bg-blue-50 text-blue-500' :
-                          n.type === 'property' ? 'bg-amber-50 text-amber-500' :
-                            n.type === 'billing' ? 'bg-emerald-50 text-emerald-500' :
-                              'bg-slate-50 text-slate-500'
+                        n.type === 'property' ? 'bg-amber-50 text-amber-500' :
+                          n.type === 'billing' ? 'bg-emerald-50 text-emerald-500' :
+                            'bg-slate-50 text-slate-500'
                         }`}>
                         {n.type === 'user' ? <Users size={14} /> :
                           n.type === 'property' ? <Building2 size={14} /> :
@@ -157,7 +157,7 @@ export default function Topbar() {
             onClick={() => setIsProfileModalOpen(!isProfileModalOpen)}
             className="flex items-center gap-2 py-1.5 px-2.5 rounded-lg hover:bg-slate-100 transition-colors border border-transparent hover:border-border"
           >
-            <div className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center shadow-sm">
+            <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center shadow-sm">
               <span className="text-white text-2xs font-semibold">{adminProfile.avatar}</span>
             </div>
             <div className="hidden md:block text-left">
@@ -169,7 +169,7 @@ export default function Topbar() {
 
           {/* Smart Positioned Dropdown Modal */}
           {isProfileModalOpen && (
-            <div className="absolute top-[calc(100%+8px)] right-0 w-72 bg-white rounded-2xl shadow-2xl border border-border z-50 animate-scale-in p-1 overflow-hidden">
+            <div className="absolute top-[calc(100%+8px)] right-0 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 animate-scale-in p-1 overflow-hidden">
               <div className="p-4 space-y-5">
                 {/* 1. Profile header */}
                 <div className="bg-slate-50 rounded-xl p-4 border border-border flex flex-col items-center text-center">

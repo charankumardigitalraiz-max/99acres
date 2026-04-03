@@ -6,9 +6,9 @@ const productsSlice = createSlice({
   initialState: {
     list: propertiesData,
     searchQuery: '',
-    typeFilter: 'All',
-    statusFilter: 'All',
-    cityFilter: 'All',
+    typeFilter: '',
+    statusFilter: '',
+    cityFilter: '',
     currentPage: 1,
     pageSize: 8,
     selectedProperty: null,
@@ -34,9 +34,9 @@ export const selectFilteredProperties = (state) => {
   const { list, searchQuery, typeFilter, statusFilter, cityFilter } = state.products;
   return list.filter(p => {
     const matchSearch = !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.uploadedBy.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchType = typeFilter === 'All' || p.type === typeFilter;
-    const matchStatus = statusFilter === 'All' || p.status === statusFilter;
-    const matchCity = cityFilter === 'All' || p.city === cityFilter;
+    const matchType = !typeFilter || p.propertyType?.toLowerCase() === typeFilter.toLowerCase();
+    const matchStatus = !statusFilter || p.status?.toLowerCase() === statusFilter.toLowerCase();
+    const matchCity = !cityFilter || p.city === cityFilter;
     return matchSearch && matchType && matchStatus && matchCity;
   });
 };

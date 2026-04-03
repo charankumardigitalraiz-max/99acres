@@ -21,23 +21,23 @@ export default function StatCard({ label, value, change, trend, icon, color = 'b
   const isUp = trend === 'up';
 
   return (
-    <div className="stat-card">
+    <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-primary/30 transition-all cursor-pointer group">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-slate-500 mb-1.5">{label}</p>
-          <p className="text-xl font-semibold text-slate-800">{value}</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{label}</p>
+          <p className="text-xl font-bold text-slate-900 leading-none">{value}</p>
         </div>
-        <div className={`w-9 h-9 rounded-lg ${colors.bg} ${colors.border} border flex items-center justify-center flex-shrink-0`}>
+        <div className={`w-10 h-10 rounded-xl ${colors.bg} flex items-center justify-center group-hover:scale-110 transition-transform`}>
           <Icon size={16} className={colors.icon} />
         </div>
       </div>
       {change && (
-        <div className="flex items-center gap-1 mt-2.5">
-          {isUp
-            ? <TrendingUp size={12} className="text-emerald-500" />
-            : <TrendingDown size={12} className="text-red-400" />}
-          <span className={`text-2xs font-medium ${isUp ? 'text-emerald-600' : 'text-red-500'}`}>{change}</span>
-          <span className="text-2xs text-slate-400">vs last month</span>
+        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-50">
+          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md ${isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'} text-[10px] font-bold`}>
+            {isUp ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+            <span>{change}</span>
+          </div>
+          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">vs baseline</span>
         </div>
       )}
     </div>

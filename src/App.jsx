@@ -5,8 +5,7 @@ import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import SubscriptionPlans from './pages/SubscriptionPlans';
 import Users from './pages/Users';
-import UserDetails from './pages/CustomerDetails';
-import CustomerDetails2 from './pages/CustomerDetails2';
+import UserDetails from './pages/UserDetails';
 import Subscribers from './pages/Subscribers';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
@@ -18,27 +17,33 @@ import TicketDetails from './pages/TicketDetails';
 import Reviews from './pages/Reviews';
 import StaffRoles from './pages/StaffRoles';
 import StaffMembers from './pages/StaffMembers';
+import Banners from './pages/Banners';
+import Transactions from './pages/Transactions';
+import Login from './pages/Login';
 
 export default function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Routes>
+        <Routes index="/login">
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="subscriptions" element={<SubscriptionPlans />} />
-            <Route path="users" element={<Users />} />
-            <Route path="users/:role" element={<Users />} />
-            <Route path="customerDetails/:id" element={<UserDetails />} />
-            <Route path="customerDetails2/:id" element={<CustomerDetails2 />} />
+            <Route path="customers/:role" element={<Users />} />
+            <Route path="customers/details/:id" element={<UserDetails />} />
             <Route path="subscribers" element={<Subscribers />} />
+            <Route path="transactions" element={<Transactions />} />
             <Route path="categories" element={<Categories />} />
+
             <Route path="products" element={<Products />} />
             <Route path="products/:id" element={<ProductDetails />} />
             <Route path="reports" element={<Reports />} />
             <Route path="profile" element={<AdminProfile />} />
             <Route path="support" element={<Support />} />
             <Route path="support/:id" element={<TicketDetails />} />
+            <Route path="banners" element={<Banners />} />
+            <Route path="transactions" element={<Transactions />} />
             <Route path="reviews" element={<Reviews />} />
             <Route path="staff/roles" element={<StaffRoles />} />
             <Route path="staff/members" element={<StaffMembers />} />

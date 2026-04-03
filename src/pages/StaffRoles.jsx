@@ -70,77 +70,97 @@ export default function StaffRoles() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="page-header flex-col sm:flex-row gap-4 sm:gap-0">
+    <div className="space-y-8 pb-20">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Staff Roles & Permissions</h1>
-          <p className="text-sm text-slate-500 mt-1">Define roles and manage access control for the admin panel.</p>
+          <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">
+            <span className="text-primary">Staff Management</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            <span>Role Permissions</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Staff Roles</h2>
         </div>
-        <button onClick={handleAddRole} className="btn-primary w-full sm:w-auto">
+        <button onClick={handleAddRole} className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-95">
           <Plus size={16} />
           Add New Role
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {roles.map((role) => (
-          <div key={role.id} className="card hover-lift transition-all">
-            <div className="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Shield size={20} className="text-primary" />
+      <div className="grid grid-cols-1 md:grid-cols-2 min-[790px]:grid-cols-2 lg:grid-cols-2 gap-8">
+        {roles.map((role) => {
+          const displayPermissions = role.permissions.slice(0, 6);
+          const hiddenCount = role.permissions.length - displayPermissions.length;
+
+          return (
+            <div key={role.id} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group hover:border-primary/20 transition-all flex flex-col hover:shadow-xl hover:shadow-slate-200/40">
+              <div className="px-6 py-5 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <Shield size={18} className="text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold text-slate-900 truncate tracking-tight">{role.name}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{role.members} Staff Members</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-slate-800 truncate">{role.name}</h3>
-                  <p className="text-xs text-slate-500">{role.members} members assigned</p>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    onClick={() => handleEditRole(role)}
+                    className="btn-action btn-action-view"
+                    title="Edit Role"
+                  >
+                    <Edit2 size={12} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteRole(role)}
+                    className="btn-action btn-action-reject"
+                    title="Delete Role"
+                  >
+                    <Trash2 size={12} />
+                  </button>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleEditRole(role)}
-                  className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  <Edit2 size={16} />
-                </button>
-                <button
-                  onClick={() => handleDeleteRole(role)}
-                  className="p-2 hover:bg-red-50 rounded-lg text-slate-400 hover:text-red-600 transition-colors"
-                >
-                  <Trash2 size={16} />
-                </button>
+              <div className="px-6 py-5 flex-1 bg-white">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Core Permissions</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {displayPermissions.map((perm, i) => (
+                    <span key={i} className="px-2.5 py-1 bg-slate-50 border border-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-widest rounded-md shadow-sm group-hover:bg-primary/5 group-hover:text-primary transition-colors">
+                      {perm}
+                    </span>
+                  ))}
+                  {hiddenCount > 0 && (
+                    <span className="px-2.5 py-1 bg-primary text-white text-[9px] font-black uppercase tracking-widest rounded-md shadow-sm">
+                      +{hiddenCount} More
+                    </span>
+                  )}
+                </div>
               </div>
+              {/* <div className="px-6 py-3.5 bg-slate-50/30 border-t border-slate-100 flex items-center justify-between">
+                <button className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline flex items-center gap-1.5">
+                  Manage Access <Plus size={10} strokeWidth={3} />
+                </button>
+                <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest tabular-nums italic">Entity Level: Global</span>
+              </div> */}
             </div>
-            <div className="card-body">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Permissions</p>
-              <div className="flex flex-wrap gap-2">
-                {role.permissions.map((perm, i) => (
-                  <span key={i} className="px-3 py-1 bg-slate-50 border border-slate-200 text-slate-600 text-xs rounded-full font-medium">
-                    {perm}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="card-body border-t border-border flex items-center justify-between py-3">
-              <button className="text-xs text-primary font-bold hover:underline">View Members</button>
-              <span className="text-2xs text-slate-400 italic">Last updated: Just now</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalMode === 'add' ? 'Add Role' : 'Edit Role'} size="md">
-        <form onSubmit={handleSave} className="space-y-4">
+        <form onSubmit={handleSave} className="space-y-6">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Name</label>
-            <input type="text" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full form-input" placeholder="e.g. Penthouse" />
+            <label className="form-label">Role Name</label>
+            <input type="text" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="form-input" placeholder="e.g. Manager" />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-2 whitespace-nowrap">Permissions</label>
-            <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 max-h-[240px] overflow-y-auto">
+            <label className="form-label mb-3">System-wide Permissions</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 max-h-[300px] overflow-y-auto shadow-inner">
               {AVAILABLE_PERMISSIONS.map(perm => {
                 const isSelected = formData.permissions.includes(perm);
                 return (
-                  <label key={perm} className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${isSelected ? 'bg-white border-primary shadow-sm' : 'bg-transparent border-transparent hover:bg-white/50'
+                  <label key={perm} className={`flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer ${isSelected ? 'bg-white border-primary/40 shadow-sm' : 'bg-transparent border-transparent hover:bg-white/50'
                     }`}>
                     <input
                       type="checkbox"
@@ -148,11 +168,11 @@ export default function StaffRoles() {
                       checked={isSelected}
                       onChange={() => handleTogglePermission(perm)}
                     />
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-primary text-white' : 'bg-white border border-slate-200'
+                    <div className={`w-4 h-4 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-white border border-slate-200'
                       }`}>
-                      {isSelected && <CheckSquare size={14} />}
+                      {isSelected && <CheckSquare size={12} />}
                     </div>
-                    <span className={`text-[11px] font-bold ${isSelected ? 'text-slate-900' : 'text-slate-500'}`}>
+                    <span className={`text-[10px] font-black uppercase tracking-tight ${isSelected ? 'text-slate-900' : 'text-slate-400'}`}>
                       {perm}
                     </span>
                   </label>
@@ -161,10 +181,10 @@ export default function StaffRoles() {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
-            <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 flex-1 md:flex-none border border-border bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-50 transition-all">Cancel</button>
-            <button type="submit" className="px-5 py-2.5 flex-1 md:flex-none bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/30">
-              {modalMode === 'add' ? 'Create' : 'Save Changes'}
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100">
+            <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-slate-200 bg-white rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-all">Discard</button>
+            <button type="submit" className="px-6 py-3 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
+              {modalMode === 'add' ? 'Save Role' : 'Update Role'}
             </button>
           </div>
         </form>

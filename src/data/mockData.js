@@ -125,6 +125,7 @@ export const sellerPlans = [
     annualPrice: 9999,
     color: 'slate',
     subscribers: 1000,
+    status: 'inactive',
     features: [
       '5 Property Listings',
       'Standard Seller Profile',
@@ -140,6 +141,7 @@ export const sellerPlans = [
     annualPrice: 24999,
     color: 'amber',
     subscribers: 600,
+    status: 'active',
     popular: true,
     features: [
       '25 Property Listings',
@@ -158,6 +160,7 @@ export const sellerPlans = [
     annualPrice: 49999,
     color: 'dark',
     subscribers: 400,
+    status: 'active',
     features: [
       '50 Property Listings',
       'Premium Seller Branding',
@@ -207,7 +210,7 @@ export const propertiesData = [
   {
     id: 1,
     title: 'Luxury 4BHK Villa in Palm Springs',
-    propertyType: 'villas',
+    propertyType: 'Villas',
     purpose: 'selling',
     propertyLength: '4500 sqft',
     areaValue: 4500,
@@ -227,7 +230,8 @@ export const propertiesData = [
       photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop'
     },
     uploadedBy: 'Priya Mehta',
-    userId: 'b2e4d1f3-2c3e-5b7a-9d02-002',
+    uploadertype: 'owner',
+    userId: '10002',
     pricing: {
       expectedPrice: 120000000,
       pricePerSqft: 26666,
@@ -235,7 +239,7 @@ export const propertiesData = [
       negotiable: true
     },
     price: '₹12 Cr',
-    status: 'Active',
+    status: 'verified',
     date: '2025-03-20',
     furnishingStatus: 'Fully Furnished',
     amenities: ['water supply', 'washrooms', 'bedrooms', 'kitchen', 'livving room', 'balcony', 'parking', 'garden', 'terrace', 'tv', 'sofa'],
@@ -255,24 +259,33 @@ export const propertiesData = [
     },
     coverPhoto: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
     images: ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80', 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
-    video: 'https://sample-videos.com/video123.mp4',
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
     ownerVerification: {
       type: 'Adhaar',
       status: 'Verified',
       photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop'
     },
     ownershipProofs: {
-      saleDeed: 'sale_deed_123.pdf',
-      encumbranceCert: 'ec_123.pdf',
-      propertyTaxReceipt: 'tax_receipt_2024.pdf',
-      legalOpinion: 'legal_op.pdf',
-      lawyerCert: 'lawyer_cert_123.pdf'
-    }
+      saleDeed: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80',
+      encumbranceCert: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80',
+      propertyTaxReceipt: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80',
+      legalOpinion: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80',
+      lawyerCert: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80'
+    },
+    lawyerDetails: {
+      name: 'Advocate R.K. Menon',
+      mobile: '+91 98765 12345',
+      email: 'rkmenon.legal@email.com'
+    },
+    bankerDetails: [
+      { name: 'HDFC Bank (Ravi Kumar)', number: '+91 99887 77665' },
+      { name: 'SBI Home Loans (Pooja Rao)', number: '+91 91234 56789' }
+    ]
   },
   {
     id: 2,
     title: 'Modern 3BHK Flat near Tech Park',
-    propertyType: 'flats',
+    propertyType: 'Flats',
     purpose: 'selling',
     propertyLength: '1800 sqft',
     areaValue: 1800,
@@ -293,6 +306,7 @@ export const propertiesData = [
     },
     uploadedBy: 'Amit Verma',
     userId: 'c3f5e2a4-3d4f-6c8b-0e13-003',
+    uploadertype: 'owner',
     pricing: {
       expectedPrice: 18500000,
       pricePerSqft: 10277,
@@ -300,7 +314,7 @@ export const propertiesData = [
       negotiable: true
     },
     price: '₹1.85 Cr',
-    status: 'Pending',
+    status: 'processing',
     date: '2025-03-22',
     furnishingStatus: 'Semi Furnished',
     amenities: ['water supply', 'washrooms', 'bedrooms', 'kitchen', 'livving room', 'parking', 'tv'],
@@ -332,7 +346,7 @@ export const propertiesData = [
   {
     id: 3,
     title: 'Commercial Retail Space in Mall',
-    propertyType: 'commercial',
+    propertyType: 'Commercial',
     purpose: 'selling',
     propertyLength: '2200 sqft',
     areaValue: 2200,
@@ -353,6 +367,7 @@ export const propertiesData = [
     },
     uploadedBy: 'Vikram Singh',
     userId: 'f6c8b5d7-6a7c-9f1e-3b46-006',
+    uploadertype: 'owner',
     pricing: {
       expectedPrice: 55000000,
       pricePerSqft: 25000,
@@ -360,7 +375,7 @@ export const propertiesData = [
       negotiable: false
     },
     price: '₹5.5 Cr',
-    status: 'Active',
+    status: 'new',
     date: '2025-03-15',
     furnishingStatus: 'Unfurnished',
     amenities: ['water supply', 'washrooms', 'parking'],
@@ -389,7 +404,7 @@ export const propertiesData = [
   {
     id: 4,
     title: 'Residential Plot in Green Acres',
-    propertyType: 'plots',
+    propertyType: 'Plots',
     purpose: 'selling',
     propertyLength: '2400 sqft',
     areaValue: 2400,
@@ -410,6 +425,7 @@ export const propertiesData = [
     },
     uploadedBy: 'Kiran Rao',
     userId: 'e5b7a4c6-5f6b-8e0d-2a35-005',
+    uploadertype: 'owner',
     pricing: {
       expectedPrice: 4200000,
       pricePerSqft: 1750,
@@ -417,7 +433,7 @@ export const propertiesData = [
       negotiable: true
     },
     price: '₹42 L',
-    status: 'Active',
+    status: 'draft',
     date: '2025-03-18',
     furnishingStatus: 'Unfurnished',
     amenities: ['water supply'],
@@ -445,7 +461,7 @@ export const propertiesData = [
   {
     id: 5,
     title: 'Penthouse with Terrace Garden',
-    propertyType: 'Appartments',
+    propertyType: 'Apartments',
     purpose: 'selling',
     propertyLength: '3600 sqft',
     areaValue: 3600,
@@ -466,6 +482,7 @@ export const propertiesData = [
     },
     uploadedBy: 'Divya Reddy',
     userId: '4b13a0c2-bf21-4e6d-8g9b-011',
+    uploadertype: 'owner',
     pricing: {
       expectedPrice: 85000000,
       pricePerSqft: 23611,
@@ -473,7 +490,7 @@ export const propertiesData = [
       negotiable: true
     },
     price: '₹8.5 Cr',
-    status: 'Pending',
+    status: 'rejected',
     date: '2025-03-24',
     furnishingStatus: 'Fully Furnished',
     amenities: ['water supply', 'washrooms', 'bedrooms', 'kitchen', 'livving room', 'balcony', 'parking', 'garden', 'terrace'],
@@ -502,7 +519,7 @@ export const propertiesData = [
   {
     id: 6,
     title: 'Independent Villa in Jubilee Hills',
-    propertyType: 'indipenedent house',
+    propertyType: 'Independent House',
     purpose: 'selling',
     propertyLength: '6500 sqft',
     areaValue: 6500,
@@ -523,6 +540,7 @@ export const propertiesData = [
     },
     uploadedBy: 'Nikhil G',
     userId: 'e5b7a4c6-5f6b-8e0d-2a35-005',
+    uploadertype: 'owner',
     pricing: {
       expectedPrice: 250000000,
       pricePerSqft: 38461,
@@ -530,7 +548,7 @@ export const propertiesData = [
       negotiable: true
     },
     price: '₹25 Cr',
-    status: 'Active',
+    status: 'processing',
     date: '2025-03-25',
     furnishingStatus: 'Fully Furnished',
     amenities: ['water supply', 'washrooms', 'bedrooms', 'kitchen', 'livving room', 'balcony', 'parking', 'garden', 'pool', 'gym'],
@@ -579,14 +597,14 @@ export const propertyTypeData = [
 // ─── Admin Profile ─────────────────────────────────────────────────────────────
 export const adminProfile = {
   name: 'Charan Kumar',
-  email: 'charan.admin@99acres.com',
+  email: 'charan.admin@sherlaproperties.com',
   phone: '+91 98765 00000',
   role: 'Super Admin',
   department: 'Platform Management',
   joinedDate: '2023-01-15',
   lastLogin: '2025-03-31 10:42 AM',
   avatar: 'CK',
-  bio: 'Overseeing the 99Acres platform operations, user management, and subscription growth strategies.',
+  bio: 'Overseeing the Sherla Properties platform operations, user management, and subscription growth strategies.',
   notifications: {
     emailAlerts: true,
     smsAlerts: false,
@@ -617,7 +635,7 @@ export const categoriesData = [
 
   { id: 4, name: 'Plot', slug: 'plot', status: 'Active', description: 'Plots of land for sale', image: 'https://images.unsplash.com/photo-1461175827210-5ceac3e39dd2?q=80&w=1033&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
 
-  { id: 5, name: 'Home', slug: 'home', status: 'Active', description: 'Residential homes for living', image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80' },
+  // { id: 5, name: 'Home', slug: 'home', status: 'Active', description: 'Residential homes for living', image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80' },
 
   { id: 6, name: 'Flat', slug: 'flat', status: 'Active', description: 'Flats for sale and rent', image: 'https://images.unsplash.com/photo-1649068453220-f7394ee150d1?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
 
@@ -727,9 +745,55 @@ export const staffRoles = [
 ];
 
 export const staffMembers = [
-  { id: 101, name: 'Nitesh Sharma', role: 'Moderator', email: 'nitesh.s@99acres.com', status: 'Active', joined: '2024-01-10', avatar: 'NS' },
-  { id: 102, name: 'Sanjana Rao', role: 'Sales Manager', email: 'sanjana.r@99acres.com', status: 'Active', joined: '2023-11-22', avatar: 'SR' },
-  { id: 103, name: 'Karthik M.', role: 'Support Agent', email: 'karthik.m@99acres.com', status: 'Inactive', joined: '2024-02-05', avatar: 'KM' },
-  { id: 104, name: 'Aavriti Gupta', role: 'Super Admin', email: 'aavriti.g@99acres.com', status: 'Active', joined: '2023-05-18', avatar: 'AG' },
-  { id: 105, name: 'Vikram Aditya', role: 'Moderator', email: 'vikram.a@99acres.com', status: 'Active', joined: '2024-03-01', avatar: 'VA' },
+  { id: 101, name: 'Nitesh Sharma', role: 'Moderator', email: 'nitesh.s@sherlaproperties.com', status: 'Active', joined: '2024-01-10', avatar: 'NS' },
+  { id: 102, name: 'Sanjana Rao', role: 'Sales Manager', email: 'sanjana.r@sherlaproperties.com', status: 'Active', joined: '2023-11-22', avatar: 'SR' },
+  { id: 103, name: 'Karthik M.', role: 'Support Agent', email: 'karthik.m@sherlaproperties.com', status: 'Inactive', joined: '2024-02-05', avatar: 'KM' },
+  { id: 104, name: 'Aavriti Gupta', role: 'Super Admin', email: 'aavriti.g@sherlaproperties.com', status: 'Active', joined: '2023-05-18', avatar: 'AG' },
+  { id: 105, name: 'Vikram Aditya', role: 'Moderator', email: 'vikram.a@sherlaproperties.com', status: 'Active', joined: '2024-03-01', avatar: 'VA' },
+];
+
+// ─── Transactions Ledger ───────────────────────────────────────────────────
+export const transactionsData = [
+  { id: 'TXN-9021', user: 'Rahul Sharma', email: 'rahul.sharma@email.com', type: 'Subscription Move', amount: '₹49,999', date: '22 Mar, 2025', status: 'Completed', method: 'UPI' },
+  { id: 'TXN-8842', user: 'Rahul Sharma', email: 'rahul.sharma@email.com', type: 'Featured Listing', amount: '₹2,499', date: '18 Mar, 2025', status: 'Completed', method: 'Card' },
+  { id: 'TXN-9501', user: 'Priya Mehta', email: 'priya.mehta@email.com', type: 'Premium Upgrade', amount: '₹49,999', date: '20 Mar, 2025', status: 'Completed', method: 'Net Banking' },
+  { id: 'TXN-9402', user: 'Amit Verma', email: 'amit.verma@email.com', type: 'Standard Plan', amount: '₹14,999', date: '15 Mar, 2025', status: 'Completed', method: 'UPI' },
+  { id: 'TXN-9321', user: 'Vikram Singh', email: 'vikram.singh@email.com', type: 'Premium Upgrade', amount: '₹49,999', date: '10 Mar, 2025', status: 'Pending', method: 'Card' },
+  { id: 'TXN-9210', user: 'Ananya Krishnan', email: 'ananya.k@email.com', type: 'Premium Move', amount: '₹49,999', date: '05 Mar, 2025', status: 'Completed', method: 'UPI' },
+  { id: 'TXN-9105', user: 'Suresh Nair', email: 'suresh.nair@email.com', type: 'Basic Extension', amount: '₹4,999', date: '01 Mar, 2025', status: 'Failed', method: 'Card' },
+  { id: 'TXN-8992', user: 'Divya Reddy', email: 'divya.reddy@email.com', type: 'Basic Plan', amount: '₹4,999', date: '25 Feb, 2025', status: 'Completed', method: 'Net Banking' },
+];
+
+// ─── Banners Ledger ──────────────────────────────────────────────────────────
+export const bannersData = [
+  {
+    id: 'BAN-001',
+    name: 'Summer Mega Sale',
+    screen: 'Home Screen',
+    description: 'Promotional banner for summer discount event.',
+    image: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=1200&q=80',
+    status: 'Active',
+    platform: 'Both',
+    date: '2024-03-20',
+  },
+  {
+    id: 'BAN-002',
+    name: 'Premium Properties Spotlight',
+    screen: 'Property Listings',
+    description: 'Highlighting high-value assets in major cities.',
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80',
+    status: 'Active',
+    platform: 'Web',
+    date: '2024-03-18',
+  },
+  {
+    id: 'BAN-003',
+    name: 'New User Onboarding',
+    screen: 'Signup Page',
+    description: 'Educational banner for new platform members.',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80',
+    status: 'Inactive',
+    platform: 'Mobile',
+    date: '2024-03-15',
+  },
 ];

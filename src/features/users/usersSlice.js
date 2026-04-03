@@ -18,6 +18,8 @@ const usersSlice = createSlice({
     setStatusFilter: (state, action) => { state.statusFilter = action.payload; state.currentPage = 1; },
     setPage: (state, action) => { state.currentPage = action.payload; },
     setSelectedUser: (state, action) => { state.selectedUser = action.payload; },
+    // setRoleFilter: (state, action) => { state.roleFilter = action.payload; state.currentPage = 1; },
+
     updateUserStatus: (state, action) => {
       const { id, status } = action.payload;
       const user = state.list.find(u => u.id === id);
@@ -42,12 +44,9 @@ export const selectFilteredUsers = (state) => {
 };
 
 
+
 export const selectUserById = (state, id) => {
   return state.users.list.find(u => u.id === id);
-};
-
-export const selectUsersByRole = (state, role) => {
-  return state.users.list.filter(u => u.role === role);
 };
 
 export default usersSlice.reducer;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
+import Select from '../components/ui/Select';
 import { UserPlus, Mail, Edit2, Trash2, Shield, Calendar, Activity } from 'lucide-react';
 import { addMember, updateMember, deleteMember, setLoading, setError } from '../features/staff/staffMember';
 import Modal from '../components/ui/Modal';
@@ -11,6 +12,7 @@ import DeleteModel from '../components/model/DeleteModel';
 export default function StaffMembers() {
   const dispatch = useDispatch();
   const members = useSelector((state) => state.staff.members);
+  const roles = useSelector((state) => state.roles.roles);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -56,79 +58,85 @@ export default function StaffMembers() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="page-header flex-col sm:flex-row gap-4 sm:gap-0">
+    <div className="space-y-8 pb-20">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Staff Directory</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage admin panel users and their active status.</p>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+            <span className="text-primary/80">Command Staff</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            <span>Personnel Registry</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Access Directory</h2>
         </div>
-        <button onClick={handleAddMember} className="btn-primary w-full sm:w-auto">
+        <button onClick={handleAddMember} className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
           <UserPlus size={16} />
-          Invite Staff
+          Authorize Staff
         </button>
       </div>
 
-      <div className="card overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
-              <tr>
-                <th className="pl-6">Staff Member</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Email</th>
-                <th>Joined Date</th>
-                <th className="text-right pr-6">Action</th>
+              <tr className="bg-slate-50/80 border-b border-slate-200">
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Staff Member</th>
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Role</th>
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Status</th>
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Email Address</th>
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Joined Date</th>
+                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-slate-50">
               {members.map((member) => (
                 <tr key={member.id} className="group hover:bg-slate-50/50 transition-colors">
-                  <td className="pl-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar name={member.name} size="md" />
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-4">
+                      <Avatar name={member.name} size="md" className="ring-4 ring-slate-50 shadow-sm" />
                       <div>
-                        <p className="font-semibold text-slate-900 group-hover:text-primary transition-colors">{member.name}</p>
-                        <p className="text-2xs text-slate-400">ID: #{member.id}</p>
+                        <p className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{member.name}</p>
+                        <p className="text-[10px] font-bold text-slate-400 font-mono tracking-widest mt-1 uppercase">Hash: {member.id}</p>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 w-fit">
-                      <Shield size={12} className="text-slate-400" />
-                      <span className="text-xs font-medium text-slate-700">{member.role}</span>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 w-fit">
+                      <Shield size={12} className="text-primary/60" />
+                      <span className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{member.role}</span>
                     </div>
                   </td>
-                  <td>
-                    <span className={`badge ${member.status === 'Active' ? 'badge-green' : 'badge-slate'}`}>
+                  <td className="px-8 py-6">
+                    <span className={`text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border shadow-sm ${member.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
                       {member.status}
                     </span>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-1.5 text-slate-500">
-                      <Mail size={12} />
-                      <span className="text-sm">{member.email}</span>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-slate-600 font-medium">
+                      <Mail size={12} className="text-slate-300" />
+                      <span className="text-xs">{member.email}</span>
                     </div>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-1.5 text-slate-500">
-                      <Calendar size={12} />
-                      <span className="text-sm">{member.joined}</span>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 text-slate-400 font-bold tabular-nums">
+                      <Calendar size={12} className="text-slate-200" />
+                      <span className="text-[10px] uppercase tracking-widest">{member.joined}</span>
                     </div>
                   </td>
-                  <td className="text-right pr-6">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="px-8 py-6 text-right">
+                    <div className="flex items-center justify-end gap-2.5">
                       <button
                         onClick={() => handleEditMember(member)}
-                        className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-primary transition-colors"
+                        className="btn-action btn-action-edit"
+                        title="Edit"
                       >
-                        <Edit2 size={16} />
+                        <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => handleDeleteMember(member)}
-                        className="p-2 hover:bg-red-50 rounded-lg text-slate-400 hover:text-red-600 transition-colors"
+                        className="btn-action btn-action-reject"
+                        title="Delete"
                       >
-                        <Trash2 size={16} className='text-red-500' />
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </td>
@@ -140,61 +148,51 @@ export default function StaffMembers() {
       </div>
 
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalMode === 'add' ? 'Invite Staff Member' : 'Edit Staff Member'} size="md">
-        <form onSubmit={handleSave} className="space-y-4">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalMode === 'add' ? 'Add Staff Member' : 'Edit Staff Member'} size="md">
+        <form onSubmit={handleSave} className="space-y-6">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+            <label className="form-label">Full Name</label>
             <input
               type="text"
               required
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full form-input"
-              placeholder="e.g. John Doe"
+              className="form-input"
+              placeholder="Enter full name"
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Role</label>
-              <select
-                value={formData.role}
-                onChange={e => setFormData({ ...formData, role: e.target.value })}
-                className="w-full form-input"
-              >
-                <option value="Super Admin">Super Admin</option>
-                <option value="Moderator">Moderator</option>
-                <option value="Sales Manager">Sales Manager</option>
-                <option value="Support Agent">Support Agent</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Status</label>
-              <select
-                value={formData.status}
-                onChange={e => setFormData({ ...formData, status: e.target.value })}
-                className="w-full form-input"
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
+            <Select
+              label="Role"
+              value={formData.role}
+              onChange={e => setFormData({ ...formData, role: e.target.value })}
+              options={roles.map(r => ({ value: r.name, label: r.name }))}
+              placeholder={null}
+            />
+            <Select
+              label="Status"
+              value={formData.status}
+              onChange={e => setFormData({ ...formData, status: e.target.value })}
+              options={['Active', 'Inactive']}
+              placeholder={null}
+            />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+            <label className="form-label">Email Address</label>
             <input
               type="email"
               required
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
-              className="w-full form-input"
-              placeholder="name@99acres.com"
+              className="form-input"
+              placeholder="email@example.com"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
-            <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 border border-border bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest hover:bg-slate-50 transition-all font-bold">Cancel</button>
-            <button type="submit" className="px-5 py-2.5 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/30 font-bold">
-              {modalMode === 'add' ? 'Send Invitation' : 'Save Changes'}
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100">
+            <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-slate-200 bg-white rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-all">Cancel</button>
+            <button type="submit" className="px-6 py-3 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
+              {modalMode === 'add' ? 'Add Member' : 'Save Changes'}
             </button>
           </div>
         </form>

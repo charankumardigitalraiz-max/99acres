@@ -25,6 +25,20 @@ data :
    
    property post required data : 
  
+
+
+
+// 
+   Step 1 :  Base Details
+
+
+
+         you are :  // add this at top
+             owener, agent
+       what kind of property :  //this one add second place
+             residential, commercial
+
+
      1. property type :
         emum : {
            villas,
@@ -39,10 +53,6 @@ data :
            other     
          }      
           
-     2. purpose :
-         
-         1. selling
-         2. buying
 
      3. property Leghnth :
 
@@ -51,21 +61,27 @@ data :
      4. property title :
 
            as per user wish , present keep any name fine 
+
+
+
+    Step 2 : Location Details       
  
      5.  location of the property:
- 
-             1. city
-             2. locality, area
-             3. project/ building name 
-             4. full address 
-             5. land mark
+            current location (auto detected)
+             1. city(fields)
+             2. locality, area(fields)
+             3. project/ building name (fields) 
+             4. full address (fields) 
+             5. land mark (fields)
 
-     6. you are 
-           enum : {
-              owner,
-              agent, 
-              broker
-           }
+
+
+
+
+
+
+
+ Step3 : Property Pricing and Advatges
 
      7. expexted price : 
            as per user wish , present some amount
@@ -112,6 +128,13 @@ data :
             }
     16. available from : 
             date 
+
+
+
+
+
+  Step 4 : Property Images and Videos 
+
     17. smart album : {
           Livving Room : [image1, image2, image3, ...],
           Kitchen : [image1, image2, image3, ...],
@@ -127,7 +150,13 @@ data :
     19. video of the property
 
     20. images of the property
-     
+         can be more that more that 2 or 3
+    
+
+Step 5 : Owner/Seller Verification 
+
+
+
     21. owner/seller verfication
            adhaar or pan or passport
 

@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 // import { reviewsData } from '../data/mockData';
 import StatCard from '../components/ui/StatCard';
 import Avatar from '../components/ui/Avatar';
-import { Star, MessageSquare, ThumbsUp, Shield, Flag, Trash2, CheckCircle, ExternalLink, Filter } from 'lucide-react';
+import { Plus, Search, Filter, Pencil, Trash2, X, Star, MessageSquare, Shield, CheckCircle, XCircle, AlertCircle, ChevronDown, Download, ExternalLink, Flag } from 'lucide-react';
+import Select from '../components/ui/Select';
+import Badge from '../components/ui/Badge';
 import { useSelector, useDispatch } from 'react-redux';
 import { setStatusFilter, setPropertyFilter, selectFilteredReviews } from '../features/reviews/reviewSlice';
 
@@ -20,127 +22,145 @@ export default function Reviews() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="page-header flex-col sm:flex-row gap-4 sm:gap-0">
+    <div className="space-y-8 pb-20">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Reviews & Ratings</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage property reviews and user feedback across the platform.</p>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+            <span className="text-primary/80">Feedback</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            <span>Reviews</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">User Reviews</h2>
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <button className="btn-secondary flex-1 sm:flex-initial">
-            Export Report
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+            <Download size={14} className="text-primary" /> Download Report
           </button>
-          <button className="btn-primary flex-1 sm:flex-initial">
-            Moderation Rules
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
+            Moderation
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map(stat => (
-          <div key={stat.id} className="hover-lift">
-            <StatCard {...stat} />
+          <div key={stat.id} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-pointer">
+            <div className="flex items-start justify-between mb-4">
+              <div className={`w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:scale-110 transition-transform`}>
+                <Star size={16} />
+              </div>
+              <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 shadow-sm">
+                {stat.change}
+              </div>
+            </div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
+            <p className="text-xl font-bold text-slate-900 tabular-nums leading-none tracking-tight">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="card glass-card">
-        <div className="card-header border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 sm:p-6">
-          <h2 className="section-title">Latest Reviews</h2>
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 w-full sm:w-auto justify-center">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="px-8 py-6 bg-white border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-[0.3em] flex items-center gap-3">
+              Customer Reviews
+            </h3>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-white border border-slate-200 shadow-sm">
               <Star size={14} className="text-amber-500 fill-amber-500" />
-              <span className="text-sm font-semibold text-slate-700">4.7 / 5.0</span>
+              <span className="text-[11px] font-bold text-slate-700">4.7 Rating</span>
             </div>
-            
-            <div className="flex flex-col sm:flex-row items-center gap-2 bg-slate-50 p-1 rounded-xl border border-slate-200 w-full sm:w-auto">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg shadow-sm border border-slate-100 w-full sm:w-auto">
+
+            <div className="flex items-center gap-4 bg-slate-100/30 px-3 py-1.5 rounded-xl border border-slate-200/50">
+              <div className="flex items-center gap-2">
                 <Filter size={14} className="text-slate-400" />
-                <select 
-                  className="bg-transparent border-none text-xs font-bold text-slate-600 focus:ring-0 cursor-pointer outline-none w-full"
+                <Select
                   value={propertyFilter}
                   onChange={(e) => dispatch(setPropertyFilter(e.target.value))}
-                >
-                  <option value="All">All Properties</option>
-                  {properties.map(p => (
-                    <option key={p.id} value={p.id}>{p.title}</option>
-                  ))}
-                </select>
+                  options={[
+                    { value: 'All', label: 'All Properties' },
+                    ...properties.map(p => ({ value: p.id, label: p.title }))
+                  ]}
+                  placeholder={null}
+                  containerClassName="!gap-0"
+                  className="!bg-transparent !border-none !ring-0 !py-1 !px-2 !text-[10px] !w-auto min-w-[140px]"
+                />
               </div>
 
-              <select 
-                className="bg-transparent border-none text-xs font-bold text-slate-600 focus:ring-0 px-3 py-1.5 sm:py-0 cursor-pointer outline-none w-full sm:w-auto"
+              <div className="w-px h-6 bg-slate-200/60" />
+
+              <Select
                 value={statusFilter}
                 onChange={(e) => dispatch(setStatusFilter(e.target.value))}
-              >
-                <option value="All">All Status</option>
-                <option value="Approved">Approved</option>
-                <option value="Pending">Pending</option>
-                <option value="Flagged">Flagged</option>
-              </select>
+                options={['All Status', 'Approved', 'Pending', 'Flagged']}
+                placeholder={null}
+                containerClassName="!gap-0"
+                className="!bg-transparent !border-none !ring-0 !py-1 !px-2 !text-[10px] !w-auto min-w-[120px]"
+              />
             </div>
           </div>
         </div>
 
-        <div className="divide-y divide-border">
+        <div className="divide-y divide-slate-50">
           {reviews.map((review) => (
-            <div key={review.id} className="p-4 sm:p-5 hover:bg-slate-50/50 transition-colors">
-              <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
-                <div className="flex items-start gap-3 sm:gap-4 w-full">
-                  <Avatar name={review.user} size="lg" className="shrink-0" />
+            <div key={review.id} className="p-8 hover:bg-slate-50/50 transition-colors group">
+              <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
+                <div className="flex items-start gap-6 flex-1">
+                  <Avatar name={review.user} size="lg" className="ring-4 ring-slate-50 shadow-sm" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="font-semibold text-slate-900 truncate">{review.user}</span>
-                      <span className="hidden sm:inline text-slate-400">•</span>
-                      <span className="text-xs text-slate-500">{review.date}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{review.user}</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest tabular-nums">{review.date}</span>
                     </div>
-                    <div className="flex items-center gap-1 mt-1 text-amber-500">
+                    <div className="flex items-center gap-1 mt-2 text-amber-500">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} className={i < review.rating ? 'fill-amber-500' : 'text-slate-200'} />
+                        <Star key={i} size={12} className={i < review.rating ? 'fill-amber-500' : 'text-slate-100'} />
                       ))}
                     </div>
-                    <p className="mt-3 text-slate-700 leading-relaxed text-sm">
-                      {review.comment}
+                    <p className="mt-4 text-sm font-medium text-slate-600 leading-relaxed max-w-3xl">
+                      "{review.comment}"
                     </p>
-                    <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-medium text-slate-400">
+                    <div className="mt-6 flex flex-wrap items-center gap-4">
                       <Link
                         to={`/products/${review.propertyId}`}
-                        className="flex items-center gap-1.5 bg-primary/5 text-primary hover:bg-primary/10 px-2.5 py-1.5 rounded-lg transition-all border border-primary/10 group"
+                        className="flex items-center gap-2.5 bg-slate-50 text-slate-600 hover:bg-white hover:shadow-md px-4 py-2 rounded-lg transition-all border border-slate-100 group/link"
                       >
-                        <Shield size={12} className="text-primary/60" />
-                        <span className="font-bold truncate max-w-[150px] sm:max-w-none">Property: {review.property}</span>
-                        <ExternalLink size={10} className="hidden sm:block opacity-40 group-hover:opacity-100" />
+                        <Shield size={14} className="text-primary/60" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest truncate max-w-[200px]">Property: {review.property}</span>
+                        <ExternalLink size={12} className="opacity-0 group-hover/link:opacity-100 transition-opacity" />
                       </Link>
-                      <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${review.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' :
-                        review.status === 'Pending' ? 'bg-amber-50 text-amber-600' :
-                          'bg-red-50 text-red-600'
+                      <div className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${review.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        review.status === 'Pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                          'bg-rose-50 text-rose-600 border-rose-100'
                         }`}>
                         {review.status}
                       </div>
                     </div>
                   </div>
                 </div>
-                
-                <div className="flex sm:flex-col items-center gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-wrap sm:flex-nowrap">
-                  <button className="flex-1 sm:flex-none p-2.5 sm:p-2 hover:bg-emerald-50 hover:text-emerald-600 text-slate-400 rounded-xl transition-all border border-slate-100 sm:border-transparent hover:border-emerald-100 flex items-center justify-center gap-2 sm:block" title="Approve">
-                    <CheckCircle size={18} />
-                    <span className="sm:hidden text-xs font-bold">Approve</span>
+
+                <div className="flex lg:flex-col items-center gap-3 w-full lg:w-auto">
+                  {/* <button className="flex-1 lg:flex-none w-10 h-10 flex items-center justify-center bg-white border border-slate-100 text-slate-400 hover:text-emerald-600 hover:border-emerald-100 hover:shadow-md rounded-xl transition-all active:scale-90" title="Approve">
+                    <CheckCircle size={20} />
+                  </button> */}
+                  <button className="flex-1 lg:flex-none btn-action btn-action-reject" title="Delete">
+                    <Trash2 size={14} />
                   </button>
-                  <button className="flex-1 sm:flex-none p-2.5 sm:p-2 hover:bg-red-50 hover:text-red-600 text-slate-400 rounded-xl transition-all border border-slate-100 sm:border-transparent hover:border-red-100 flex items-center justify-center gap-2 sm:block" title="Delete">
-                    <Trash2 size={18} />
-                    <span className="sm:hidden text-xs font-bold">Delete</span>
-                  </button>
-                  <button className="flex-1 sm:flex-none p-2.5 sm:p-2 hover:bg-amber-50 hover:text-amber-600 text-slate-400 rounded-xl transition-all border border-slate-100 sm:border-transparent hover:border-amber-100 flex items-center justify-center gap-2 sm:block" title="Flag">
-                    <Flag size={18} />
-                    <span className="sm:hidden text-xs font-bold">Flag</span>
+                  <button className="flex-1 lg:flex-none btn-action btn-action-edit" title="Flag">
+                    <Flag size={14} />
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="card-body border-t border-border flex items-center justify-center p-4">
-          <button className="btn-secondary text-xs">Load More Reviews</button>
+        <div className="p-8 bg-slate-50/80 border-t border-slate-200 flex items-center justify-center">
+          <button className="px-10 py-3.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+            Load More
+          </button>
         </div>
       </div>
     </div>

@@ -4,6 +4,11 @@ const variantClasses = {
   red: 'badge-red',
   blue: 'badge-blue',
   slate: 'badge-slate',
+  violet: 'badge-violet',
+  rose: 'badge-rose',
+  indigo: 'badge-indigo',
+  sky: 'badge-sky',
+  orange: 'badge-orange',
 };
 
 const statusVariants = {

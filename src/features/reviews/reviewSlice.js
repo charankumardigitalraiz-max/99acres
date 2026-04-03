@@ -38,5 +38,10 @@ export const selectFilteredReviews = (state) => {
     });
 };
 
+
+export const selectReviewsByPropertyId = (state, id) => {
+    return state.reviews.reviews.filter(review => review.propertyId === id);
+};
+
 export const { addReview, showById, setStatusFilter, setPropertyFilter } = reviewSlice.actions;
 export default reviewSlice.reducer;

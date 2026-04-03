@@ -33,9 +33,9 @@ export const { setStatusFilter, setCategoryFilter, setPriorityFilter } = Support
 
 export const selectFilteredTickets = (state) => {
     const { statusFilter, categoryFilter, priorityFilter, tickets } = state.tickets;
-    return tickets.filter(s => 
-        (statusFilter === 'All' || s.status === statusFilter) && 
-        (categoryFilter === 'All' || s.category === categoryFilter) && 
+    return tickets.filter(s =>
+        (statusFilter === 'All' || s.status === statusFilter) &&
+        (categoryFilter === 'All' || s.category === categoryFilter) &&
         (priorityFilter === 'All' || s.priority === priorityFilter)
     );
 };

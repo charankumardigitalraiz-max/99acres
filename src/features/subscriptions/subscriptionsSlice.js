@@ -24,10 +24,27 @@ const subscriptionsSlice = createSlice({
     setSearch: (state, action) => { state.searchQuery = action.payload; },
     setEditingPlan: (state, action) => { state.editingPlan = action.payload; },
     setShowPlanModal: (state, action) => { state.showPlanModal = action.payload; },
+    togglePlanStatus: (state, action) => {
+      const { type, id } = action.payload;
+      const plans = type === 'agent' ? state.agentPlans : state.sellerPlans;
+      const plan = plans.find(p => p.id === id);
+      if (plan) {
+        plan.status = plan.status === 'active' ? 'inactive' : 'active';
+      }
+    },
   },
 });
 
-export const { setBillingCycle, setPlanFilter, setStatusFilter, setTypeFilter, setSearch, setEditingPlan, setShowPlanModal } = subscriptionsSlice.actions;
+export const {
+  setBillingCycle,
+  setPlanFilter,
+  setStatusFilter,
+  setTypeFilter,
+  setSearch,
+  setEditingPlan,
+  setShowPlanModal,
+  togglePlanStatus
+} = subscriptionsSlice.actions;
 
 export const selectFilteredSubscribers = (state) => {
   const { subscribers, planFilter, statusFilter, typeFilter, searchQuery } = state.subscriptions;
@@ -35,7 +52,7 @@ export const selectFilteredSubscribers = (state) => {
     const matchSearch = !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()) || s.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchPlan = planFilter === 'All' || s.plan.includes(planFilter);
     const matchStatus = statusFilter === 'All' || s.status === statusFilter;
-    const matchType = typeFilter === 'All' ||   (s.type && s.type.toLowerCase() === typeFilter.toLowerCase());
+    const matchType = typeFilter === 'All' || (s.type && s.type.toLowerCase() === typeFilter.toLowerCase());
     return matchSearch && matchPlan && matchStatus && matchType;
   });
 };

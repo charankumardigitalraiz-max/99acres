@@ -7,22 +7,47 @@ import {
 } from '../features/products/productsSlice';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
-import { Search, Filter, Download, ChevronLeft, ChevronRight, Eye, CheckCircle, XCircle, Building2, MapPin } from 'lucide-react';
+import Select from '../components/ui/Select';
+import { Search, Filter, Download, ChevronLeft, ChevronRight, Eye, CheckCircle, XCircle, Building2, MapPin, Clock, TrendingUp } from 'lucide-react';
 
-const types = ['All', 'villas', 'home', 'plots', 'flats', 'commercial', 'independent house', 'Appartments', 'Lands', 'other'];
-const statuses = ['All', 'Active', 'Pending', 'Rejected'];
-const cities = ['All', 'Mumbai', 'Bangalore', 'Delhi NCR', 'Hyderabad', 'Chennai'];
+const types = [
+  { label: 'All Types', value: '' },
+  { label: 'Villas', value: 'villas' },
+  { label: 'Home', value: 'home' },
+  { label: 'Plots', value: 'plots' },
+  { label: 'Flats', value: 'flats' },
+  { label: 'Commercial', value: 'commercial' },
+  { label: 'Independent House', value: 'independent house' },
+  { label: 'Apartments', value: 'Appartments' },
+  { label: 'Lands', value: 'Lands' },
+  { label: 'Other', value: 'other' },
+];
+const statuses = [
+  { label: 'All Statuses', value: '' },
+  { label: 'New', value: 'new' },
+  { label: 'Processing', value: 'processing' },
+  { label: 'Rejected', value: 'rejected' },
+  { label: 'Verified', value: 'verified' },
+  { label: 'Draft', value: 'draft' },
+];
+const cities = [
+  { label: 'All Cities', value: '' },
+  { label: 'Mumbai', value: 'Mumbai' },
+  { label: 'Bangalore', value: 'Bangalore' },
+  { label: 'Delhi NCR', value: 'Delhi NCR' },
+  { label: 'Hyderabad', value: 'Hyderabad' },
+  { label: 'Chennai', value: 'Chennai' },
+];
 
-const typeColors = {
-  villas: 'bg-emerald-50 text-emerald-600',
-  home: 'bg-blue-50 text-blue-600',
-  plots: 'bg-amber-50 text-amber-600',
-  flats: 'bg-violet-50 text-violet-600',
-  commercial: 'bg-rose-50 text-rose-600',
-  'independent house': 'bg-indigo-50 text-indigo-600',
-  Appartments: 'bg-sky-50 text-sky-600',
-  Lands: 'bg-orange-50 text-orange-600',
-  other: 'bg-slate-50 text-slate-600',
+const typeVariants = {
+  Villas: 'green',
+  Flats: 'violet',
+  Plots: 'amber',
+  Commercial: 'rose',
+  'Independent House': 'indigo',
+  Apartments: 'sky',
+  Land: 'orange',
+  other: 'slate',
 };
 
 export default function Products() {
@@ -36,162 +61,182 @@ export default function Products() {
 
   const counts = {
     all: filtered.length,
-    active: filtered.filter(p => p.status === 'Active').length,
-    pending: filtered.filter(p => p.status === 'Pending').length,
-    rejected: filtered.filter(p => p.status === 'Rejected').length,
+    new: filtered.filter(p => p.status?.toLowerCase() === 'new').length,
+    processing: filtered.filter(p => p.status?.toLowerCase() === 'processing').length,
+    rejected: filtered.filter(p => p.status?.toLowerCase() === 'rejected').length,
+    verified: filtered.filter(p => p.status?.toLowerCase() === 'verified').length,
+    draft: filtered.filter(p => p.status?.toLowerCase() === 'draft').length,
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="page-header">
+    <div className="space-y-6 pb-12">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
         <div>
-          <h2 className="section-title">Properties</h2>
-          <p className="section-subtitle">Listings uploaded by subscribed users</p>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5">
+            <span>Admin</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            <span className="text-primary/80">Properties</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Property Management</h2>
         </div>
-        <button className="btn-secondary">
-          <Download size={13} /> Export
+        <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:shadow-sm transition-all active:scale-95 shadow-sm">
+          <Download size={14} className="text-primary" /> Export Data
         </button>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-4 gap-3">
+      {/* Premium KPI Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         {[
-          { label: 'Total', value: counts.all, color: 'text-slate-800', bg: 'bg-slate-50' },
-          { label: 'Active', value: counts.active, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: 'Pending', value: counts.pending, color: 'text-amber-600', bg: 'bg-amber-50' },
-          { label: 'Rejected', value: counts.rejected, color: 'text-red-500', bg: 'bg-red-50' },
+          { label: 'Total Properties', value: counts.all, icon: Building2, color: 'slate' },
+          { label: 'New', value: counts.new, icon: TrendingUp, color: 'blue' },
+          { label: 'Processing', value: counts.processing, icon: Clock, color: 'amber' },
+          { label: 'Verified', value: counts.verified, icon: CheckCircle, color: 'emerald' },
+          { label: 'Rejected', value: counts.rejected, icon: XCircle, color: 'rose' },
+          { label: 'Draft', value: counts.draft, icon: Filter, color: 'slate' },
         ].map(s => (
-          <div key={s.label} className={`${s.bg} rounded-xl p-3 border border-border/50 text-center`}>
-            <p className={`text-lg font-semibold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-slate-500">{s.label}</p>
+          <div key={s.label} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-pointer">
+            <div className={`w-10 h-10 rounded-lg bg-${s.color === 'slate' ? 'slate' : s.color}-50 flex items-center justify-center text-${s.color === 'slate' ? 'slate-500' : s.color + '-600'} mb-4 group-hover:scale-110 transition-transform`}>
+              <s.icon size={16} />
+            </div>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{s.label}</p>
+            <p className="text-xl font-bold text-slate-900 tabular-nums leading-none">{s.value.toLocaleString()}</p>
           </div>
         ))}
       </div>
 
-      {/* Filters */}
-      <div className="card card-body flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-48">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+      {/* Modern Filter Interface */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-wrap gap-4 items-center">
+        <div className="relative flex-1 min-w-[280px]">
+          <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
-            className="form-input pl-8"
-            placeholder="Search property or uploader..."
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
+            placeholder="Search by property or uploader..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}
           />
         </div>
 
-        <div className="flex bg-slate-100 rounded-lg p-0.5 gap-0.5">
-          {types.map(t => (
-            <button
-              key={t}
-              onClick={() => dispatch(setTypeFilter(t))}
-              className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${typeFilter === t ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500'}`}
-            >
-              {t}
-            </button>
-          ))}
+        <div className="flex gap-4">
+          <div className="w-40">
+            <Select
+              value={typeFilter}
+              onChange={e => dispatch(setTypeFilter(e.target.value))}
+              options={types}
+            />
+          </div>
+          <div className="w-40">
+            <Select
+              value={statusFilter}
+              onChange={e => dispatch(setStatusFilter(e.target.value))}
+              options={statuses}
+            />
+          </div>
+          <div className="w-40">
+            <Select
+              value={cityFilter}
+              onChange={e => dispatch(setCityFilter(e.target.value))}
+              options={cities}
+            />
+          </div>
         </div>
-
-        <select
-          className="form-input w-auto text-xs"
-          value={statusFilter}
-          onChange={e => dispatch(setStatusFilter(e.target.value))}
-        >
-          {statuses.map(s => <option key={s}>{s}</option>)}
-        </select>
-
-        <select
-          className="form-input w-auto text-xs"
-          value={cityFilter}
-          onChange={e => dispatch(setCityFilter(e.target.value))}
-        >
-          {cities.map(c => <option key={c}>{c}</option>)}
-        </select>
       </div>
 
-      {/* Table */}
-      <div className="card overflow-hidden">
+      {/* Enhanced Property Repository Table */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
-              <tr>
+              <tr className="bg-slate-50/80 border-b border-slate-200">
                 <th>Property</th>
                 <th>Type</th>
-                <th>City</th>
-                <th>Area</th>
+                <th>Location</th>
                 <th>Price</th>
                 <th>Uploaded By</th>
-                <th>Date</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-50">
               {paginated.map(prop => (
-                <tr key={prop.id}>
-                  <td>
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
-                        <Building2 size={14} className="text-slate-400" />
+                <tr key={prop.id} className="group hover:bg-slate-50/80 transition-all">
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center p-1 group-hover:rotate-3 transition-transform overflow-hidden shadow-sm">
+                        {prop.coverPhoto ? (
+                          <img src={prop.coverPhoto} className="w-full h-full object-cover rounded-lg" alt="Prop" />
+                        ) : (
+                          <Building2 size={16} className="text-slate-300" />
+                        )}
                       </div>
                       <div>
-                        <p className="font-medium text-slate-800 text-xs leading-tight">{prop.title}</p>
-                        {prop.bedrooms && <p className="text-2xs text-slate-400">{prop.bedrooms} BHK</p>}
+                        <p className="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors mb-0.5">{prop.title}</p>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                          #{prop.id} {prop.bedrooms && <><div className="w-1 h-1 rounded-full bg-slate-300" /> {prop.bedrooms} BHK</>}
+                        </p>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${typeColors[prop.type] || 'bg-slate-50 text-slate-600'}`}>
-                      {prop.type}
-                    </span>
+                  <td className="px-6 py-5">
+                    <Badge variant={typeVariants[prop.propertyType]}>
+                      {prop.propertyType}
+                    </Badge>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-1">
-                      <MapPin size={11} className="text-slate-400" />
-                      <span className="text-xs">{prop.city}</span>
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-2">
+                      <MapPin size={10} className="text-primary/50" />
+                      <span className="text-xs font-bold text-slate-600">{prop.city}</span>
+                    </div>
+                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{prop.area}</p>
+                  </td>
+                  <td className="px-6 py-5 tabular-nums">
+                    <div className="font-bold text-slate-900 text-sm">{prop.price}</div>
+                    <div className="text-[8px] text-emerald-600 font-bold uppercase tracking-[0.1em] mt-1 flex items-center gap-1">
+                      <TrendingUp size={8} /> Verified
                     </div>
                   </td>
-                  <td className="text-slate-500 text-xs">{prop.area}</td>
-                  <td className="font-semibold text-slate-800 text-xs">{prop.price}</td>
-                  <td className="text-slate-600 text-xs">{prop.uploadedBy}</td>
-                  <td className="text-slate-400 text-xs">{prop.date}</td>
-                  <td><Badge>{prop.status}</Badge></td>
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[8px] font-bold">
+                        {prop.uploadedBy ? prop.uploadedBy.split(' ').map(n => n[0]).join('') : 'U'}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-700 leading-none">{prop.uploadedBy}</p>
+                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1">{prop.date}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <Badge variant={
+                      prop.status?.toLowerCase() === 'verified' ? 'green' :
+                        prop.status?.toLowerCase() === 'processing' ? 'amber' :
+                          prop.status?.toLowerCase() === 'new' ? 'blue' :
+                            prop.status?.toLowerCase() === 'rejected' ? 'red' :
+                              'slate'
+                    } className="text-[8px] font-bold uppercase tracking-widest px-3 py-1 shadow-sm">
+                      {prop.status}
+                    </Badge>
+                  </td>
                   <td>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-end gap-1.5 opacity-100 transition-opacity">
                       <button
                         onClick={() => navigate(`/products/${prop.id}`)}
-                        className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                        className="btn-action btn-action-view"
                         title="View Details"
                       >
-                        <Eye size={13} />
+                        <Eye size={14} />
                       </button>
-                      {prop.status === 'Pending' && (
-                        <>
-                          <button
-                            onClick={() => dispatch(updatePropertyStatus({ id: prop.id, status: 'Active' }))}
-                            className="p-1.5 rounded-md hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 transition-colors"
-                            title="Approve"
-                          >
-                            <CheckCircle size={13} />
-                          </button>
-                          <button
-                            onClick={() => dispatch(updatePropertyStatus({ id: prop.id, status: 'Rejected' }))}
-                            className="p-1.5 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
-                            title="Reject"
-                          >
-                            <XCircle size={13} />
-                          </button>
-                        </>
-                      )}
                     </div>
                   </td>
                 </tr>
               ))}
               {paginated.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center py-8 text-slate-400 text-sm">
-                    No properties found
+                  <td colSpan={7} className="text-center py-20">
+                    <div className="flex flex-col items-center justify-center text-slate-400">
+                      <Building2 size={32} className="mb-4 opacity-20" />
+                      <p className="text-xs font-bold uppercase tracking-widest">No property listings found</p>
+                    </div>
                   </td>
                 </tr>
               )}

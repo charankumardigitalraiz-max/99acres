@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setBillingCycle, setShowPlanModal, setEditingPlan } from '../features/subscriptions/subscriptionsSlice';
+import { setBillingCycle, setShowPlanModal, setEditingPlan, togglePlanStatus } from '../features/subscriptions/subscriptionsSlice';
 import { Check, X, Plus, Edit2, Users, Star } from 'lucide-react';
 import Modal from '../components/ui/Modal';
 import Badge from '../components/ui/Badge';
+import Switch from '../components/ui/Switch';
 
 const planColors = {
   Basic: { badge: 'slate', ring: 'ring-slate-200', activeBg: 'bg-slate-700', light: 'bg-slate-50' },
@@ -18,68 +19,75 @@ export default function SubscriptionPlans() {
   const [planModal, setPlanModal] = useState(false);
   const [editPlan, setEditPlan] = useState(null);
 
-  const plans = activeTab === 'agent' ? agentPlans : sellerPlans;
+  const plans = sellerPlans;
 
   const openEdit = (plan) => { setEditPlan(plan); setPlanModal(true); };
   const openAdd = () => { setEditPlan(null); setPlanModal(true); };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="page-header flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-0 font-bold">
-        <div className="w-full lg:w-auto">
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Subscription Vault</h1>
-          <p className="text-sm text-slate-500 mt-1 font-medium italic">Configure premium pricing tiers and ecosystem features.</p>
-        </div>
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-          <div className="flex bg-slate-100/80 backdrop-blur-md rounded-2xl p-1.5 gap-1.5 w-full sm:w-auto border border-slate-200">
-            <button
-              onClick={() => setActiveTab('agent')}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex-1 sm:flex-none ${activeTab === 'agent' ? 'bg-white shadow-xl shadow-slate-200 text-primary border border-slate-100' : 'text-slate-400 hover:text-slate-600'
-                }`}
-            >
-              Agent Tier
-            </button>
-            <button
-              onClick={() => setActiveTab('seller')}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex-1 sm:flex-none ${activeTab === 'seller' ? 'bg-white shadow-xl shadow-slate-200 text-primary border border-slate-100' : 'text-slate-400 hover:text-slate-600'
-                }`}
-            >
-              Seller Tier
-            </button>
+    <div className="space-y-8 pb-20">
+      {/* Header Section */}
+      <div className="flex  xl:flex-row xl:items-center justify-between gap-8 mb-4">
+        <div>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+            <span className="text-primary/80">Subscriptions</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            <span>Plan Settings</span>
           </div>
-          <button onClick={openAdd} className="btn-primary w-full sm:w-auto py-3.5 px-6  active:scale-95 text-[10px] uppercase font-black tracking-widest">
-            <Plus size={16} /> Add Plan
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Subscription Plans</h2>
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex bg-slate-100/50 p-1 rounded-2xl border border-slate-200/50">
+            {/* <button
+              onClick={() => setActiveTab('agent')}
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'agent' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
+                }`}
+            >
+              Agent Plans
+            </button> */}
+            {/* <button
+              onClick={() => setActiveTab('seller')}
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'seller' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
+                }`}
+            >
+              Seller Plans
+            </button> */}
+          </div>
+          <button onClick={openAdd} className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-95">
+            <Plus size={16} />
+            Add Plan
           </button>
         </div>
       </div>
 
       {/* Plan Filters & Toggle */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/80 backdrop-blur-xl p-4 sm:p-5 rounded-3xl shadow-xl shadow-slate-100/50 border border-white/50">
-        <div className="flex items-center gap-3 w-full sm:w-auto bg-slate-50/80 p-2 rounded-2xl border border-slate-100">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Viewing:</span>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
-            {activeTab === 'agent' ? <Users size={14} /> : <Star size={14} />}
-            <span className="text-[10px] font-black uppercase tracking-wider">{activeTab} Tier Plans</span>
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-primary/60">
+            {activeTab === 'agent' ? <Users size={16} /> : <Star size={16} />}
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Selected Plan</p>
+            <p className="text-sm font-bold text-slate-900 uppercase tracking-tight">Seller Plans</p>
           </div>
         </div>
-        <div className="flex items-center bg-slate-100/80 p-1.5 rounded-2xl gap-1.5 w-full sm:w-auto border border-slate-200">
+        <div className="flex items-center bg-slate-50 p-1 rounded-xl gap-1 border border-slate-100 shadow-inner">
           {['monthly', 'annual'].map(c => (
             <button
               key={c}
               onClick={() => dispatch(setBillingCycle(c))}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex-1 sm:flex-none ${billingCycle === c ? 'bg-white shadow-xl shadow-slate-200 text-slate-900 border border-slate-100' : 'text-slate-400 hover:text-slate-600'
+              className={`px-6 py-2 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all ${billingCycle === c ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'
                 }`}
             >
               {c}
-              {c === 'annual' && <span className="ml-2 text-emerald-500">(-17%)</span>}
+              {c === 'annual' && <span className="ml-2 text-emerald-500">(-17% Savings)</span>}
             </button>
           ))}
         </div>
       </div>
 
       {/* Plan Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {plans.map(plan => {
           const pc = planColors[plan.name.includes('Premium') ? 'Premium' : plan.name.includes('Standard') ? 'Standard' : 'Basic'];
           const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
@@ -88,80 +96,88 @@ export default function SubscriptionPlans() {
           return (
             <div
               key={plan.id}
-              className={`card relative flex flex-col hover-lift h-full transition-all duration-300 border-2 ${isPopular ? 'border-primary shadow-lg ring-4 ring-primary/5' : 'border-border'
-                }`}
+              className={`bg-white rounded-3xl relative flex flex-col transition-all duration-500 border overflow-hidden p-8 ${isPopular ? 'border-primary/30 shadow-2xl shadow-primary/5 ring-1 ring-primary/20 pt-14' : 'border-slate-100 shadow-sm hover:border-primary/20 hover:shadow-xl hover:shadow-slate-200/40'
+                } ${plan.status === 'inactive' ? 'opacity-60 grayscale-[0.5]' : ''}`}
             >
+              {/* Status Toggle - Top Right */}
+              <div className="absolute top-6 right-8 flex items-center gap-2 z-20">
+                <Switch
+                  checked={plan.status === 'active'}
+                  onChange={() => dispatch(togglePlanStatus({ type: 'seller', id: plan.id }))}
+                />
+                <span className={`text-[8px] font-black uppercase tracking-widest transition-colors ${plan.status === 'inactive' ? 'text-slate-400' : 'text-primary'}`}>
+                  {plan.status === 'inactive' ? 'Inactive' : 'Active'}
+                </span>
+              </div>
+
               {isPopular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
-                  Most Popular
+                <div className="absolute top-0 left-0">
+                  <div className="bg-primary text-white text-[9px] font-bold uppercase tracking-[0.2em] px-6 py-2 rounded-br-2xl shadow-lg">
+                    Popular Plan
+                  </div>
                 </div>
               )}
 
-              <div className="p-6 pb-2">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-800">{plan.name}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">Perfect for growing {activeTab}s</p>
+              <div className="mb-8">
+                <div className="flex justify-between items-start mb-6 pr-12">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">{plan.name}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Entity Analytics Package</p>
                   </div>
-                  <button
-                    onClick={() => openEdit(plan)}
-                    className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors border border-transparent hover:border-slate-200"
-                  >
-                    <Edit2 size={15} />
-                  </button>
                 </div>
 
-                <div className="my-6">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-lg font-bold text-slate-500">₹</span>
-                    <span className="text-4xl font-black text-slate-900 tracking-tight">{price.toLocaleString()}</span>
-                    <span className="text-sm font-medium text-slate-400">/ {billingCycle === 'annual' ? 'yr' : 'mo'}</span>
-                  </div>
-                  {billingCycle === 'annual' && (
-                    <p className="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-2">
-                      <div className="w-1 h-1 rounded-full bg-emerald-600" />
-                      Save ₹{(plan.monthlyPrice * 12 - plan.annualPrice).toLocaleString()} per year
-                    </p>
-                  )}
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xl font-bold text-slate-400">₹</span>
+                  <span className="text-4xl font-bold text-slate-900 tracking-tighter tabular-nums">{price.toLocaleString()}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">/ {billingCycle.slice(0, 2)}</span>
                 </div>
+                {billingCycle === 'annual' && (
+                  <div className="inline-flex items-center gap-2 mt-4 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100 shadow-sm">
+                    <Check size={10} className="stroke-[3]" />
+                    <span className="text-[9px] font-bold uppercase tracking-widest">Savings: ₹{(plan.monthlyPrice * 12 - plan.annualPrice).toLocaleString()}</span>
+                  </div>
+                )}
               </div>
 
-              <div className="p-6 pt-2 flex-1 space-y-3">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">What's included</div>
+              <div className="flex-1 space-y-4 mb-8">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Included Features</p>
                 {plan.features.map((f, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Check size={12} className="text-emerald-600" strokeWidth={3} />
+                  <div key={i} className="flex items-start gap-4 group">
+                    <div className="w-5 h-5 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                      <Check size={10} className="text-emerald-600" strokeWidth={3} />
                     </div>
-                    <span className="text-sm text-slate-600 font-medium">{f}</span>
+                    <span className="text-[11px] font-bold text-slate-600 leading-tight group-hover:text-slate-900 transition-colors">{f}</span>
                   </div>
                 ))}
                 {plan.notIncluded?.map((f, i) => (
-                  <div key={i} className="flex items-start gap-3 opacity-40">
-                    <div className="w-5 h-5 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <X size={12} className="text-slate-400" strokeWidth={3} />
+                  <div key={i} className="flex items-start gap-4 opacity-30 grayscale group">
+                    <div className="w-5 h-5 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <X size={10} className="text-slate-400" strokeWidth={3} />
                     </div>
-                    <span className="text-sm text-slate-400 line-through font-medium">{f}</span>
+                    <span className="text-[11px] font-bold text-slate-400 line-through leading-tight">{f}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="p-6 pt-0 mt-auto">
-                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 group hover:bg-white hover:border-primary/20 hover:shadow-sm transition-all duration-300">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
-                        <Users size={14} className="text-slate-400 group-hover:text-primary transition-colors" />
+              <div className="mt-auto">
+                <div className="bg-slate-50/50 rounded-2xl p-5 border border-slate-100 flex flex-col gap-4 group">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                        <Users size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
                       </div>
-                      <span className="text-xs font-bold text-slate-700">{plan.subscribers.toLocaleString()}</span>
+                      <div>
+                        <p className="text-xs font-bold text-slate-900 tabular-nums">{plan.subscribers.toLocaleString()}</p>
+                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Subscribers</p>
+                      </div>
                     </div>
-                    <span className="text-xs font-black text-primary">
-                      {Math.round((plan.subscribers / plans.reduce((a, p) => a + p.subscribers, 0)) * 100)}% share
-                    </span>
+                    {/* <span className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10 uppercase tracking-widest tabular-nums">
+                      {Math.round((plan.subscribers / plans.reduce((a, p) => a + p.subscribers, 0)) * 100)}% Market Share
+                    </span> */}
                   </div>
-                  <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                     <div
-                      className="h-full rounded-full bg-primary transition-all duration-700 ease-out shadow-inner"
+                      className="h-full rounded-full bg-primary transition-all duration-1000 ease-out shadow-sm"
                       style={{ width: `${Math.round((plan.subscribers / plans.reduce((a, p) => a + p.subscribers, 0)) * 100)}%` }}
                     />
                   </div>
@@ -173,50 +189,69 @@ export default function SubscriptionPlans() {
       </div>
 
       {/* Summary Table */}
-      <div className="card glass-card overflow-hidden">
-        <div className="card-header border-b border-border bg-white/50">
-          <p className="section-title text-lg">Revenue Summary: {activeTab === 'agent' ? 'Agents' : 'Sellers'}</p>
-          <div className="badge badge-blue">Real-time Data</div>
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="px-8 py-6 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em]">Revenue Summary</h3>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Plan Type: {activeTab}</p>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-bold uppercase tracking-widest border border-emerald-100 shadow-sm">
+            Real-time Stream
+          </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="data-table">
+          <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/50">
-                <th className="pl-6 py-4">Plan Name</th>
-                <th>Users</th>
-                <th>Monthly (₹)</th>
-                <th>Annual (₹)</th>
-                <th>Monthly Revenue</th>
-                <th className="pr-6 text-right">Status</th>
+              <tr className="bg-slate-50/20 border-b border-slate-100">
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Plan Name</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Subscribers</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Monthly Price</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Annual Price</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Total Revenue</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-slate-50">
               {plans.map(plan => (
-                <tr key={plan.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="pl-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-8 rounded-full bg-primary/20" />
-                      <span className="font-bold text-slate-900">{plan.name}</span>
+                <tr key={plan.id} className="group hover:bg-slate-50/50 transition-colors">
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-1.5 h-6 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]" />
+                      <span className="text-sm font-bold text-slate-800">{plan.name}</span>
                     </div>
                   </td>
-                  <td className="font-bold text-slate-700">{plan.subscribers.toLocaleString()}</td>
-                  <td className="text-slate-600">₹{plan.monthlyPrice.toLocaleString()}</td>
-                  <td className="text-slate-600">₹{plan.annualPrice.toLocaleString()}</td>
-                  <td className="font-black text-slate-900">
-                    ₹{(plan.subscribers * plan.monthlyPrice).toLocaleString()}
+                  <td className="px-8 py-5 text-sm font-bold text-slate-600 tabular-nums">{plan.subscribers.toLocaleString()}</td>
+                  <td className="px-8 py-5 text-[11px] font-bold text-slate-400 tabular-nums">₹{plan.monthlyPrice.toLocaleString()}</td>
+                  <td className="px-8 py-5 text-[11px] font-bold text-slate-400 tabular-nums">₹{plan.annualPrice.toLocaleString()}</td>
+                  <td className="px-8 py-5">
+                    <span className="text-sm font-bold text-slate-900 tabular-nums">₹{(plan.subscribers * plan.monthlyPrice).toLocaleString()}</span>
                   </td>
-                  <td className="pr-6 text-right"><Badge>Active Tier</Badge></td>
+                  <td className="px-8 py-5 text-right">
+                    <span className={`text-[8px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border shadow-sm transition-all group-hover:shadow-md ${plan.status === 'inactive'
+                      ? 'text-rose-600 bg-rose-50 border-rose-100'
+                      : 'text-emerald-600 bg-emerald-50 border-emerald-100'
+                      }`}>
+                      {plan.status === 'inactive' ? 'Inactive' : 'Active Plan'}
+                    </span>
+                  </td>
                 </tr>
               ))}
-              <tr className="bg-primary/5 font-bold border-t-2 border-primary/10">
-                <td className="pl-6 py-5 text-slate-900 uppercase tracking-wider text-xs">Total {activeTab} Revenue</td>
-                <td className="text-slate-900">{plans.reduce((a, p) => a + p.subscribers, 0).toLocaleString()}</td>
-                <td colSpan={2} />
-                <td className="text-xl font-black text-primary">
-                  ₹{plans.reduce((a, p) => a + (p.subscribers * p.monthlyPrice), 0).toLocaleString()}
+              <tr className="bg-slate-900 border-t-2 border-slate-800">
+                <td className="px-8 py-6">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Total Revenue</span>
                 </td>
-                <td className="pr-6 text-right">
-                  <span className="text-2xs text-slate-400 italic font-medium">Billed Monthly</span>
+                <td className="px-8 py-6">
+                  <span className="text-sm font-bold text-white tabular-nums">{plans.reduce((a, p) => a + p.subscribers, 0).toLocaleString()}</span>
+                </td>
+                <td colSpan={2} />
+                <td className="px-8 py-6">
+                  <div className="flex items-baseline gap-2 text-white">
+                    <span className="text-xs font-bold text-primary">₹</span>
+                    <span className="text-xl font-bold tracking-tighter tabular-nums">{plans.reduce((a, p) => a + (p.subscribers * p.monthlyPrice), 0).toLocaleString()}</span>
+                  </div>
+                </td>
+                <td className="px-8 py-6 text-right">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Monthly Total</span>
                 </td>
               </tr>
             </tbody>
@@ -228,41 +263,51 @@ export default function SubscriptionPlans() {
       <Modal
         isOpen={planModal}
         onClose={() => setPlanModal(false)}
-        title={editPlan ? `Edit ${editPlan.name} Plan` : `Add New ${activeTab === 'agent' ? 'Agent' : 'Seller'} Plan`}
+        title={editPlan ? `Edit Subscription Plan` : `Add Subscription Plan `}
+        size="md"
       >
-        <div className="space-y-5 p-2">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2 sm:col-span-1">
-              <label className="form-label">Plan Name</label>
-              <input className="form-input" defaultValue={editPlan?.name || ''} placeholder="e.g. Pro Business" />
+        <div className="space-y-6 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="col-span-1 sm:col-span-2">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Plan Name</label>
+              <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" defaultValue={editPlan?.name || ''} placeholder="e.g. Pro Business" />
             </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label className="form-label">Billing Type</label>
-              <select className="form-input capitalize">
-                <option>{activeTab} Plan</option>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Subscription For</label>
+              <select
+                value="value"
+                name='subscriptiontype'
+                // onChange={e => setFormData({ ...formData, role: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer shadow-sm"
+              >
+                {/* {roles.map((role) => ( */}
+
+                <option value="agent">Agent</option>
+                <option value="seller">Seller</option>
+                {/* ))} */}
               </select>
             </div>
             <div>
-              <label className="form-label">Monthly Price (₹)</label>
-              <input className="form-input" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Monthly Price (₹)</label>
+              <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
             </div>
             <div>
-              <label className="form-label">Annual Price (₹)</label>
-              <input className="form-input" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="24999" />
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Annual Price (₹)</label>
+              <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="24999" />
             </div>
           </div>
           <div>
-            <label className="form-label">Features (one per line)</label>
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Features (one per line)</label>
             <textarea
-              className="form-input h-32 resize-none"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium h-32 resize-none placeholder:text-slate-300"
               defaultValue={editPlan?.features?.join('\n') || ''}
-              placeholder="Features list..."
+              placeholder="Enter features..."
             />
           </div>
-          <div className="flex justify-end gap-3 pt-4 border-t border-border">
-            <button onClick={() => setPlanModal(false)} className="btn-secondary px-6">Cancel</button>
-            <button className="btn-primary px-8">
-              {editPlan ? 'Update Plan' : 'Generate Tier'}
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100">
+            <button onClick={() => setPlanModal(false)} className="px-6 py-3 border border-slate-200 bg-white rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-all">Cancel</button>
+            <button className="flex items-center justify-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-95">
+              {editPlan ? 'Update Plan' : 'Add Plan'}
             </button>
           </div>
         </div>
@@ -270,3 +315,4 @@ export default function SubscriptionPlans() {
     </div>
   );
 }
+

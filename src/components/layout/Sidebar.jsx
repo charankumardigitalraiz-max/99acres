@@ -5,25 +5,25 @@ import { toggleSidebar } from '../../features/ui/uiSlice';
 import {
   LayoutDashboard, CreditCard, Users, Star,
   Building2, BarChart3, MessageCircle, MessageSquareText, UserCircle, ChevronLeft,
-  ChevronRight, Home, ShieldCheck, UserCog, Users2, UserCheck, Store, ShoppingBag, Tags
+  ChevronRight, Home, ShieldCheck, UserCog, Users2, Headset, Store, ShoppingCart, Image as ImageIcon
 } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
 
   { path: '/subscriptions', label: 'Subscription Plans', icon: CreditCard },
-
   {
-    path: '/users', label: 'Customers', icon: Users,
+    path: '/customers', label: 'Customers', icon: Users,
     children: [
-      { path: '/users/agent', label: 'Agent', icon: UserCheck },
-      { path: '/users/seller', label: 'Seller', icon: Store },
-      { path: '/users/buyer', label: 'Buyer', icon: ShoppingBag },
+      // { path: '/customers/agent', label: 'Agent', icon: Headset },     // support / intermediary
+      { path: '/customers/seller', label: 'Seller', icon: Store },     // selling entity
+      { path: '/customers/buyer', label: 'Buyer', icon: ShoppingCart } // purchasing
     ]
   },
+
   { path: '/subscribers', label: 'Subscribers', icon: Star },
 
-  { path: '/categories', label: 'Categories', icon: Tags },
+  { path: '/categories', label: 'Categories', icon: Users },
 
   { path: '/products', label: 'Properties', icon: Building2 },
 
@@ -33,6 +33,8 @@ const navItems = [
   { path: '/support', label: 'Support', icon: MessageCircle },
 
   { path: '/reviews', label: 'Reviews', icon: MessageSquareText },
+  { path: '/banners', label: 'Banners', icon: ImageIcon },
+  { path: '/transactions', label: 'Transactions', icon: CreditCard },
 
   {
     label: 'Staff',
@@ -50,8 +52,6 @@ const SidebarItem = ({ item, collapsed }) => {
   const Icon = item.icon;
   const hasChildren = !!item.children;
   const isChildrenActive = hasChildren && item.children.some(child => location.pathname.startsWith(child.path));
-  const isParentActive = item.path && location.pathname === item.path;
-  const isActive = isParentActive || isChildrenActive;
 
   useEffect(() => {
     if (isChildrenActive && !collapsed) {
@@ -65,7 +65,10 @@ const SidebarItem = ({ item, collapsed }) => {
         to={item.path}
         end={item.path === '/'}
         className={({ isActive }) =>
-          `sidebar-link relative overflow-hidden group ${isActive ? 'active' : ''} ${collapsed ? 'justify-center px-0' : ''}`
+          `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 cursor-pointer relative overflow-hidden group ${isActive
+            ? 'bg-primary text-white shadow-md shadow-primary/20'
+            : 'text-slate-500 hover:bg-primary/5 hover:text-primary'
+          } ${collapsed ? 'justify-center px-0' : ''}`
         }
         title={collapsed ? item.label : ''}
       >
@@ -75,21 +78,26 @@ const SidebarItem = ({ item, collapsed }) => {
     );
   }
 
+  // Header (parent item with children)
   return (
     <div className="flex flex-col gap-1 w-full">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`sidebar-link w-full relative ${isActive ? 'active' : ''} ${isOpen && !isActive ? 'bg-primary text-white' : ''
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 cursor-pointer w-full relative ${isChildrenActive
+          ? 'bg-primary text-white shadow-md shadow-primary/20'
+          : isOpen
+            ? 'bg-slate-50 text-slate-900 border border-slate-100 shadow-sm'
+            : 'text-slate-500 hover:bg-primary/5 hover:text-primary border border-transparent'
           } ${collapsed ? 'justify-center px-0' : ''}`}
         title={collapsed ? item.label : ''}
       >
-        <Icon size={18} className="flex-shrink-0" />
+        <Icon size={18} className={`flex-shrink-0 ${isChildrenActive ? 'text-white' : 'text-slate-500 group-hover:text-primary'}`} />
         {!collapsed && (
           <>
-            <span className="flex-1 text-left">{item.label}</span>
+            <span className="flex-1 text-left font-medium">{item.label}</span>
             <ChevronRight
               size={16}
-              className={`transition-transform duration-200 flex-shrink-0 text-slate-400 ${isOpen ? 'rotate-90 text-white' : ''}`}
+              className={`transition-transform duration-200 flex-shrink-0 ${isChildrenActive ? 'text-white/80' : 'text-slate-400'} ${isOpen ? 'rotate-90' : ''}`}
             />
           </>
         )}
@@ -100,7 +108,7 @@ const SidebarItem = ({ item, collapsed }) => {
           className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 mt-1' : 'max-h-0 opacity-0'
             }`}
         >
-          <div className="flex flex-col gap-1 pl-11 pr-2 relative before:absolute before:left-[21px] before:top-0 before:-bottom-2 before:w-px before:bg-white/10">
+          <div className="flex flex-col gap-1 pl-11 pr-2 relative before:absolute before:left-[21px] before:top-0 before:-bottom-2 before:w-px before:bg-slate-100">
             {item.children.map(child => {
               const ChildIcon = child.icon;
               return (
@@ -108,9 +116,9 @@ const SidebarItem = ({ item, collapsed }) => {
                   key={child.path}
                   to={child.path}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${isActive
-                      ? 'text-white bg-primary'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 relative ${isActive
+                      ? 'text-white bg-primary shadow-md shadow-primary/20'
+                      : 'text-slate-500 hover:text-primary hover:bg-primary/5'
                     }`
                   }
                 >
@@ -136,17 +144,17 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`gradient-sidebar flex flex-col fixed top-0 left-0 h-full z-30 shadow-sidebar transition-all duration-300 ${collapsed ? 'w-16' : 'w-56'}`}
+      className={`bg-white flex flex-col fixed top-0 left-0 h-full z-30 border-r border-slate-200 transition-all duration-300 ${collapsed ? 'w-16' : 'w-56'}`}
     >
       {/* Logo */}
-      <div className={`flex items-center gap-2.5 px-4 py-4 border-b border-white/10 ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center flex-shrink-0">
+      <div className={`flex items-center gap-2.5 px-4 py-4 border-b border-slate-100 ${collapsed ? 'justify-center' : ''}`}>
+        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/20">
           <Home size={15} className="text-white" />
         </div>
         {!collapsed && (
           <div>
-            <p className="text-white font-semibold text-sm leading-tight">99Acres</p>
-            <p className="text-slate-400 text-2xs leading-tight">Admin Panel</p>
+            <p className="text-slate-900 font-semibold text-sm leading-tight">Sherla Properties</p>
+            <p className="text-slate-500 text-2xs leading-tight">Admin Panel</p>
           </div>
         )}
       </div>
@@ -165,7 +173,7 @@ export default function Sidebar() {
       <div className="px-2 pb-4">
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-150 text-xs"
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-all duration-150 text-xs"
         >
           {collapsed ? <ChevronRight size={14} /> : <><ChevronLeft size={14} /><span>Collapse</span></>}
         </button>

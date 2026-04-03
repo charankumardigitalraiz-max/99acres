@@ -1,39 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setSearch, setRoleFilter, setStatusFilter, setPage,
-  updateUserStatus, selectFilteredUsers
+  setSelectedUser, updateUserStatus, selectFilteredUsers
 } from '../features/users/usersSlice';
 import Badge from '../components/ui/Badge';
 import Avatar from '../components/ui/Avatar';
 import Modal from '../components/ui/Modal';
-import { Search, Filter, Download, ChevronLeft, ChevronRight, Eye, UserX, UserCheck, MapPin, Phone, Mail, Activity, Calendar, Building2 } from 'lucide-react';
+import Select from '../components/ui/Select';
+import { Search, Filter, Download, ChevronLeft, ChevronRight, Eye, UserX, UserCheck, MapPin, Phone, Mail, Activity, Calendar, Building2, TrendingUp, Users as UsersIcon, XCircle, CheckCircle } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const roles = ['All', 'Buyer', 'Seller', 'Agent'];
 const statuses = ['All', 'Active', 'Inactive', 'Suspended'];
 
-export default function Customers() {
+export default function Users() {
   const dispatch = useDispatch();
+  const [category, setCategory] = useState([]);
+  const users = useSelector((state) => state.users.list)
   const { role } = useParams();
-  const { searchQuery, roleFilter, statusFilter, currentPage, pageSize } = useSelector(s => s.users);
+  const { searchQuery, roleFilter, statusFilter, currentPage, pageSize, selectedUser } = useSelector(s => s.users);
   const filtered = useSelector(selectFilteredUsers);
   const [viewUser, setViewUser] = useState(null);
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const handleView = (user) => setViewUser(user);
   const navigate = useNavigate();
 
 
 
-  const usertypeBadge = (r) => {
-    if (r === 'Agent') return 'bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm font-bold uppercase tracking-widest text-[9px]';
-    if (r === 'Seller') return 'bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm font-bold uppercase tracking-widest text-[9px]';
-    if (r === 'Buyer') return 'bg-violet-50 text-violet-600 border border-violet-100 shadow-sm font-bold uppercase tracking-widest text-[9px]';
-    return 'bg-slate-50 text-slate-500 border border-slate-100 shadow-sm font-bold uppercase tracking-widest text-[9px]';
-  };
 
   useEffect(() => {
     if (role) {
+      // Capitalize first letter to match data (e.g., 'agent' -> 'Agent')
       const formattedRole = role.charAt(0).toUpperCase() + role.slice(1);
       dispatch(setRoleFilter(formattedRole));
     } else {
@@ -41,122 +40,173 @@ export default function Customers() {
     }
   }, [role, dispatch]);
 
+  const usertypeBadge = (role) => {
+    if (role === 'Agent') return 'bg-blue-50 text-blue-600 border border-blue-200 shadow-sm';
+    if (role === 'Seller') return 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm';
+    if (role === 'Buyer') return 'bg-purple-50 text-purple-600 border border-purple-200 shadow-sm';
+    return 'bg-slate-50 text-slate-600 border border-slate-200 shadow-sm';
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6 pb-12">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
         <div>
-          <h2 className="text-xl font-black text-slate-900 tracking-tight capitalize">{role ? `${role}s` : 'Customers'}</h2>
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{filtered.length} total active users</p>
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5">
+            <span>Admin</span>
+            <div className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="text-primary/80">User Management</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">{role ? role.toUpperCase() : 'ALL'} CUSTOMERS</h2>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 bg-white text-[10px] font-bold text-slate-600 hover:bg-slate-50 transition-all uppercase tracking-widest shadow-sm">
-          <Download size={13} /> Export Data
+        <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:shadow-md transition-all active:scale-95 shadow-sm">
+          <Download size={14} className="text-primary" /> Export Data
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="card card-body flex flex-wrap items-center gap-4 bg-slate-50/30 border-slate-100/50">
-        {/* Search */}
-        <div className="relative flex-1 min-w-48 group">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" />
+      {/* Premium KPI Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Users', value: users.length, icon: UsersIcon, color: 'slate' },
+          { label: 'Active Users', value: users.filter(u => u.status === 'Active').length, icon: Activity, color: 'emerald' },
+          { label: 'Growth', value: '+12%', icon: TrendingUp, color: 'primary' },
+          { label: 'Suspended Users', value: users.filter(u => u.status === 'Suspended').length, icon: UserX, iconColor: 'rose' },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-pointer">
+            <div className={`w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center text-${s.iconColor ? s.iconColor + '-500' : 'slate-500'} mb-4 group-hover:scale-110 transition-transform`}>
+              <s.icon size={16} className='text-primary' />
+            </div>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{s.label}</p>
+            <p className="text-xl font-bold text-slate-900 tabular-nums leading-none">{s.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Modern Filter Interface */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-wrap gap-4 items-center">
+        <div className="relative flex-1 min-w-[280px]">
+          <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
-            className="w-full pl-10 pr-4 py-2.5 text-xs border border-transparent rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
             placeholder="Search by name, email or city..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}
           />
         </div>
 
-        {/* Role Filter */}
-        {/* <div className="flex bg-slate-100/50 p-1 rounded-xl border border-slate-200/50">
-          {roles.map(r => (
-            <button
-              key={r}
-              onClick={() => dispatch(setRoleFilter(r))}
-              className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${roleFilter === r
-                ? 'bg-primary text-white shadow-md'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50'
-                }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div> */}
+        <div className="flex items-center gap-4">
+          <div className="w-40">
+            <Select
+              value={roleFilter}
+              onChange={e => dispatch(setRoleFilter(e.target.value))}
+              options={['All', 'Agent', 'Seller', 'Buyer']}
+              placeholder="Filter Role"
+            />
+          </div>
 
-        {/* Status Filter */}
-        <select
-          className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-white border border-transparent rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer uppercase tracking-widest"
-          value={statusFilter}
-          onChange={e => dispatch(setStatusFilter(e.target.value))}
-        >
-          {statuses.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
-        </select>
+          <div className="w-40">
+            <Select
+              value={statusFilter}
+              onChange={e => dispatch(setStatusFilter(e.target.value))}
+              options={statuses}
+              placeholder="Filter Status"
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="card overflow-hidden">
+      {/* Enhanced Intelligence Grid Table */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>User</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>City</th>
+                <th>Contact</th>
+                <th>Location</th>
                 <th>Role</th>
                 <th>Properties</th>
                 <th>Joined</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th className="text-center">Status</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-50">
               {paginated.map(user => (
                 <tr key={user.id}>
-                  <td className="text-slate-500">{user.id}</td>
                   <td>
-                    <div className="flex items-center gap-2.5">
-                      <Avatar initials={user.avatar} size="sm" />
-                      <span className="font-medium text-slate-800 text-xs">{user.name}</span>
+                    <span className="text-[10px] font-bold text-slate-400 tabular-nums">#{user.id.toString().padStart(4, '0')}</span>
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <Avatar initials={user.avatar} size="sm" className="shadow-sm border border-white ring-1 ring-slate-100" />
+                        <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${user.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors leading-none">{user.name}</p>
+                        <p className="text-[9px] text-slate-400 font-bold tracking-tight mt-1">{user.email}</p>
+                      </div>
                     </div>
                   </td>
-                  <td className="text-slate-500">{user.email}</td>
-                  <td className="text-slate-500">{user.phone}</td>
-                  <td>{user.city}</td>
                   <td>
-                    <span className={`text-xs font-medium ${usertypeBadge(user.role)} px-2 py-0.5 rounded-full `}>{user.role}</span>
+                    <div className="flex items-center gap-2">
+                      <Phone size={10} className="text-primary/50" />
+                      <span className="text-[11px] font-bold text-slate-600">{user.phone}</span>
+                    </div>
                   </td>
-                  <td className="text-center font-medium">{user.properties}</td>
-                  <td className="text-slate-500 text-xs">{user.joined}</td>
-                  <td><Badge>{user.status}</Badge></td>
                   <td>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
+                      <MapPin size={10} className="text-primary/50" />
+                      <span className="text-xs font-bold text-slate-600">{user.city}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <span className={`text-[8px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border shadow-sm ${usertypeBadge(user.role)}`}>
+                      {user.role}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-bold text-slate-700 shadow-inner">
+                        {user.properties}
+                      </div>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Properties</span>
+                    </div>
+                  </td>
+                  <td>
+                    <p className="text-[10px] font-bold text-slate-500 tabular-nums">{user.joined}</p>
+                  </td>
+                  <td className="px-6 py-5 text-center">
+                    <Badge variant={user.status === 'Active' ? 'green' : user.status === 'Suspended' ? 'red' : 'amber'} className="text-[8px] font-bold uppercase tracking-widest px-3 py-1 shadow-sm">
+                      {user.status}
+                    </Badge>
+                  </td>
+                  <td className="px-6 py-5 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
                       <button
-                        onClick={() =>
-                          //  handleView(user)
-                          navigate(`/customerDetails/${user.id}`)
-                        }
-                        className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
-                        title="View"
+                        onClick={() => navigate(`/customers/details/${user.id}`)}
+                        className="btn-action btn-action-view"
+                        title="View Details"
                       >
-                        <Eye size={13} />
+                        <Eye size={14} />
                       </button>
                       {user.status !== 'Suspended' ? (
                         <button
                           onClick={() => dispatch(updateUserStatus({ id: user.id, status: 'Suspended' }))}
-                          className="p-1.5 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
-                          title="Suspend"
+                          className="btn-action btn-action-reject"
+                          title="Suspend User"
                         >
-                          <UserX size={13} />
+                          <XCircle size={14} />
                         </button>
                       ) : (
                         <button
                           onClick={() => dispatch(updateUserStatus({ id: user.id, status: 'Active' }))}
-                          className="p-1.5 rounded-md hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 transition-colors"
-                          title="Activate"
+                          className="btn-action btn-action-approve"
+                          title="Activate User"
                         >
-                          <UserCheck size={13} />
+                          <CheckCircle size={14} />
                         </button>
                       )}
                     </div>
@@ -165,7 +215,12 @@ export default function Customers() {
               ))}
               {paginated.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center py-8 text-slate-400 text-sm">No users found</td>
+                  <td colSpan={9} className="text-center py-20">
+                    <div className="flex flex-col items-center justify-center text-slate-400">
+                      <UsersIcon size={32} className="mb-4 opacity-20" />
+                      <p className="text-xs font-bold uppercase tracking-widest">No Users Found</p>
+                    </div>
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -331,6 +386,6 @@ export default function Customers() {
           </div>
         )}
       </Modal>
-    </div>
+    </div >
   );
 }

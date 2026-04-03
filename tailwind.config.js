@@ -37,12 +37,12 @@ export default {
         border: '#E2E8F0',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.04)',
-        'card-hover': '0 4px 12px 0 rgba(0,0,0,0.08)',
-        sidebar: '2px 0 8px 0 rgba(0,0,0,0.12)',
+        card: '0 2px 8px -1px rgba(0,0,0,0.08), 0 1px 4px -1px rgba(0,0,0,0.04)',
+        'card-hover': '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+        sidebar: '4px 0 12px 0 rgba(0,0,0,0.06)',
       },
       fontSize: {
         '2xs': '0.65rem',
