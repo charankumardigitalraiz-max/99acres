@@ -49,15 +49,14 @@ export default function PropertyForm({ initialData }) {
     };
 
     const steps = [
-        { id: 1, title: 'Basic Details', icon: <User size={16} /> },
-        { id: 2, title: 'Location', icon: <MapPin size={16} /> },
-        { id: 3, title: 'Pricing & Specs', icon: <IndianRupee size={16} /> },
-        { id: 4, title: 'Media Assets', icon: <ImageIcon size={16} /> },
-        { id: 5, title: 'Verification', icon: <ShieldCheck size={16} /> }
+        { id: 1, title: 'Property Details', icon: <Building size={16} /> },
+        { id: 2, title: 'Pricing & Specs', icon: <IndianRupee size={16} /> },
+        { id: 3, title: 'Media Assets', icon: <ImageIcon size={16} /> },
+        { id: 4, title: 'Verification', icon: <ShieldCheck size={16} /> }
     ];
 
     return (
-        <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col">
+        <div className="bg-white  border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col">
             {/* <div className="p-6 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                 <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
                     <Building size={18} className="text-primary" />
@@ -94,73 +93,82 @@ export default function PropertyForm({ initialData }) {
             </div>
 
             <div className="bg-white">
-                {/* STEP 1: BASE DETAILS */}
+                {/* STEP 1: PROPERTY & LOCATION DETAILS */}
                 {openStep === 1 && (
-                    <div className="p-10 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">You Are</p>
-                                <p className="text-sm font-bold text-slate-800 capitalize">{formData.uploadertype || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Title</p>
-                                <p className="text-sm font-bold text-slate-800">{formData.title || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Kind of Property</p>
-                                <p className="text-sm font-bold text-slate-800 capitalize">{formData.propertyType || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Length / Area</p>
-                                <p className="text-sm font-bold text-slate-800">{formData.propertyLength || 'Not Provided'}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* STEP 2: LOCATION DETAILS */}
-                {openStep === 2 && (
-                    <div className="p-10 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div className="flex items-center gap-3 pb-6 border-b border-slate-100">
-                            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                                <MapPin size={14} className="text-blue-500" />
-                            </div>
-                            <span className="text-xs font-bold text-slate-600">Auto-detected location configuration is available for this property.</span>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">City</p>
-                                <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.city || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Locality, Area</p>
-                                <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.locality || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Project / Building Name</p>
-                                <p className="text-sm font-bold text-slate-800">{formData.location?.projectName || 'Not Provided'}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Landmark</p>
-                                <p className="text-sm font-bold text-slate-800">{formData.location?.landmark || 'Not Provided'}</p>
-                            </div>
-                            <div className="md:col-span-2 pt-4 border-t border-slate-100">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Full Address</p>
-                                <p className="text-sm font-bold text-slate-800 leading-relaxed max-w-3xl">{formData.location?.fullAddress || 'Not Provided'}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* STEP 3: PRICING & ADVANTAGES */}
-                {openStep === 3 && (
-                    <div className="p-10 space-y-12 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="p-10 space-y-7 animate-in fade-in slide-in-from-right-4 duration-500">
+                        {/* Basic Section */}
                         <div>
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                                <IndianRupee size={12} className="text-emerald-500" /> Financial Structure
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-y-8 gap-x-8">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                <User size={12} className="text-primary" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Basic Information
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">You Are</p>
+                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.uploadertype || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Title</p>
+                                    <p className="text-sm font-bold text-slate-800">{formData.title || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Kind of Property</p>
+                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.propertyType || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Length / Area</p>
+                                    <p className="text-sm font-bold text-slate-800">{formData.propertyLength || 'Not Provided'}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Location Section */}
+                        <div className="pt-4 border-t border-slate-100">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                <MapPin size={12} className="text-blue-500" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Location Details
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">City</p>
+                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.city || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Locality, Area</p>
+                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.locality || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Project / Building Name</p>
+                                    <p className="text-sm font-bold text-slate-800">{formData.location?.projectName || 'Not Provided'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Landmark</p>
+                                    <p className="text-sm font-bold text-slate-800">{formData.location?.landmark || 'Not Provided'}</p>
+                                </div>
+                                <div className="md:col-span-2 pt-4 border-t border-slate-100">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Full Address</p>
+                                    <p className="text-sm font-bold text-slate-800 leading-relaxed max-w-3xl">{formData.location?.fullAddress || 'Not Provided'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* STEP 2: PRICING & ADVANTAGES */}
+                {openStep === 2 && (
+                    <div className="p-10 space-y-7 animate-in fade-in slide-in-from-right-4 duration-500">
+                        <div>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-3 transition-all hover:bg-white hover:shadow-sm">
+                                <IndianRupee size={12} className="text-emerald-500" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Financial Structure
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-y-6 gap-x-8">
                                 <div>
                                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Expected Price</p>
                                     <p className="text-xl font-black text-slate-800 tracking-tight">{formData.pricing?.expectedPrice || 'Not Provided'}</p>
@@ -182,11 +190,15 @@ export default function PropertyForm({ initialData }) {
                             </div>
                         </div>
 
-                        <div className="border-t border-slate-100 pt-2">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                <Layout size={12} className="text-blue-500" /> Specifications & Availability
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        {/* Divider Line 1 */}
+                        <div className="border-t border-slate-100 pt-5">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                <Layout size={12} className="text-blue-500" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Specifications & Availability
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                                 <div>
                                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Furnishing</p>
                                     <p className="text-sm font-bold text-slate-800 capitalize">{formData.furnishingStatus || 'Not Provided'}</p>
@@ -208,11 +220,15 @@ export default function PropertyForm({ initialData }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-10 border-t border-slate-100">
+                        {/* Divider Line 2 */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-5 border-t border-slate-100">
                             <div>
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                                    <CheckCircle size={12} className="text-primary" /> Amenities
-                                </h4>
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-4 transition-all hover:bg-white hover:shadow-sm">
+                                    <CheckCircle size={12} className="text-primary" />
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                        Amenities
+                                    </h4>
+                                </div>
                                 <div className="flex flex-wrap gap-2">
                                     {(formData.amenities || []).map(amenity => (
                                         <span
@@ -228,9 +244,12 @@ export default function PropertyForm({ initialData }) {
                                 </div>
                             </div>
                             <div>
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                                    <MapPin size={12} className="text-emerald-500" /> Location Advantages
-                                </h4>
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-4 transition-all hover:bg-white hover:shadow-sm">
+                                    <MapPin size={12} className="text-emerald-500" />
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                        Location Advantages
+                                    </h4>
+                                </div>
                                 <div className="flex flex-wrap gap-2">
                                     {(formData.locationAdvantages || []).map(adv => (
                                         <span
@@ -249,10 +268,10 @@ export default function PropertyForm({ initialData }) {
                     </div>
                 )}
 
-                {/* STEP 4: IMAGES AND VIDEOS */}
-                {openStep === 4 && (
-                    <div className="p-10 space-y-12 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* STEP 3: IMAGES AND VIDEOS */}
+                {openStep === 3 && (
+                    <div className="p-7 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                             <div>
                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Cover Photo</p>
                                 {formData.coverPhoto || (formData.images && formData.images[0]) ? (
@@ -326,11 +345,14 @@ export default function PropertyForm({ initialData }) {
                             </div>
                         </div>
 
-                        <div className="pt-8 border-t border-slate-100">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                <ImageIcon size={12} className="text-primary" /> Smart Album Assets
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                        <div className="pt-7 border-t border-slate-100">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                <ImageIcon size={12} className="text-primary" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Smart Album Assets
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-7">
                                 {Object.keys(formData.smartAlbum || {}).map(room => (
                                     <div key={room}>
                                         <div className="flex items-center gap-2 mb-3">
@@ -360,9 +382,9 @@ export default function PropertyForm({ initialData }) {
                     </div>
                 )}
 
-                {/* STEP 5: VERIFICATION */}
-                {openStep === 5 && (
-                    <div className="p-10 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                {/* STEP 4: VERIFICATION */}
+                {openStep === 4 && (
+                    <div className="p-7 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Identity Verification</p>
@@ -405,9 +427,12 @@ export default function PropertyForm({ initialData }) {
 
                             {/* Legal Details */}
                             <div className="pt-4 border-t lg:border-t-0 lg:pt-0">
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                    <Briefcase size={12} className="text-blue-500" /> Legal / Lawyer Details
-                                </h4>
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                    <Briefcase size={12} className="text-blue-500" />
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                        Legal / Lawyer Details
+                                    </h4>
+                                </div>
                                 {formData.lawyerDetails ? (
                                     <div className="space-y-6">
                                         <div>
@@ -434,9 +459,12 @@ export default function PropertyForm({ initialData }) {
 
                             {/* Banker Details */}
                             <div className="pt-4 border-t lg:border-t-0 lg:pt-0">
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                    <Building size={12} className="text-amber-500" /> Banker Details
-                                </h4>
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                    <Building size={12} className="text-amber-500" />
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                        Banker Details
+                                    </h4>
+                                </div>
                                 {formData.bankerDetails?.length > 0 ? (
                                     <div className="space-y-4">
                                         {formData.bankerDetails.map((banker, idx) => (
@@ -458,11 +486,14 @@ export default function PropertyForm({ initialData }) {
                             </div>
                         </div>
 
-                        <div className="pt-8 border-t border-slate-100">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                <ShieldCheck size={12} className="text-slate-500" /> Property Ownership Proofs
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="pt-7 border-t border-slate-100">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
+                                <ShieldCheck size={12} className="text-slate-500" />
+                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                    Property Ownership Proofs
+                                </h4>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                                 {[
                                     { id: 'saleDeed', label: 'Sale Deed / Title Deed', req: true },
                                     { id: 'encumbranceCert', label: 'Encumbrance Certificate', req: true },

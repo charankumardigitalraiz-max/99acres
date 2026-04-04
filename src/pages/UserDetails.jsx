@@ -157,8 +157,11 @@ export default function UserDetails() {
                     {isSeller && (
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-2">
-                                    <Building2 size={13} className="text-primary" /> Property Listings
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/5 to-white flex items-center justify-center border border-primary/20 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                                        <Building2 size={13} className="text-primary" />
+                                    </div>
+                                    Property Listings
                                 </h3>
                                 <span className="text-[9px] font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">{properties.length} total</span>
                             </div>
@@ -213,8 +216,10 @@ export default function UserDetails() {
                     {isBuyer && (
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                                <h3 className="text-[15px] font-black text-slate-900 uppercase  flex items-center gap-2">
-                                    <Heart size={13} className="text-rose-500 fill-rose-500" />
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em]  flex items-center gap-2">
+                                    <div className='w-8 h-8 rounded-xl bg-gradient-to-br from-primary/5 to-white flex items-center justify-center border border-rose-200 shadow-sm transition-transform duration-300 group-hover:scale-110">'>
+                                        <Heart size={13} className="text-rose-500 fill-rose-500" />
+                                    </div>
                                     <span > My </span>
                                     <span> Wishlist</span>
                                 </h3>
@@ -304,8 +309,11 @@ export default function UserDetails() {
                     {user.chats?.length > 0 && (
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-slate-100">
-                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-2">
-                                    <MessageSquare size={13} className="text-primary" /> Messages
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/5 to-white flex items-center justify-center border border-primary/20 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                                        <MessageSquare size={13} className="text-primary" />
+                                    </div>
+                                    Messages
                                 </h3>
                             </div>
                             <div className="divide-y divide-slate-50">
@@ -333,8 +341,11 @@ export default function UserDetails() {
                     {user.activity?.length > 0 && (
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-slate-100">
-                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-2">
-                                    <Activity size={13} className="text-primary" /> Recent Activity
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-50 to-white flex items-center justify-center border border-blue-100 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                                        <Activity size={13} className="text-blue-500" />
+                                    </div>
+                                    Recent Activity
                                 </h3>
                             </div>
                             <div className="divide-y divide-slate-50">
@@ -355,8 +366,11 @@ export default function UserDetails() {
                     {user.reports?.length > 0 && isSeller && (
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-2">
-                                    <Shield size={13} className="text-rose-500" /> Reports
+                                <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-50 to-white flex items-center justify-center border border-rose-100 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                                        <Shield size={13} className="text-rose-500" />
+                                    </div>
+                                    Security Reports
                                 </h3>
                                 <span className="px-2.5 py-0.5 bg-rose-50 text-rose-600 rounded-full text-[9px] font-bold border border-rose-100">{user.reports.length} flags</span>
                             </div>
