@@ -40,6 +40,8 @@ export default function Users() {
     }
   }, [role, dispatch]);
 
+  const isSellerOrAgent = roleFilter === 'Seller' || roleFilter === 'Agent';
+
   const usertypeBadge = (role) => {
     if (role === 'Agent') return 'bg-blue-50 text-blue-600 border border-blue-200 shadow-sm';
     if (role === 'Seller') return 'bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-sm';
@@ -126,7 +128,7 @@ export default function Users() {
                 <th>Contact</th>
                 <th>Location</th>
                 <th>Role</th>
-                <th>Properties</th>
+                <th style={{ display: roleFilter === "Buyer" ? 'none' : 'table-cell' }}>Properties</th>
                 <th>Joined</th>
                 <th className="text-center">Status</th>
                 <th className="text-right">Actions</th>
@@ -167,7 +169,10 @@ export default function Users() {
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-6 py-5 text-center">
+                  <td
+                    className="px-6 py-5 text-center"
+                    style={{ display: roleFilter === "Buyer" ? 'none' : 'table-cell' }}
+                  >
                     <div className="flex items-center justify-center gap-1.5">
                       <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-bold text-slate-700 shadow-inner">
                         {user.properties}

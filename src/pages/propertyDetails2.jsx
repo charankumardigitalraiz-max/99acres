@@ -75,6 +75,7 @@ export default function ProductDetails() {
                             <div className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-emerald-100 shadow-sm">
                                 <CheckCircle size={14} className="text-emerald-500 fill-emerald-500/10" /> {product.status}
                             </div>
+
                         )}
                         {product.status?.toLowerCase() === 'rejected' && (
                             <div className="text-[10px] font-black uppercase tracking-widest text-rose-600 bg-rose-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-rose-100 shadow-sm">
