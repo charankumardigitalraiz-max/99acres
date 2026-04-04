@@ -1,35 +1,21 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPropertyById, updatePropertyStatus } from '../features/products/productsSlice';
 import { selectReviewsByPropertyId } from '../features/reviews/reviewSlice';
-import Badge from '../components/ui/Badge';
 import Avatar from '../components/ui/Avatar';
 import Modal from '../components/ui/Modal';
 import {
     Building2, MapPin, CheckCircle, XCircle,
-    ArrowLeft, Calendar, Activity,
-    Download, ExternalLink, Shield,
-    Info, Maximize2, Play, Users,
-    Compass, Home, Layout, Waves,
-    Wind, Trash2, Check, Clock,
+    Shield, Edit3, Info, Maximize2, Play, Users,
+    Layout, Waves, Wind, Trash2, Check, Clock,
     Smartphone, Sofa, Tv, Utensils,
-    Coffee, Bike, Trees, Eye, Star, MessageSquare
+    Bike, Trees, Eye, ArrowLeft, Calendar, Activity,
+    Image as ImageIcon, ChevronDown, RotateCcw, MoreHorizontal, AlertOctagon, MessageSquare
 } from 'lucide-react';
 
-const amenityIcons = {
-    'water supply': <Waves size={14} />,
-    'washrooms': <Layout size={14} />,
-    'bedrooms': <Home size={14} />,
-    'kitchen': <Utensils size={14} />,
-    'livving room': <Sofa size={14} />,
-    'balcony': <Wind size={14} />,
-    'parking': <Bike size={14} />,
-    'garden': <Trees size={14} />,
-    'terrace': <Layout size={14} />,
-    'tv': <Tv size={14} />,
-    'sofa': <Sofa size={14} />
-};
+import PropertyForm from '../components/ui/PropertyForm';
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -37,10 +23,12 @@ export default function ProductDetails() {
     const dispatch = useDispatch();
 
     const product = useSelector((state) => selectPropertyById(state, id));
-    const propertyReviews = useSelector((state) => selectReviewsByPropertyId(state, Number(id))) || [];
-    const [activeTab, setActiveTab] = useState('Overview');
+    const [activeTab, setActiveTab] = useState('Basic Info');
     const [selectedAlbum, setSelectedAlbum] = useState('Livving Room');
-    const [lightboxImage, setLightboxImage] = useState(null);
+    const [lightboxMedia, setLightboxMedia] = useState(null); // { type: 'image' | 'video', url: string }
+    const [isEditing, setIsEditing] = useState(false);
+    const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+    const [statusConfirm, setStatusConfirm] = useState(null); // { type, reason }
 
     if (!product) {
         return (
@@ -50,10 +38,7 @@ export default function ProductDetails() {
                 </div>
                 <h2 className="text-xl font-bold text-slate-800">Property not found</h2>
                 <p className="text-slate-500 mt-1">This listing might have been removed or doesn't exist.</p>
-                <button
-                    onClick={() => navigate('/properties')}
-                    className="mt-6 btn-secondary"
-                >
+                <button onClick={() => navigate('/properties')} className="mt-6 btn-secondary">
                     <ArrowLeft size={14} /> Back to Listings
                 </button>
             </div>
@@ -61,13 +46,10 @@ export default function ProductDetails() {
     }
 
     const albumCategories = product.smartAlbum ? Object.keys(product.smartAlbum) : [];
-    if (albumCategories.length > 0 && !selectedAlbum) {
-        setSelectedAlbum(albumCategories[0]);
-    }
 
     return (
-        <div className="space-y-6 pb-20">
-            {/* Header / Breadcrumb */}
+        <div className="space-y-6 pb-24">
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <button
@@ -78,530 +60,604 @@ export default function ProductDetails() {
                     </button>
                     <div>
                         <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
-                            <span className="hover:text-primary transition-colors cursor-pointer">Admin</span>
+                            <span className="hover:text-primary cursor-pointer">Admin</span>
                             <span className="text-slate-200">/</span>
-                            <span className="hover:text-primary transition-colors cursor-pointer">Listings</span>
+                            <span className="hover:text-primary cursor-pointer">Listings</span>
                             <span className="text-slate-200">/</span>
                             <span className="text-primary bg-primary/10 px-2 py-0.5 rounded-md">#PRP-{product.id}</span>
                         </div>
                         <h2 className="text-2xl font-black text-slate-900 tracking-tight">{product.title}</h2>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border ${product.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                        product.status === 'Pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                            'bg-red-50 text-red-600 border-red-100'
-                        }`}>
-                        {product.status}
-                    </div>
-                    <button className="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg">
-                        <Download size={14} /> Download PDF
-                    </button>
-                </div>
-            </div>
+                <div className="flex items-center gap-3 relative">
+                    <div className="flex items-center gap-1.5">
+                        {product.status?.toLowerCase() === 'verified' && (
+                            <div className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-emerald-100 shadow-sm">
+                                <CheckCircle size={14} className="text-emerald-500 fill-emerald-500/10" /> {product.status}
+                            </div>
 
-            {/* Hero Section: Media Gallery */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-8 space-y-6">
-                    {/* Main Cover & Quick Stats */}
-                    <div className="relative rounded-[2rem] overflow-hidden aspect-[16/9] lg:aspect-[21/9] shadow-2xl border border-slate-200 group">
-                        <img
-                            src={product.coverPhoto || product.images[0]}
-                            alt={product.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between text-white">
-                            <div className="flex items-center gap-8">
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Price</p>
-                                    <p className="text-3xl font-black tracking-tight">{product.price}</p>
-                                </div>
-                                <div className="w-px h-10 bg-white/20"></div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Built Area</p>
-                                    <p className="text-xl font-bold">{product.propertyLength}</p>
-                                </div>
+                        )}
+                        {product.status?.toLowerCase() === 'rejected' && (
+                            <div className="text-[10px] font-black uppercase tracking-widest text-rose-600 bg-rose-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-rose-100 shadow-sm">
+                                <XCircle size={14} className="text-rose-500 fill-rose-500/10" /> {product.status}
                             </div>
-                            <div className="flex gap-3">
-                                {product.video && (
-                                    <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-black uppercase tracking-widest hover:bg-white/30 transition-all shadow-lg">
-                                        <Play size={14} fill="currentColor" /> Watch Video
-                                    </button>
-                                )}
-                                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-slate-900/80 transition-all shadow-lg">
-                                    <Maximize2 size={14} /> Full View
-                                </button>
+                        )}
+                        {(product.status?.toLowerCase() === 'processing' || product.status?.toLowerCase() === 'pending') && (
+                            <div className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-amber-100 shadow-sm">
+                                <Clock size={14} className="text-amber-500" /> {product.status}
                             </div>
-                        </div>
+                        )}
+                        {(product.status?.toLowerCase() === 'new' || product.status?.toLowerCase() === 'active') && product.status?.toLowerCase() !== 'verified' && (
+                            <div className="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-3.5 py-2 rounded-xl flex items-center gap-2 border border-blue-100 shadow-sm">
+                                <MoreHorizontal size={14} className="text-blue-500" /> {product.status}
+                            </div>
+                        )}
                     </div>
 
-                    {/* Smart Album Tabs */}
-                    <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/20">
-                        <div className="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                            <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
-                                <Layout size={16} className="text-primary" /> Smart Album Breakdown
-                            </h3>
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-                                {albumCategories.length} Categories
-                            </span>
-                        </div>
-                        <div className="p-3 flex gap-2 overflow-x-auto scrollbar-hide border-b border-slate-100 bg-slate-50/30">
-                            {albumCategories.map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setSelectedAlbum(cat)}
-                                    className={`px-5 py-2.5 text-[10px] font-black uppercase tracking-widest whitespace-nowrap rounded-xl transition-all ${selectedAlbum === cat ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-slate-500 hover:bg-slate-100 border border-transparent hover:border-slate-200'}`}
-                                >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="p-6">
-                            {selectedAlbum && product.smartAlbum[selectedAlbum] ? (
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    {product.smartAlbum[selectedAlbum].map((img, i) => (
-                                        <div
-                                            key={i}
-                                            onClick={() => setLightboxImage(img)}
-                                            className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-200 shadow-sm cursor-zoom-in"
-                                        >
-                                            <img src={img} alt={`${selectedAlbum} ${i + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                            <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 text-white">
-                                                    <Maximize2 size={18} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
-                                    <p className="text-xs font-bold text-slate-400">No images found for this category.</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Column: Uploader & Proofs */}
-                <div className="lg:col-span-4 space-y-6">
-                    {/* Uploader Card */}
-                    <div className="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-xl shadow-slate-200/20">
-                        <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-md bg-emerald-50 flex items-center justify-center">
-                                <Shield size={12} className="text-emerald-500" />
-                            </div>
-                            Uploader Verification
-                        </h3>
-                        <div className="flex items-center gap-4 mb-6">
-                            <Avatar initials={product.uploader.avatar} src={product.uploader.photo} size="lg" className="ring-4 ring-slate-50" />
+                    {product.status?.toLowerCase() === 'rejected' && product.rejectionReason && (
+                        <div className="absolute top-full left-0 mt-3 flex items-start gap-2 bg-rose-50/50 backdrop-blur-sm border border-rose-100 p-2.5 rounded-xl min-w-[280px] shadow-lg shadow-rose-200/20 animate-in slide-in-from-top-1 duration-300">
+                            <Info size={12} className="text-rose-500 mt-0.5 shrink-0" />
                             <div>
-                                <h4 className="text-lg font-black text-slate-900 tracking-tight">{product.uploader.name}</h4>
-                                <div className="flex flex-wrap items-center gap-2 mt-1">
-                                    <span className="text-[9px] font-black uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-md">
-                                        {product.uploader.role}
-                                    </span>
-                                    {product.ownerVerification?.status === 'Verified' && (
-                                        <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                            <CheckCircle size={10} /> {product.uploader.verification}
-                                        </span>
-                                    )}
-                                </div>
+                                <p className="text-[8px] font-black uppercase tracking-widest text-rose-400 mb-0.5">Rejection Reason</p>
+                                <p className="text-[10px] font-bold text-rose-700 leading-tight">{product.rejectionReason}</p>
                             </div>
                         </div>
+                    )}
 
-                        <div className="space-y-3 pt-5 border-t border-slate-100">
-                            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Identity Proof</span>
-                                <span className="text-xs font-black text-slate-700">{product.ownerVerification?.type} Card</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Verification Date</span>
-                                <span className="text-xs font-black text-slate-700">March 15, 2024</span>
-                            </div>
-                        </div>
-                    </div>
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                            className="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 flex items-center gap-2 transition-all shadow-lg hover:shadow-slate-200">
+                            Update Status <ChevronDown size={14} className={`transition-transform duration-300 ${showStatusDropdown ? 'rotate-180' : ''}`} />
+                        </button>
 
-                    {/* Ownership Proofs Card */}
-                    <div className="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-xl shadow-slate-200/20">
-                        <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
-                                <Info size={12} className="text-blue-500" />
-                            </div>
-                            Ownership Proofs
-                        </h3>
-                        <div className="space-y-3">
-                            {[
-                                { id: 'saleDeed', label: 'Sale Deed / Title Deed', req: true },
-                                { id: 'encumbranceCert', label: 'Encumbrance Certificate', req: true },
-                                { id: 'propertyTaxReceipt', label: 'Property Tax Receipt', req: true },
-                                { id: 'legalOpinion', label: 'Legal Opinion Document', req: false },
-                                { id: 'lawyerCert', label: 'Lawyer Certificate', req: false }
-                            ].map(doc => {
-                                const exists = product.ownershipProofs?.[doc.id];
-                                return (
-                                    <div key={doc.id} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${exists ? 'bg-white border-slate-200 shadow-sm hover:border-primary/40' : 'bg-slate-50 border-dashed border-slate-200 opacity-60'}`}>
-                                        <div className="flex flex-col">
-                                            <span className="text-xs font-black text-slate-700">{doc.label}</span>
-                                            <span className={`text-[9px] font-black uppercase tracking-widest mt-0.5 ${doc.req ? 'text-rose-400' : 'text-slate-400'}`}>
-                                                {doc.req ? 'Required Protocol' : 'Optional Support'}
-                                            </span>
-                                        </div>
-                                        {exists ? (
-                                            <button className="w-8 h-8 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-white transition-colors flex items-center justify-center shadow-sm">
-                                                <Download size={14} />
-                                            </button>
-                                        ) : (
-                                            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
-                                                <XCircle size={14} className="text-slate-300" />
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Details Tabs & Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-8">
-                    <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/20 overflow-hidden">
-                        <div className="p-4 bg-slate-50 border-b border-slate-100">
-                            <div className="flex bg-slate-100/80 p-1.5 rounded-2xl w-full sm:w-fit overflow-x-auto scrollbar-hide">
-                                {['Overview', 'Location & Area', 'Amenities & Specs'].map(tab => (
-                                    <button
-                                        key={tab}
-                                        onClick={() => setActiveTab(tab)}
-                                        className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${activeTab === tab ? 'bg-white shadow-xl shadow-slate-200 text-primary' : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'}`}
-                                    >
-                                        {tab}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="p-8">
-                            {activeTab === 'Overview' && (
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 ml-1">About this Property</h4>
-                                        <p className="text-sm text-slate-600 leading-loose font-medium">
-                                            This stunning {product.propertyType} is listed for {product.purpose}. Located in the heart of {product.location.city}, it offers a perfect blend of luxury and convenience. The property features modern architecture with {product.furnishingStatus.toLowerCase()} interiors and high-end finishes throughout.
-                                        </p>
-                                    </div>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {showStatusDropdown && (
+                            <>
+                                <div className="fixed inset-0 z-40" onClick={() => setShowStatusDropdown(false)}></div>
+                                <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="p-2 space-y-1">
                                         {[
-                                            { label: 'Type', value: product.propertyType, icon: <Layout className="text-blue-500" size={16} /> },
-                                            { label: 'Purpose', value: product.purpose, icon: <ArrowLeft className="text-emerald-500" size={16} /> },
-                                            { label: 'Direction', value: product.direction, icon: <Compass className="text-amber-500" size={16} /> },
-                                            { label: 'Listed Date', value: product.date, icon: <Calendar className="text-purple-500" size={16} /> },
-                                        ].map(item => (
-                                            <div key={item.label} className="flex items-center gap-3 bg-slate-50/50 p-3 rounded-2xl border border-slate-100">
-                                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-100 shrink-0">
-                                                    {item.icon}
-                                                </div>
-                                                <div>
-                                                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">{item.label}</p>
-                                                    <p className="text-xs font-black text-slate-800 capitalize truncate">{item.value}</p>
-                                                </div>
-                                            </div>
+                                            { label: 'Verified', val: 'Verified', color: 'text-emerald-600 hover:bg-emerald-50', icon: <CheckCircle size={14} /> },
+                                            { label: 'Rejected', val: 'Rejected', color: 'text-rose-600 hover:bg-rose-50', icon: <XCircle size={14} /> },
+                                            { label: 'Processing', val: 'Processing', color: 'text-amber-600 hover:bg-amber-50', icon: <Clock size={14} /> },
+                                            { label: 'New', val: 'New', color: 'text-blue-600 hover:bg-blue-50', icon: <RotateCcw size={14} /> }
+                                        ].map(opt => (
+                                            <button
+                                                key={opt.val}
+                                                onClick={() => {
+                                                    if (opt.val === 'Verified' || opt.val === 'Rejected') {
+                                                        setStatusConfirm({ type: opt.val, reason: '' });
+                                                    } else {
+                                                        dispatch(updatePropertyStatus({ id: product.id, status: opt.val }));
+                                                    }
+                                                    setShowStatusDropdown(false);
+                                                }}
+                                                className={`w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${opt.color}`}>
+                                                {opt.icon} {opt.label}
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
-                            )}
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
 
-                            {activeTab === 'Location & Area' && (
-                                <div className="space-y-8 border-none">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div>
-                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                                                <MapPin size={14} /> Geographical Footprint
-                                            </h4>
-                                            <div className="bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100 space-y-5">
+            {/* Main Content */}
+            {isEditing ? (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <PropertyForm initialData={null} onCancel={() => setIsEditing(false)} onSubmit={() => setIsEditing(false)} />
+                </div>
+            ) : (
+                <>
+                    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+                        {/* TOP ROW: Main Information + Financials */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+                            {/* Cover Photo */}
+                            <div className="lg:col-span-8 flex flex-col gap-6">
+                                <div className="relative rounded-[2rem] overflow-hidden h-full min-h-[200px] max-h-[280px] border border-slate-200 group cursor-pointer"
+                                    onClick={() => setLightboxMedia({ type: 'image', url: product.coverPhoto || product.images?.[0] })}>
+                                    <img src={product.coverPhoto || product.images?.[0]} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent pointer-events-none"></div>
+
+                                    {/* Play Overlay if video exists */}
+                                    {product.video && (
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10">
+                                            <div className="w-16 h-16 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center text-white shadow-2xl transform scale-75 group-hover:scale-100 transition-transform duration-500">
+                                                <Play size={24} fill="white" className="ml-1" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between text-white pointer-events-none">
+                                        <div className="flex items-center gap-8">
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Price</p>
+                                                <p className="text-3xl font-black tracking-tight">{product.price}</p>
+                                            </div>
+                                            <div className="w-px h-10 bg-white/20"></div>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Built Area</p>
+                                                <p className="text-xl font-bold">{product.propertyLength}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-3 pointer-events-auto">
+                                            {product.video && (
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); setLightboxMedia({ type: 'video', url: product.video }); }}
+                                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-[10px] font-black uppercase tracking-widest hover:bg-white/30 transition-all shadow-lg">
+                                                    <Play size={14} fill="currentColor" /> Watch Video
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setLightboxMedia({ type: 'image', url: product.coverPhoto || product.images?.[0] }); }}
+                                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-slate-900/80 transition-all shadow-lg">
+                                                <Maximize2 size={14} /> Full View
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Financials & Admin Actions */}
+                            <div className="lg:col-span-4 flex flex-col gap-6">
+                                <div className="bg-white rounded-[1.5rem] border border-primary/20 shadow-xl shadow-slate-200/30 bg-gradient-to-br from-white to-slate-50 p-4 h-full flex flex-col">
+                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-primary/70 mb-3">Financial Structure</h3>
+                                    <div className="space-y-2 flex-1 flex flex-col justify-center">
+                                        <div className="bg-white p-3.5 rounded-[1.25rem] border border-slate-200 shadow-sm relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-[2.5rem] -mr-6 -mt-6 group-hover:scale-110 transition-transform duration-500"></div>
+                                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Expected Pricing</p>
+                                            <p className="text-2xl font-black text-slate-900 tracking-tighter">{product.price}</p>
+                                            <div className="mt-2">
+                                                {product.pricing.negotiable ? (
+                                                    <div className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg inline-flex items-center gap-1 border border-emerald-200 shadow-sm">
+                                                        <Check size={10} /> Negotiable Listing
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-[9px] font-black uppercase tracking-widest text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg inline-flex items-center gap-1 border border-rose-200 shadow-sm">
+                                                        <XCircle size={10} /> Fixed Rate Model
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-2">
+                                            <div className="bg-white px-3 py-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between group hover:border-primary/20 transition-all">
                                                 <div>
-                                                    <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Project / Building</p>
-                                                    <p className="text-sm font-black text-slate-800 tracking-tight">{product.location.projectName}</p>
+                                                    <p className="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-0.5">Price / SqFt</p>
+                                                    <p className="text-sm font-black text-slate-900">₹{product.pricing.pricePerSqft.toLocaleString()}</p>
                                                 </div>
-                                                <div>
-                                                    <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Full Address</p>
-                                                    <p className="text-xs font-bold text-slate-600 leading-relaxed">{product.location.fullAddress}</p>
+                                                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 group-hover:text-primary group-hover:bg-primary/5 transition-all">
+                                                    <Maximize2 size={14} />
                                                 </div>
+                                            </div>
+                                            <div className="bg-white px-3 py-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between group hover:border-primary/20 transition-all">
                                                 <div>
-                                                    <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-1">Prominent Landmark</p>
-                                                    <p className="text-xs font-bold text-slate-600 italic">"{product.location.landmark}"</p>
+                                                    <p className="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-0.5">Monthly Maintenance</p>
+                                                    <p className="text-sm font-black text-slate-900">
+                                                        {product.pricing.maintenanceCharges > 0 ? `₹${product.pricing.maintenanceCharges.toLocaleString()}` : 'Included'}
+                                                    </p>
+                                                </div>
+                                                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 group-hover:text-primary group-hover:bg-primary/5 transition-all">
+                                                    <Smartphone size={14} />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                                                <Activity size={14} /> Location Advantages
-                                            </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* BOTTOM ROW: Tabs & Details */}
+                        <div className="w-full bg-white rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-200/20 overflow-hidden">
+                            {/* <div className="p-3 bg-slate-50 border-b border-slate-200">
+                                <div className="flex bg-slate-100/80 p-1 rounded-2xl w-full overflow-x-auto scrollbar-hide gap-1">
+                                    {['Basic Info', 'Location', 'Pricing & Specs', 'Media Assets', 'Verification'].map(tab => (
+                                        <button key={tab} onClick={() => setActiveTab(tab)}
+                                            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${activeTab === tab ? 'bg-white shadow-lg text-primary' : 'text-slate-500 hover:text-slate-800 hover:bg-white/50'}`}>
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div> */}
+                            {/* <div className="p-6">
+
+                 
+                                {activeTab === 'Basic Info' && (
+                                    <div className="space-y-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+                                            {[
+                                                { label: 'You Are', value: product.uploadertype, cap: true },
+                                                { label: 'Property Title', value: product.title },
+                                                { label: 'Kind of Property', value: product.propertyType, cap: true },
+                                                { label: 'Property Length / Area', value: product.propertyLength },
+                                                { label: 'Listed For', value: product.purpose, cap: true },
+                                                { label: 'Listed Date', value: product.date },
+                                            ].map(f => (
+                                                <div key={f.label}>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{f.label}</p>
+                                                    <p className={`text-sm font-bold text-slate-800 ${f.cap ? 'capitalize' : ''}`}>{f.value || 'Not Provided'}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">About this Property</p>
+                                            <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                                                This stunning {product.propertyType} is listed for {product.purpose}. Located in the heart of {product.location?.city}, it offers a perfect blend of luxury and convenience. The property features modern architecture with {product.furnishingStatus?.toLowerCase()} interiors and high-end finishes throughout.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                   
+                                {activeTab === 'Location' && (
+                                    <div className="space-y-5">
+                                        <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                                            <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                                                <MapPin size={13} className="text-blue-500" />
+                                            </div>
+                                            <span className="text-xs font-bold text-slate-600">Auto-detected location configuration is available for this property.</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+                                            {[
+                                                { label: 'City', value: product.location?.city, cap: true },
+                                                { label: 'Locality, Area', value: product.location?.locality, cap: true },
+                                                { label: 'Project / Building Name', value: product.location?.projectName },
+                                                { label: 'Landmark', value: product.location?.landmark },
+                                            ].map(f => (
+                                                <div key={f.label}>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{f.label}</p>
+                                                    <p className={`text-sm font-bold text-slate-800 ${f.cap ? 'capitalize' : ''}`}>{f.value || 'Not Provided'}</p>
+                                                </div>
+                                            ))}
+                                            <div className="md:col-span-2 pt-3 border-t border-slate-100">
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Full Address</p>
+                                                <p className="text-sm font-bold text-slate-800 leading-relaxed">{product.location?.fullAddress || 'Not Provided'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="pt-3 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Activity size={12} /> Location Advantages</p>
                                             <div className="flex flex-wrap gap-2">
-                                                {product.locationAdvantages.map(adv => (
-                                                    <div key={adv} className="px-4 py-2.5 bg-white border border-slate-200 shadow-sm rounded-xl flex items-center gap-2.5 text-[11px] font-black uppercase tracking-widest text-slate-700">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-200"></div>
-                                                        {adv}
+                                                {(product.locationAdvantages || []).map(adv => (
+                                                    <span key={adv} className="px-3 py-1 rounded-md text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200">{adv}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+            
+                                {activeTab === 'Pricing & Specs' && (
+                                    <div className="space-y-5">
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Check size={12} className="text-emerald-500" /> Financial Structure</p>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Expected Price</p>
+                                                    <p className="text-base font-black text-slate-900 tracking-tight">{product.price || 'N/A'}</p>
+                                                </div>
+                                                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Price / SqFt</p>
+                                                    <p className="text-base font-black text-emerald-600">₹{product.pricing?.pricePerSqft?.toLocaleString() || 'N/A'}</p>
+                                                </div>
+                                                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Maintenance</p>
+                                                    <p className="text-sm font-bold text-slate-800">{product.pricing?.maintenanceCharges > 0 ? `₹${product.pricing.maintenanceCharges.toLocaleString()}` : 'Included'}</p>
+                                                </div>
+                                                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Flexibility</p>
+                                                    <p className={`text-sm font-black ${product.pricing?.negotiable ? 'text-primary' : 'text-slate-600'}`}>
+                                                        {product.pricing?.negotiable ? 'Negotiable' : 'Fixed Price'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><Layout size={12} className="text-blue-500" /> Specifications & Availability</p>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                {[
+                                                    { label: 'Furnishing', value: product.furnishingStatus },
+                                                    { label: 'Direction', value: product.direction },
+                                                    { label: 'Availability', value: product.availabilityStatus },
+                                                    { label: 'Available From', value: product.availableFrom },
+                                                ].map(f => (
+                                                    <div key={f.label}>
+                                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{f.label}</p>
+                                                        <p className="text-sm font-bold text-slate-800 capitalize">{f.value || 'N/A'}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2"><CheckCircle size={12} className="text-primary" /> Amenities</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {(product.amenities || []).map(a => (
+                                                    <span key={a} className="px-3 py-1 rounded-md text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 capitalize">{a}</span>
+                                                ))}
+                                                {!(product.amenities?.length > 0) && <span className="text-xs font-bold text-slate-400 italic">No amenities specified</span>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                  
+                                {activeTab === 'Media Assets' && (
+                                    <div className="space-y-5">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Cover Photo</p>
+                                                {(product.coverPhoto || product.images?.[0]) ? (
+                                                    <div className="w-full h-40 rounded-2xl overflow-hidden border border-slate-200 cursor-pointer group shadow-sm" onClick={() => setLightboxImage(product.coverPhoto || product.images[0])}>
+                                                        <img src={product.coverPhoto || product.images[0]} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-full h-40 rounded-2xl bg-slate-50 border border-slate-200 border-dashed flex items-center justify-center">
+                                                        <p className="text-xs font-bold text-slate-400 italic">No cover photo</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Property Video</p>
+                                                <div className={`w-full h-40 border border-slate-200 rounded-2xl flex flex-col items-center justify-center bg-slate-50 transition-all ${product.video ? 'cursor-pointer hover:border-primary/50 group' : ''}`}
+                                                    onClick={() => product.video && setLightboxImage(product.video)}>
+                                                    <div className={`w-12 h-12 rounded-full shadow-sm flex items-center justify-center mb-3 transition-colors ${product.video ? 'bg-primary text-white group-hover:scale-110' : 'bg-white text-slate-300'}`}>
+                                                        <Play size={20} />
+                                                    </div>
+                                                    <p className={`text-[10px] font-black uppercase tracking-widest ${product.video ? 'text-primary' : 'text-slate-400'}`}>
+                                                        {product.video ? 'Play Video' : 'No video uploaded'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2"><ImageIcon size={12} className="text-primary" /> Smart Album Assets</p>
+                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                                {Object.keys(product.smartAlbum || {}).map(room => (
+                                                    <div key={room}>
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">{room}</p>
+                                                            <span className="text-[9px] font-bold text-slate-400">({product.smartAlbum[room]?.length || 0})</span>
+                                                        </div>
+                                                        <div className="grid grid-cols-5 gap-1.5 py-1">
+                                                            {product.smartAlbum[room]?.map((img, i) => (
+                                                                <img key={i} src={img} onClick={() => setLightboxImage(img)}
+                                                                    className="aspect-square w-full object-cover rounded-lg border border-slate-200 cursor-pointer hover:opacity-80 transition-opacity" alt="" />
+                                                            ))}
+                                                            {!(product.smartAlbum[room]?.length > 0) && (
+                                                                <div className="col-span-5 py-2">
+                                                                    <p className="text-[10px] text-slate-400 italic">No assets uploaded</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
-                            {activeTab === 'Amenities & Specs' && (
-                                <div className="space-y-8">
-                                    <div>
-                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center gap-2">
-                                            <Shield size={14} /> Integrated Modern Amenities
-                                        </h4>
-                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                            {product.amenities.map(amenity => (
-                                                <div key={amenity} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-primary/30 hover:shadow-md transition-all group">
-                                                    <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm border border-slate-100 shrink-0 group-hover:scale-110 transition-transform">
-                                                        {amenityIcons[amenity.toLowerCase()] || <Info size={14} />}
+           
+                                {activeTab === 'Verification' && (
+                                    <div className="space-y-5">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Identity Verification</p>
+                                                {product.ownerVerification?.photo ? (
+                                                    <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 cursor-pointer group relative shadow-sm" onClick={() => setLightboxImage(product.ownerVerification.photo)}>
+                                                        <img src={product.ownerVerification.photo} alt="Verification" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                            <span className="text-white text-[10px] font-bold px-3 py-1.5 bg-black/50 rounded-full flex items-center gap-2">
+                                                                <ImageIcon size={12} /> View {product.ownerVerification?.type || 'Proof'}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <span className="text-[11px] font-black uppercase tracking-widest text-slate-700 truncate">{amenity}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-100">
-                                        <div className="p-5 rounded-2xl bg-blue-50/50 border border-blue-100 flex flex-col items-center text-center shadow-sm">
-                                            <Layout size={20} className="text-blue-500 mb-2" />
-                                            <p className="text-[9px] font-black uppercase tracking-widest text-blue-400 mb-1">Furnishing</p>
-                                            <p className="text-sm font-black text-slate-800">{product.furnishingStatus}</p>
-                                        </div>
-                                        <div className="p-5 rounded-2xl bg-amber-50/50 border border-amber-100 flex flex-col items-center text-center shadow-sm">
-                                            <Clock size={20} className="text-amber-500 mb-2" />
-                                            <p className="text-[9px] font-black uppercase tracking-widest text-amber-400 mb-1">Availability</p>
-                                            <p className="text-sm font-black text-slate-800 capitalize">{product.availabilityStatus}</p>
-                                        </div>
-                                        <div className="p-5 rounded-2xl bg-emerald-50/50 border border-emerald-100 flex flex-col items-center text-center shadow-sm">
-                                            <Calendar size={20} className="text-emerald-500 mb-2" />
-                                            <p className="text-[9px] font-black uppercase tracking-widest text-emerald-400 mb-1">Available From</p>
-                                            <p className="text-sm font-black text-slate-800">{product.availableFrom}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Independent Property Reviews Block */}
-                    <div className="mt-8 bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/20 overflow-hidden p-8">
-                        <div className="flex items-center justify-between mb-8">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                <MessageSquare size={14} /> Global Feedback ({propertyReviews.length})
-                            </h4>
-                            <div className="flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-100 shadow-sm">
-                                <Star size={14} className="text-amber-500 fill-amber-500" />
-                                <span className="text-xs font-black text-amber-600">
-                                    {propertyReviews.length > 0 ? (propertyReviews.reduce((sum, r) => sum + r.rating, 0) / propertyReviews.length).toFixed(1) : 'No Ratings'}
-                                </span>
-                            </div>
-                        </div>
-
-                        {propertyReviews.length > 0 ? (
-                            <div className="space-y-4">
-                                {propertyReviews.map(review => (
-                                    <div key={review.id} className="p-5 rounded-[1.5rem] bg-white border border-slate-100 shadow-sm shadow-slate-200/20 group hover:border-primary/20 transition-all">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-xs font-black text-slate-500 uppercase border border-slate-100">
-                                                    {review.user.substring(0, 2)}
-                                                </div>
-                                                <div>
-                                                    <h5 className="text-sm font-black text-slate-800">{review.user}</h5>
-                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{review.date}</p>
-                                                </div>
+                                                ) : (
+                                                    <div className="w-full h-32 rounded-xl bg-slate-50 border border-slate-200 border-dashed flex flex-col items-center justify-center text-slate-400">
+                                                        <XCircle size={20} className="mb-2 text-slate-300" />
+                                                        <span className="text-[9px] font-black uppercase tracking-widest">No Proof Uploaded</span>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="flex flex-col items-end">
-                                                <div className="flex items-center gap-1 mb-1">
-                                                    {[...Array(5)].map((_, i) => (
-                                                        <Star key={i} size={12} className={i < review.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-100 fill-slate-100'} />
-                                                    ))}
-                                                </div>
-                                                <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${review.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' : review.status === 'Flagged' ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'}`}>
-                                                    {review.status}
-                                                </span>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Owner Photograph</p>
+                                                {product.uploader?.photo ? (
+                                                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-200 cursor-pointer hover:border-primary/50 transition-colors shadow-sm" onClick={() => setLightboxImage(product.uploader.photo)}>
+                                                        <img src={product.uploader.photo} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" alt="Owner" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-24 h-24 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
+                                                        <Users size={32} className="text-slate-300" />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-                                        <p className="text-xs font-semibold text-slate-600 leading-relaxed italic border-l-2 border-primary/20 pl-4 py-1">
-                                            "{review.comment}"
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-16 bg-slate-50 rounded-[1.5rem] border border-slate-100 border-dashed">
-                                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
-                                    <MessageSquare size={20} className="text-slate-300" />
-                                </div>
-                                <p className="text-xs font-bold text-slate-400 flex flex-col gap-1">
-                                    <span className="text-sm font-black text-slate-600">No Reviews Found</span>
-                                    This property hasn't received any reviews yet.
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                </div>
 
-                {/* Right Column: Pricing & Financials */}
-                <div className="lg:col-span-4 gap-6 flex flex-col">
-                    <div className="bg-white rounded-[2rem] border border-primary/20 shadow-2xl shadow-slate-200/30 bg-gradient-to-br from-white to-slate-50 p-8">
-                        <h3 className="text-[10px] font-black uppercase tracking-widest text-primary/70 mb-6 flex items-center gap-2">
-                            Financial Structure
-                        </h3>
-                        <div className="space-y-6">
-                            <div className="bg-white p-6 rounded-[1.5rem] border border-slate-100 shadow-lg shadow-slate-200/20 relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-[3rem] -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500"></div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Expected Pricing</p>
-                                <p className="text-4xl font-black text-slate-900 tracking-tighter">{product.price}</p>
-                                <div className="mt-5 flex items-center gap-2">
-                                    {product.pricing.negotiable ? (
-                                        <div className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-emerald-100 shadow-sm">
-                                            <Check size={12} /> Negotiable Listing
-                                        </div>
-                                    ) : (
-                                        <div className="text-[9px] font-black uppercase tracking-widest text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-rose-100 shadow-sm">
-                                            <XCircle size={12} /> Fixed Rate Model
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-3">
-                                <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:border-primary/20 transition-all">
-                                    <div>
-                                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-1">Price / SqFt</p>
-                                        <p className="text-base font-black text-slate-800">₹{product.pricing.pricePerSqft.toLocaleString()}</p>
-                                    </div>
-                                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
-                                        <Maximize2 size={18} />
-                                    </div>
-                                </div>
-                                <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:border-primary/20 transition-all">
-                                    <div>
-                                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-1">Monthly Maintenance</p>
-                                        <p className="text-base font-black text-slate-800">
-                                            {product.pricing.maintenanceCharges > 0 ? `₹${product.pricing.maintenanceCharges.toLocaleString()}` : 'Included'}
-                                        </p>
-                                    </div>
-                                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
-                                        <Smartphone size={18} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pt-4">
-                                <div className="bg-slate-950 text-white p-7 rounded-[1.5rem] shadow-2xl relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-                                    <div className="relative z-10">
-                                        <h5 className="text-[10px] font-black uppercase tracking-widest text-slate-400 opacity-80 mb-5 flex items-center gap-2">
-                                            <Activity size={12} className="text-primary" /> Admin Insights
-                                        </h5>
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/5 shadow-inner">
-                                                    <Users size={16} className="text-white" />
-                                                </div>
-                                                <div>
-                                                    <p className="text-xs font-black text-white">12 Active Inquiries</p>
-                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">High Interest</p>
-                                                </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4 border-t border-slate-100">
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                                                    <Shield size={12} className="text-blue-500" /> Legal / Lawyer Details
+                                                </p>
+                                                {product.lawyerDetails ? (
+                                                    <div className="space-y-3">
+                                                        <div>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Lawyer Name</p>
+                                                            <p className="text-sm font-bold text-slate-800">{product.lawyerDetails.name || 'Not Provided'}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Mobile</p>
+                                                            <p className="text-sm font-bold text-slate-800">{product.lawyerDetails.mobile || 'Not Provided'}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Email</p>
+                                                            <p className="text-sm font-bold text-slate-800">{product.lawyerDetails.email || 'Not Provided'}</p>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="p-5 rounded-xl border border-slate-200 bg-slate-50 border-dashed flex items-center justify-center">
+                                                        <p className="text-xs font-bold text-slate-400 italic">No lawyer details provided</p>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/5 shadow-inner">
-                                                    <Eye size={16} className="text-white" />
-                                                </div>
-                                                <div>
-                                                    <p className="text-xs font-black text-white">1.2k Weekly Views</p>
-                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">+14% From Last Week</p>
-                                                </div>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                                                    <Info size={12} className="text-amber-500" /> Banker Details
+                                                </p>
+                                                {product.bankerDetails?.length > 0 ? (
+                                                    <div className="space-y-3">
+                                                        {product.bankerDetails.map((banker, idx) => (
+                                                            <div key={idx} className="p-3 rounded-xl border border-slate-200 bg-white shadow-sm flex items-center justify-between">
+                                                                <p className="text-sm font-bold text-slate-800">{banker.name}</p>
+                                                                <p className="text-xs font-bold tracking-widest uppercase text-slate-600 shrink-0 ml-2">{banker.number}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="p-5 rounded-xl border border-slate-200 bg-slate-50 border-dashed flex items-center justify-center">
+                                                        <p className="text-xs font-bold text-slate-400 italic">No banker details provided</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                                                <Shield size={12} className="text-slate-500" /> Property Ownership Proofs
+                                            </p>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {[
+                                                    { id: 'saleDeed', label: 'Sale Deed / Title Deed', req: true },
+                                                    { id: 'encumbranceCert', label: 'Encumbrance Certificate', req: true },
+                                                    { id: 'propertyTaxReceipt', label: 'Property Tax Receipt', req: true },
+                                                    { id: 'legalOpinion', label: 'Legal Opinion Document', req: false },
+                                                    { id: 'lawyerCert', label: 'Lawyer Certificate', req: false }
+                                                ].map(doc => {
+                                                    const proofImg = product.ownershipProofs?.[doc.id];
+                                                    return (
+                                                        <div key={doc.id} className="p-3 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-all flex flex-col gap-2">
+                                                            {proofImg ? (
+                                                                <div className="w-full h-24 rounded-lg overflow-hidden border border-slate-200 cursor-pointer group relative" onClick={() => setLightboxImage(proofImg)}>
+                                                                    <img src={proofImg} alt={doc.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                                        <span className="text-white text-[10px] font-bold px-3 py-1.5 bg-black/50 rounded-full flex items-center gap-1"><ImageIcon size={12} /> View</span>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="w-full h-24 rounded-lg bg-slate-50 border border-slate-200 border-dashed flex flex-col items-center justify-center text-slate-400">
+                                                                    <XCircle size={18} className="mb-1 text-slate-300" />
+                                                                    <span className="text-[9px] font-black uppercase tracking-widest">Not Uploaded</span>
+                                                                </div>
+                                                            )}
+                                                            <div className="px-1">
+                                                                <p className="text-xs font-bold text-slate-800">{doc.label}</p>
+                                                                <p className={`text-[9px] font-bold uppercase tracking-widest mt-0.5 ${doc.req ? 'text-rose-400' : 'text-slate-400'}`}>
+                                                                    {doc.req ? 'Required Verification' : 'Optional Support'}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                )}
 
-            {/* Bottom Admin Actions Bar */}
-            <div className="fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-xl border-t border-slate-200 z-50 flex items-center px-6 lg:ml-60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
-                <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-                    <div className="hidden md:flex items-center gap-4">
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 shadow-sm">
-                            <Clock size={14} className="text-slate-400" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Last scanned: 2 mins ago</span>
+                            </div> */}
+
+
+
+                            <PropertyForm initialData={product} />
                         </div>
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-100 shadow-sm">
-                            <Shield size={14} className="text-emerald-500" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Protocol Secured</span>
-                        </div>
+
+
                     </div>
-                    <div className="flex items-center gap-3 ml-auto">
-                        <button className="px-6 py-2.5 rounded-xl border border-slate-200 font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95 shadow-sm">
-                            Cancel Review
-                        </button>
-                        {product.status === 'Pending' && (
-                            <>
-                                <button
-                                    onClick={() => {
-                                        dispatch(updatePropertyStatus({ id: product.id, status: 'Rejected' }));
-                                        navigate('/properties');
-                                    }}
-                                    className="px-6 py-2.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-600 font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95 shadow-sm"
-                                >
-                                    Reject Listing
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        dispatch(updatePropertyStatus({ id: product.id, status: 'Active' }));
-                                        navigate('/properties');
-                                    }}
-                                    className="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20 active:scale-95"
-                                >
-                                    Publish Property
-                                </button>
-                            </>
-                        )}
-                        {product.status === 'Active' && (
-                            <button
-                                onClick={() => {
-                                    dispatch(updatePropertyStatus({ id: product.id, status: 'Rejected' }));
-                                    navigate('/properties');
-                                }}
-                                className="px-6 py-2.5 rounded-xl bg-rose-600 text-white font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-600/20 active:scale-95 flex items-center gap-2"
-                            >
-                                <Trash2 size={14} /> Take Down Listing
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </div>
-            {/* Asset Intelligence Lightbox */}
-            <Modal
-                isOpen={!!lightboxImage}
-                onClose={() => setLightboxImage(null)}
-                title={`Smart Album Inspection — ${selectedAlbum}`}
-                size="xl"
-            >
-                <div className="relative group bg-slate-950 rounded-lg overflow-hidden border border-slate-800 shadow-2xl">
-                    <img
-                        src={lightboxImage}
-                        className="w-full h-auto max-h-[80vh] object-contain mx-auto transition-transform duration-700 group-hover:scale-[1.02]"
-                        alt="Full Screen Preview"
-                    />
-                    <div className="absolute top-4 right-4 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-black text-white uppercase tracking-widest shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        High-Resolution Asset Analysis
+
+
+                </>
+            )
+            }
+            {/* Lightbox Modal */}
+            {/* Lightbox Modal */}
+            <Modal isOpen={!!lightboxMedia} onClose={() => setLightboxMedia(null)} title={lightboxMedia?.type === 'video' ? 'Property Video Tour' : 'Asset Inspection'} size="xl">
+                <div className="relative group bg-slate-950 rounded-[2rem] overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center min-h-[400px]">
+                    {lightboxMedia?.type === 'video' ? (
+                        <video
+                            src={lightboxMedia.url}
+                            controls
+                            autoPlay
+                            className="w-full h-auto max-h-[85vh] object-contain shadow-2xl mx-auto"
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    ) : (
+                        <img
+                            src={lightboxMedia?.url}
+                            className="w-full h-auto max-h-[85vh] object-contain mx-auto transition-transform duration-700"
+                            alt="Full Screen Preview"
+                        />
+                    )}
+                    <div className="absolute top-6 right-6 bg-slate-900/80 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 text-[10px] font-black text-white uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-all">
+                        {lightboxMedia?.type === 'video' ? 'HDR Video Stream Analysis' : 'High-Resolution Asset Analysis'}
                     </div>
                 </div>
             </Modal>
-        </div>
+
+            {/* Status Update Confirmation Modal */}
+            <Modal isOpen={!!statusConfirm} onClose={() => setStatusConfirm(null)}
+                title={statusConfirm?.type === 'Verified' ? 'Confirm Verification' : 'Listings Rejection'} size="md">
+                <div className="p-2">
+                    <div className="flex flex-col items-center text-center mb-6">
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${statusConfirm?.type === 'Verified' ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'}`}>
+                            {statusConfirm?.type === 'Verified' ? <CheckCircle size={32} /> : <AlertOctagon size={32} />}
+                        </div>
+                        <h3 className="text-xl font-black text-slate-900 tracking-tight mb-2">
+                            {statusConfirm?.type === 'Verified' ? 'Verify Property Listing?' : 'Reason for Rejection'}
+                        </h3>
+                        <p className="text-xs font-medium text-slate-500 max-w-[280px]">
+                            {statusConfirm?.type === 'Verified' ?
+                                'This listing will be marked as verified and published to all users. Are you sure you want to proceed?' :
+                                'Please provide a clear reason to the uploader why this property listing is being rejected.'}
+                        </p>
+                    </div>
+
+                    {statusConfirm?.type === 'Rejected' && (
+                        <div className="space-y-4 mb-6">
+                            <div className="relative">
+                                <MessageSquare size={14} className="absolute left-4 top-4 text-slate-400" />
+                                <textarea
+                                    value={statusConfirm.reason}
+                                    onChange={(e) => setStatusConfirm({ ...statusConfirm, reason: e.target.value })}
+                                    placeholder="e.g. Incomplete documentation, low quality images..."
+                                    className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:bg-white transition-all h-28 resize-none"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <button
+                            onClick={() => setStatusConfirm(null)}
+                            className="px-6 py-3.5 rounded-xl border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all">
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => {
+                                dispatch(updatePropertyStatus({
+                                    id: product.id,
+                                    status: statusConfirm.type,
+                                    rejectionReason: statusConfirm.reason
+                                }));
+                                setStatusConfirm(null);
+                            }}
+                            disabled={statusConfirm?.type === 'Rejected' && !statusConfirm.reason?.trim()}
+                            className={`px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 ${statusConfirm?.type === 'Verified' ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : 'bg-rose-600 hover:bg-rose-700 shadow-rose-200'}`}>
+                            {statusConfirm?.type === 'Verified' ? 'Yes, Verify Listing' : 'Confirm Rejection'}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+        </div >
+
+
+
     );
 }

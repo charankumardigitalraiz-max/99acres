@@ -9,7 +9,7 @@ import UserDetails from './pages/UserDetails';
 import Subscribers from './pages/Subscribers';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
-import PropertyDetails from './pages/PropertyDetails2';
+import PropertyDetails from './pages/PropertyDetails';
 import Reports from './pages/Reports';
 import AdminProfile from './pages/AdminProfile';
 import Categories from './pages/Categories';
