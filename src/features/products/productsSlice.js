@@ -21,9 +21,12 @@ const productsSlice = createSlice({
     setPage: (state, action) => { state.currentPage = action.payload; },
     setSelectedProperty: (state, action) => { state.selectedProperty = action.payload; },
     updatePropertyStatus: (state, action) => {
-      const { id, status } = action.payload;
-      const prop = state.list.find(p => p.id === id);
-      if (prop) prop.status = status;
+      const { id, status, rejectionReason } = action.payload;
+      const prop = state.list.find(p => Number(p.id) === Number(id));
+      if (prop) {
+        prop.status = status;
+        if (rejectionReason) prop.rejectionReason = rejectionReason;
+      }
     },
   },
 });
@@ -47,6 +50,11 @@ export const selectPropertiesByUserId = (state, id) => {
 
 export const selectPropertyById = (state, id) => {
   return state.products.list.find(p => p.id === Number(id) || p.id === id);
+};
+
+export const selectWishlistedProperties = (state, wishlistIds) => {
+  if (!wishlistIds || !Array.isArray(wishlistIds)) return [];
+  return state.products.list.filter(p => wishlistIds.includes(p.id));
 };
 
 

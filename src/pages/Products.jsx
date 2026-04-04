@@ -220,7 +220,7 @@ export default function Products() {
                   <td>
                     <div className="flex items-center justify-end gap-1.5 opacity-100 transition-opacity">
                       <button
-                        onClick={() => navigate(`/products/${prop.id}`)}
+                        onClick={() => navigate(`/properties/${prop.id}`)}
                         className="btn-action btn-action-view"
                         title="View Details"
                       >

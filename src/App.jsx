@@ -9,6 +9,7 @@ import UserDetails from './pages/UserDetails';
 import Subscribers from './pages/Subscribers';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
+import PropertyDetails from './pages/PropertyDetails2';
 import Reports from './pages/Reports';
 import AdminProfile from './pages/AdminProfile';
 import Categories from './pages/Categories';
@@ -38,6 +39,7 @@ export default function App() {
 
             <Route path="products" element={<Products />} />
             <Route path="products/:id" element={<ProductDetails />} />
+            <Route path="properties/:id" element={<PropertyDetails />} />
             <Route path="reports" element={<Reports />} />
             <Route path="profile" element={<AdminProfile />} />
             <Route path="support" element={<Support />} />

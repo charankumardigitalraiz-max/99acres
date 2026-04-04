@@ -175,7 +175,7 @@ export const sellerPlans = [
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 export const usersData = [
-  { id: '10001', name: 'Rahul Sharma', email: 'rahul.sharma@email.com', phone: '+91 98765 43210', altPhone: '+91 91234 56780', landline: '022-26543210', role: 'Buyer', status: 'Active', joined: '2024-08-12', avatar: 'RS', city: 'Mumbai', properties: 0, subscription: 'Free', address: { city: 'Mumbai', location: 'Andheri East', fullAddress: 'Flat 402, Sunshine Apts, Andheri East, Mumbai, Maharashtra 400069' }, activity: [{ action: 'Logged into dashboard', time: '2 hours ago' }, { action: 'Viewed a property listing', time: '1 day ago' }, { action: 'Updated profile information', time: '1 week ago' }], reports: [{ id: 'REP-101', reporter: 'System', reason: 'Security check flag', date: '25 Mar, 2025', status: 'Resolved' }, { id: 'REP-102', reporter: 'Admin', reason: 'Identity verification pending', date: '28 Mar, 2025', status: 'Active' }], chats: [{ name: 'Amit Verma', role: 'Agent', msg: "Sent property documents for approval...", time: '12 mins ago', unread: true }, { name: 'Rahul Sharma', role: 'Buyer', msg: "Is the price negotiable for the Powai villa?", time: '2 hours ago', unread: false }], transactions: [{ id: 'TXN-9021', type: 'Subscription Move', amount: '₹49,999', date: '22 Mar, 2025', status: 'Completed', color: 'emerald' }, { id: 'TXN-8842', type: 'Featured Listing', amount: '₹2,499', date: '18 Mar, 2025', status: 'Completed', color: 'emerald' }] },
+  { id: '10001', name: 'Rahul Sharma', email: 'rahul.sharma@email.com', phone: '+91 98765 43210', altPhone: '+91 91234 56780', landline: '022-26543210', role: 'Buyer', status: 'Active', joined: '2024-08-12', avatar: 'RS', city: 'Mumbai', properties: 0, subscription: 'Free', address: { city: 'Mumbai', location: 'Andheri East', fullAddress: 'Flat 402, Sunshine Apts, Andheri East, Mumbai, Maharashtra 400069' }, activity: [{ action: 'Logged into dashboard', time: '2 hours ago' }, { action: 'Viewed a property listing', time: '1 day ago' }, { action: 'Updated profile information', time: '1 week ago' }], reports: [{ id: 'REP-101', reporter: 'System', reason: 'Security check flag', date: '25 Mar, 2025', status: 'Resolved' }, { id: 'REP-102', reporter: 'Admin', reason: 'Identity verification pending', date: '28 Mar, 2025', status: 'Active' }], chats: [{ name: 'Amit Verma', role: 'Agent', msg: "Sent property documents for approval...", time: '12 mins ago', unread: true }, { name: 'Rahul Sharma', role: 'Buyer', msg: "Is the price negotiable for the Powai villa?", time: '2 hours ago', unread: false }], transactions: [{ id: 'TXN-9021', type: 'Subscription Move', amount: '₹49,999', date: '22 Mar, 2025', status: 'Completed', color: 'emerald' }, { id: 'TXN-8842', type: 'Featured Listing', amount: '₹2,499', date: '18 Mar, 2025', status: 'Completed', color: 'emerald' }], wishlist: [1, 2, 3] },
 
   { id: '10002', name: 'Priya Mehta', email: 'priya.mehta@email.com', phone: '+91 87654 32109', role: 'Seller', status: 'Active', joined: '2024-07-22', avatar: 'PM', city: 'Bangalore', properties: 4, subscription: 'Premium', address: { city: 'Bangalore', location: 'Koramangala', fullAddress: 'Villa 12, Palm Meadows, Koramangala, Bangalore, Karnataka 560034' }, activity: [{ action: 'Posted new property', time: '1 hour ago' }, { action: 'Logged into dashboard', time: '1 day ago' }], reports: [], chats: [{ name: 'Sneha Patel', role: 'Buyer', msg: "Wanted to schedule a site visit for Sunday.", time: '1 day ago', unread: false }], transactions: [{ id: 'TXN-9501', type: 'Premium Upgrade', amount: '₹49,999', date: '20 Mar, 2025', status: 'Completed', color: 'emerald' }] },
 
@@ -187,7 +187,7 @@ export const usersData = [
 
   { id: '10006', name: 'Vikram Singh', email: 'vikram.singh@email.com', phone: '+91 43210 98765', role: 'Agent', status: 'Active', joined: '2024-04-14', avatar: 'VS', city: 'Jaipur', properties: 21, subscription: 'Premium', address: { city: 'Jaipur', location: 'Malviya Nagar', fullAddress: 'C-Scheme, Shop No 5, Malviya Nagar, Jaipur, Rajasthan 302017' }, activity: [{ action: 'Logged into dashboard', time: 'Just now' }, { action: 'Upgraded subscription plan', time: '1 week ago' }] },
 
-  { id: '10007', name: 'Ananya Krishnan', email: 'ananya.k@email.com', phone: '+91 32109 87654', landline: '044-24567890', role: 'Buyer', status: 'Active', joined: '2024-10-02', avatar: 'AK', city: 'Chennai', properties: 0, subscription: 'Premium', address: { city: 'Chennai', location: 'Adyar', fullAddress: 'No. 8, Gandhi Nagar 1st Main Rd, Adyar, Chennai, Tamil Nadu 600020' }, activity: [{ action: 'Saved a property to favorites', time: '12 hours ago' }, { action: 'Logged into dashboard', time: '12 hours ago' }] },
+  { id: '10007', name: 'Ananya Krishnan', email: 'ananya.k@email.com', phone: '+91 32109 87654', landline: '044-24567890', role: 'Buyer', status: 'Active', joined: '2024-10-02', avatar: 'AK', city: 'Chennai', properties: 0, subscription: 'Premium', address: { city: 'Chennai', location: 'Adyar', fullAddress: 'No. 8, Gandhi Nagar 1st Main Rd, Adyar, Chennai, Tamil Nadu 600020' }, activity: [{ action: 'Saved a property to favorites', time: '12 hours ago' }, { action: 'Logged into dashboard', time: '12 hours ago' }], wishlist: [1, 4, 6] },
 
   { id: '10008', name: 'Rohit Gupta', email: 'rohit.gupta@email.com', phone: '+91 21098 76543', altPhone: '+91 88776 65544', role: 'Seller', status: 'Suspended', joined: '2024-03-08', avatar: 'RG', city: 'Pune', properties: 2, subscription: 'Basic', address: { city: 'Pune', location: 'Koregaon Park', fullAddress: 'Lane 5, Koregaon Park, Pune, Maharashtra 411001' }, activity: [{ action: 'Account suspended by admin', time: '2 weeks ago' }, { action: 'Multiple policy violations detected', time: '2 weeks ago' }] },
 
@@ -248,22 +248,70 @@ export const propertiesData = [
     availabilityStatus: 'ready to move',
     availableFrom: '2025-04-01',
     smartAlbum: {
-      'Livving Room': ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80', 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
-      'Kitchen': ['https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80'],
-      'Bedrooms': ['https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80'],
-      'Washrooms': ['https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80'],
-      'Balcony': ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80'],
-      'Parking': ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
-      'Garden': ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80'],
-      'Terrace': ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80']
+      'Livving Room': [
+        'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
+        'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&q=80',
+        'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=80',
+        'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
+        'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80'
+      ],
+      'Kitchen': [
+        'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80',
+        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+        'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80',
+        'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=800&q=80',
+        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80'
+      ],
+      'Bedrooms': [
+        'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80',
+        'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80',
+        'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&q=80',
+        'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80',
+        'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80'
+      ],
+      'Washrooms': [
+        'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
+        'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&q=80',
+        'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
+        'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
+        'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&q=80'
+      ],
+      'Balcony': [
+        'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
+        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80',
+        'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80',
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
+        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80'
+      ],
+      'Parking': [
+        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
+        'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800&q=80',
+        'https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?w=800&q=80',
+        'https://images.unsplash.com/photo-1549490349-8643362247b5?w=800&q=80',
+        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80'
+      ],
+      'Garden': [
+        'https://images.unsplash.com/photo-1598902108854-10e335adac99?w=800&q=80',
+        'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
+        'https://images.unsplash.com/photo-1598902108854-10e335adac99?w=800&q=80',
+        'https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?w=800&q=80',
+        'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80'
+      ],
+      'Terrace': [
+        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
+        'https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?w=800&q=80',
+        'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800&q=80',
+        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80',
+        'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800&q=80'
+      ]
     },
     coverPhoto: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
     images: ['https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80', 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
-    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    video: 'https://www.youtube.com/watch?v=ec_fXMrD7Ow',
     ownerVerification: {
-      type: 'Adhaar',
+      type: 'Passport',
       status: 'Verified',
-      photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop'
+      photo: 'https://images.unsplash.com/photo-1581553672347-95d9444c0d2c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     ownershipProofs: {
       saleDeed: 'https://images.unsplash.com/photo-1618044733300-9472054094ee?w=800&q=80',
@@ -335,7 +383,7 @@ export const propertiesData = [
     ownerVerification: {
       type: 'PAN',
       status: 'Verified',
-      photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop'
+      photo: 'https://images.unsplash.com/photo-1554224155-aa5c88c3a1f1?w=800&q=80'
     },
     ownershipProofs: {
       saleDeed: 'deed_456.pdf',
@@ -393,7 +441,7 @@ export const propertiesData = [
     ownerVerification: {
       type: 'Passport',
       status: 'Verified',
-      photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop'
+      photo: 'https://images.unsplash.com/photo-1544207240-8b1025eb7aeb?w=800&q=80'
     },
     ownershipProofs: {
       saleDeed: 'comm_deed.pdf',
@@ -508,7 +556,7 @@ export const propertiesData = [
     ownerVerification: {
       type: 'PAN',
       status: 'Verified',
-      photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop'
+      photo: 'https://images.unsplash.com/photo-1554224155-aa5c88c3a1f1?w=800&q=80'
     },
     ownershipProofs: {
       saleDeed: 'pent_deed.pdf',
@@ -567,7 +615,7 @@ export const propertiesData = [
     ownerVerification: {
       type: 'Passport',
       status: 'Verified',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop'
+      photo: 'https://images.unsplash.com/photo-1544207240-8b1025eb7aeb?w=800&q=80'
     },
     ownershipProofs: {
       saleDeed: 'villadeed_789.pdf',
@@ -729,11 +777,77 @@ export const supportTickets = [
 
 // ─── Reviews ──────────────────────────────────────────────────────────────────
 export const reviewsData = [
-  { id: 1, propertyId: 1, property: 'Palm Springs Villa', user: 'Ananya K.', rating: 5, comment: 'Amazing property and very smooth process.', date: '2024-03-15', status: 'Approved' },
-  { id: 2, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rohit G.', rating: 4, comment: 'Great location, but the price is a bit high.', date: '2024-03-18', status: 'Pending' },
-  { id: 3, propertyId: 3, property: 'Commercial Retail Space', user: 'Meena I.', rating: 3, comment: 'The area is good, but maintenance is lacking.', date: '2024-03-20', status: 'Approved' },
-  { id: 4, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Suresh N.', rating: 5, comment: 'Excellent investment opportunity.', date: '2024-03-22', status: 'Approved' },
-  { id: 5, propertyId: 5, property: 'Ocean View Penthouse', user: 'Divya R.', rating: 2, comment: 'Multiple issues with the plumbing.', date: '2024-03-25', status: 'Flagged' },
+  // Property 1: Luxury 4BHK Villa in Palm Springs
+  { id: 1, propertyId: 1, property: 'Palm Springs Villa', user: 'Ananya K.', rating: 5, comment: 'Amazing property and very smooth process. The architecture is just stunning.', date: '2024-03-15', avatar: 'AK' },
+  { id: 6, propertyId: 1, property: 'Palm Springs Villa', user: 'Rahul S.', rating: 5, comment: 'The pool area is spectacular. Perfect for hosting weekend parties.', date: '2024-03-10', avatar: 'RS' },
+  { id: 7, propertyId: 1, property: 'Palm Springs Villa', user: 'Sanjay D.', rating: 4, comment: 'Beautiful interiors. The living room is huge and well-lit.', date: '2024-03-05', avatar: 'SD' },
+  { id: 8, propertyId: 1, property: 'Palm Springs Villa', user: 'Priya M.', rating: 5, comment: 'High-end finishes everywhere. Worth every penny for the luxury.', date: '2024-02-28', avatar: 'PM' },
+  { id: 9, propertyId: 1, property: 'Palm Springs Villa', user: 'Vijay K.', rating: 5, comment: 'The garden is meticulously maintained. Very peaceful neighborhood.', date: '2024-02-20', avatar: 'VK' },
+  { id: 10, propertyId: 1, property: 'Palm Springs Villa', user: 'Deepa M.', rating: 4, comment: 'Modern design with traditional touches. Very spacious kitchen.', date: '2024-02-15', avatar: 'DM' },
+  { id: 11, propertyId: 1, property: 'Palm Springs Villa', user: 'Rohan S.', rating: 5, comment: 'The view from the terrace at sunset is breathtaking.', date: '2024-02-10', avatar: 'RS' },
+  { id: 12, propertyId: 1, property: 'Palm Springs Villa', user: 'Aarti P.', rating: 5, comment: 'Safe and secure. The security staff is very professional.', date: '2024-02-05', avatar: 'AP' },
+  { id: 13, propertyId: 1, property: 'Palm Springs Villa', user: 'Kavita B.', rating: 4, comment: 'Excellent location near the hospital, yet very quiet.', date: '2024-01-30', avatar: 'KB' },
+  { id: 14, propertyId: 1, property: 'Palm Springs Villa', user: 'Amit V.', rating: 5, comment: 'The best villa in Powai. Exceptional build quality.', date: '2024-01-25', avatar: 'AV' },
+
+  // Property 2: Modern 3BHK Flat near Tech Park
+  { id: 2, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rohit G.', rating: 4, comment: 'Great location, but the price is a bit high. Connectivity is excellent.', date: '2024-03-18', avatar: 'RG' },
+  { id: 15, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Sneha P.', rating: 5, comment: 'Walking distance to my office. Super convenient for IT professionals.', date: '2024-03-12', avatar: 'SP' },
+  { id: 16, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Vikram S.', rating: 4, comment: 'The gym and pool are top-notch. Well-maintained society.', date: '2024-03-08', avatar: 'VS' },
+  { id: 17, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Meena I.', rating: 5, comment: 'Beautiful lake view from the balcony. Very well-ventilated flat.', date: '2024-03-01', avatar: 'MI' },
+  { id: 18, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Suresh N.', rating: 4, comment: 'Efficient layout. No wasted space in the bedrooms or kitchen.', date: '2024-02-22', avatar: 'SN' },
+  { id: 19, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Divya R.', rating: 5, comment: 'The developer has done a great job with the landscaping.', date: '2024-02-15', avatar: 'DR' },
+  { id: 20, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Manoj K.', rating: 4, comment: 'Quick response from the maintenance team for minor fixes.', date: '2024-02-08', avatar: 'MK' },
+  { id: 21, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Kiran R.', rating: 5, comment: 'Safe for families. The dedicated play area for kids is great.', date: '2024-02-01', avatar: 'KR' },
+  { id: 22, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rahul S.', rating: 4, comment: 'Parking is a bit tight but manageable. Overall a great stay.', date: '2024-01-25', avatar: 'RS' },
+  { id: 23, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Ananya K.', rating: 5, comment: 'Value for money considering the amenities and location.', date: '2024-01-18', avatar: 'AK' },
+
+  // Property 3: Commercial Retail Space in Mall
+  { id: 3, propertyId: 3, property: 'Commercial Retail Space', user: 'Meena I.', rating: 3, comment: 'The area is good, but maintenance is lacking. High footfall though.', date: '2024-03-20', avatar: 'MI' },
+  { id: 24, propertyId: 3, property: 'Commercial Retail Space', user: 'Amit V.', rating: 4, comment: 'Great visibility for my brand. The mall entrance attracts many customers.', date: '2024-03-15', avatar: 'AV' },
+  { id: 25, propertyId: 3, property: 'Commercial Retail Space', user: 'Vikram S.', rating: 5, comment: 'Top-tier location in Saket. The management is professional.', date: '2024-03-10', avatar: 'VS' },
+  { id: 26, propertyId: 3, property: 'Commercial Retail Space', user: 'Sneha P.', rating: 4, comment: 'Ample parking for customers. Air conditioning works perfectly.', date: '2024-03-05', avatar: 'SP' },
+  { id: 27, propertyId: 3, property: 'Commercial Retail Space', user: 'Rahul S.', rating: 3, comment: 'Loading dock access could be better for inventory restock.', date: '2024-02-28', avatar: 'RS' },
+  { id: 28, propertyId: 3, property: 'Commercial Retail Space', user: 'Priya M.', rating: 5, comment: 'Excellent signage opportunities. High conversion rates here.', date: '2024-02-20', avatar: 'PM' },
+  { id: 29, propertyId: 3, property: 'Commercial Retail Space', user: 'Kiran R.', rating: 4, comment: 'Security is tight, which is good for retail. Very clean mall.', date: '2024-02-15', avatar: 'KR' },
+  { id: 30, propertyId: 3, property: 'Commercial Retail Space', user: 'Ananya K.', rating: 4, comment: 'Rent is high but justified by the volume of shoppers.', date: '2024-02-10', avatar: 'AK' },
+  { id: 31, propertyId: 3, property: 'Commercial Retail Space', user: 'Suresh N.', rating: 5, comment: 'Strategic location near the food court. Maximum exposure.', date: '2024-02-05', avatar: 'SN' },
+  { id: 32, propertyId: 3, property: 'Commercial Retail Space', user: 'Rohit G.', rating: 3, comment: 'Common area maintenance charges are a bit on the higher side.', date: '2024-01-30', avatar: 'RG' },
+
+  // Property 4: Residential Plot in Green Acres
+  { id: 4, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Suresh N.', rating: 5, comment: 'Excellent investment opportunity. The area is developing fast.', date: '2024-03-22', avatar: 'SN' },
+  { id: 33, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Manoj K.', rating: 4, comment: 'Clear titles and easy documentation process. Very professional team.', date: '2024-03-17', avatar: 'MK' },
+  { id: 34, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Divya R.', rating: 5, comment: 'Beautiful location next to the Botanical Garden. Very peaceful.', date: '2024-03-12', avatar: 'DR' },
+  { id: 35, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Rahul S.', rating: 4, comment: 'Wide roads and good street lighting in the layout.', date: '2024-03-07', avatar: 'RS' },
+  { id: 36, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Priya M.', rating: 5, comment: 'Great appreciation potential. Secured gated community.', date: '2024-03-01', avatar: 'PM' },
+  { id: 37, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Amit V.', rating: 4, comment: 'Water and electricity connections are already in place.', date: '2024-02-25', avatar: 'AV' },
+  { id: 38, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Sneha P.', rating: 5, comment: 'Perfect for building a dream home. Very quiet neighborhood.', date: '2024-02-18', avatar: 'SP' },
+  { id: 39, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Vikram S.', rating: 4, comment: 'The park inside the layout is well-designed for morning walks.', date: '2024-02-10', avatar: 'VS' },
+  { id: 40, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Kiran R.', rating: 5, comment: 'Close to the IT corridor but far enough from the hustle.', date: '2024-02-05', avatar: 'KR' },
+  { id: 41, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Ananya K.', rating: 4, comment: 'Slightly pricey but the location advantages are worth it.', date: '2024-01-28', avatar: 'AK' },
+
+  // Property 5: Penthouse with Terrace Garden
+  { id: 5, propertyId: 5, property: 'Ocean View Penthouse', user: 'Divya R.', rating: 2, comment: 'Multiple issues with the plumbing initially, but fixed now.', date: '2024-03-25', avatar: 'DR' },
+  { id: 42, propertyId: 5, property: 'Ocean View Penthouse', user: 'Rahul S.', rating: 5, comment: 'The terrace garden is a dream. Best sea view in Mumbai.', date: '2024-03-20', avatar: 'RS' },
+  { id: 43, propertyId: 5, property: 'Ocean View Penthouse', user: 'Priya M.', rating: 4, comment: 'Luxury at its peak. The private elevator is a great feature.', date: '2024-03-15', avatar: 'PM' },
+  { id: 44, propertyId: 5, property: 'Ocean View Penthouse', user: 'Amit V.', rating: 5, comment: 'Spacious and grand. The interior woodwork is exceptional.', date: '2024-03-10', avatar: 'AV' },
+  { id: 45, propertyId: 5, property: 'Ocean View Penthouse', user: 'Sneha P.', rating: 4, comment: 'Very exclusive. Only one penthouse per floor ensures privacy.', date: '2024-03-05', avatar: 'SP' },
+  { id: 46, propertyId: 5, property: 'Ocean View Penthouse', user: 'Vikram S.', rating: 5, comment: 'The home automation system works flawlessly. Pure luxury.', date: '2024-03-01', avatar: 'VS' },
+  { id: 47, propertyId: 5, property: 'Ocean View Penthouse', user: 'Kiran R.', rating: 3, comment: 'High maintenance costs, but expected for a property like this.', date: '2024-02-22', avatar: 'KR' },
+  { id: 48, propertyId: 5, property: 'Ocean View Penthouse', user: 'Ananya K.', rating: 5, comment: 'Waking up to the sea view is priceless. Truly elite living.', date: '2024-02-15', avatar: 'AK' },
+  { id: 49, propertyId: 5, property: 'Ocean View Penthouse', user: 'Suresh N.', rating: 4, comment: 'The swimming pool on the terrace is the highlight for me.', date: '2024-02-08', avatar: 'SN' },
+  { id: 50, propertyId: 5, property: 'Ocean View Penthouse', user: 'Rohit G.', rating: 5, comment: 'Excellent security and concierge service. Very well-managed.', date: '2024-02-01', avatar: 'RG' },
+
+  // Property 6: Independent Villa in Jubilee Hills
+  { id: 51, propertyId: 6, property: 'Elite Enclave Villa', user: 'Nitesh S.', rating: 5, comment: 'Grand architecture and elite neighborhood. Best in Jubilee Hills.', date: '2024-03-25', avatar: 'NS' },
+  { id: 52, propertyId: 6, property: 'Elite Enclave Villa', user: 'Sanjana R.', rating: 4, comment: 'The home theatre room is amazing. Perfect for family movie nights.', date: '2024-03-20', avatar: 'SR' },
+  { id: 53, propertyId: 6, property: 'Elite Enclave Villa', user: 'Vijay K.', rating: 5, comment: 'Extensive lawn and beautiful landscaping. Very serene environment.', date: '2024-03-15', avatar: 'VK' },
+  { id: 54, propertyId: 6, property: 'Elite Enclave Villa', user: 'Aavriti G.', rating: 5, comment: 'The kitchen is a chef\'s dream. High-end appliances included.', date: '2024-03-10', avatar: 'AG' },
+  { id: 55, propertyId: 6, property: 'Elite Enclave Villa', user: 'Vikram A.', rating: 4, comment: 'Massive bedrooms with walk-in closets. Truly a palatial home.', date: '2024-03-05', avatar: 'VA' },
+  { id: 56, propertyId: 6, property: 'Elite Enclave Villa', user: 'Rahul S.', rating: 5, comment: 'The gym and sauna are private and well-equipped.', date: '2024-03-01', avatar: 'RS' },
+  { id: 57, propertyId: 6, property: 'Elite Enclave Villa', user: 'Priya M.', rating: 5, comment: 'Extremely secure and private. The location is very prestigious.', date: '2024-02-22', avatar: 'PM' },
+  { id: 58, propertyId: 6, property: 'Elite Enclave Villa', user: 'Amit V.', rating: 4, comment: 'Beautiful marble flooring throughout. Very elegant design.', date: '2024-02-15', avatar: 'AV' },
+  { id: 59, propertyId: 6, property: 'Elite Enclave Villa', user: 'Sneha P.', rating: 5, comment: 'The guest house is a nice addition. Lots of parking space.', date: '2024-02-08', avatar: 'SP' },
+  { id: 60, propertyId: 6, property: 'Elite Enclave Villa', user: 'Ananya K.', rating: 5, comment: 'The perfect blend of luxury and comfort. Highly recommended.', date: '2024-02-01', avatar: 'AK' },
 ];
 
 // ─── Staff ────────────────────────────────────────────────────────────────────

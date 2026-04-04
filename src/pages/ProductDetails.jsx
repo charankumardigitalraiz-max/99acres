@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPropertyById, updatePropertyStatus } from '../features/products/productsSlice';
-import { Building2, ArrowLeft, Clock, Shield, Trash2, ChevronDown } from 'lucide-react';
+import { Building2, ArrowLeft, Clock, Shield, ChevronDown, Star, ThumbsUp, MessageSquare, Filter, SortAsc, LayoutGrid } from 'lucide-react';
+import { reviewsData } from '../data/mockData';
 
 import Modal from '../components/ui/Modal';
 import PropertyForm from '../components/ui/PropertyForm';
+import Avatar from '../components/ui/Avatar';
+import Badge from '../components/ui/Badge';
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -15,6 +18,25 @@ export default function ProductDetails() {
     const product = useSelector((state) => selectPropertyById(state, id));
     const [statusToUpdate, setStatusToUpdate] = useState(null);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [reason, setReason] = useState('');
+
+    // Filter reviews for this property
+    const reviews = useMemo(() => {
+        return reviewsData.filter(r => r.propertyId === Number(id));
+    }, [id]);
+
+    const stats = useMemo(() => {
+        if (!reviews.length) return { avg: 0, total: 0, distribution: [0, 0, 0, 0, 0] };
+        const total = reviews.length;
+        const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+        const distribution = [0, 0, 0, 0, 0];
+        reviews.forEach(r => distribution[5 - r.rating]++);
+        return {
+            avg: (sum / total).toFixed(1),
+            total,
+            distribution: distribution.map(count => Math.round((count / total) * 100))
+        };
+    }, [reviews]);
 
     const handleStatusChange = (newStatus) => {
         if (newStatus === 'verified' || newStatus === 'rejected') {
@@ -50,7 +72,7 @@ export default function ProductDetails() {
     }
 
     return (
-        <div className="space-y-6 pb-20">
+        <div className="space-y-8 pb-20">
             {/* Header / Breadcrumb */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
@@ -100,30 +122,134 @@ export default function ProductDetails() {
             </div>
 
             {/* Main Content Area */}
-            <div className="animate-in fade-in duration-500">
+            <div className="animate-in fade-in duration-500 space-y-8">
                 <PropertyForm initialData={product} />
-            </div>
 
-            {/* Bottom Admin Actions Bar */}
-            {/* <div className="fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-xl border-t border-slate-200 z-50 flex items-center px-6 lg:ml-60 shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
-                <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-                    <div className="hidden md:flex items-center gap-4">
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 shadow-sm">
-                            <Clock size={14} className="text-slate-400" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Last scanned: 2 mins ago</span>
-                        </div>
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-100 shadow-sm">
-                            <Shield size={14} className="text-emerald-500" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Protocol Secured</span>
+                {/* Reviews Section */}
+                {/* <div className="bg-white rounded-[2rem] border border-slate-200/60 shadow-sm overflow-hidden">
+                    <div className="p-8 border-b border-slate-100 bg-slate-50/30">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div>
+                                <div className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-widest mb-2">
+                                    <MessageSquare size={12} />
+                                    <span>User Feedback</span>
+                                </div>
+                                <h3 className="text-xl font-black text-slate-900 tracking-tight">Property Reviews & Ratings</h3>
+                                <p className="text-slate-500 text-sm mt-1">Showing verified user experiences for this property.</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+                                    <Filter size={14} /> Filter
+                                </button>
+                                <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+                                    <SortAsc size={14} /> Relevancy
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 ml-auto">
-                        <button onClick={() => navigate(-1)} className="px-6 py-2.5 rounded-xl border border-slate-200 font-black text-[10px] uppercase tracking-widest text-slate-500 hover:text-slate-800 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95 shadow-sm">
-                            Return to Listings
-                        </button>
+
+                    <div className="p-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                      
+                            <div className="lg:col-span-4 space-y-8">
+                                <div className="p-8 rounded-3xl bg-slate-900 text-white shadow-xl shadow-slate-200/50 relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                                        <Star size={80} fill="currentColor" />
+                                    </div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-end gap-3 mb-2">
+                                            <span className="text-5xl font-black">{stats.avg}</span>
+                                            <span className="text-slate-400 font-bold mb-1.5 text-xl">/ 5.0</span>
+                                        </div>
+                                        <div className="flex items-center gap-1 mb-4">
+                                            {[1, 2, 3, 4, 5].map((s) => (
+                                                <Star
+                                                    key={s}
+                                                    size={18}
+                                                    className={s <= Math.round(stats.avg) ? 'text-amber-400 fill-amber-400' : 'text-slate-700 fill-slate-700'}
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Based on {stats.total} total reviews</p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4 px-2">
+                                    {[5, 4, 3, 2, 1].map((rating, idx) => (
+                                        <div key={rating} className="flex items-center gap-4 group cursor-default">
+                                            <div className="flex items-center gap-1.5 min-w-[32px]">
+                                                <span className="text-xs font-black text-slate-700">{rating}</span>
+                                                <Star size={10} className="text-amber-400 fill-amber-400" />
+                                            </div>
+                                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-slate-900 rounded-full transition-all duration-1000 ease-out"
+                                                    style={{ width: `${stats.distribution[idx]}%` }}
+                                                />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-400 min-w-[32px] text-right group-hover:text-slate-900 transition-colors">
+                                                {stats.distribution[idx]}%
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+            
+                            <div className="lg:col-span-8 space-y-6">
+                                {reviews.map((review) => (
+                                    <div key={review.id} className="p-6 rounded-[2rem] border border-slate-100 bg-slate-50/30 hover:bg-white hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group">
+                                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar initials={review.avatar} size="lg" className="ring-4 ring-white shadow-sm" />
+                                                <div>
+                                                    <h4 className="text-sm font-black text-slate-900 tracking-tight group-hover:text-primary transition-colors">{review.user}</h4>
+                                                    <div className="flex items-center gap-2 mt-0.5">
+                                                        <div className="flex items-center gap-0.5">
+                                                            {[1, 2, 3, 4, 5].map((s) => (
+                                                                <Star
+                                                                    key={s}
+                                                                    size={10}
+                                                                    className={s <= review.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-200 fill-slate-200'}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">• {review.date}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Badge variant="sky">Verified Buyer</Badge>
+                                            </div>
+                                        </div>
+                                        <p className="text-slate-600 text-sm leading-relaxed pl-1">
+                                            "{review.comment}"
+                                        </p>
+                                        <div className="mt-5 pt-5 border-t border-slate-100/50 flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <button className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 hover:text-primary transition-colors transition-transform active:scale-90">
+                                                    <ThumbsUp size={12} /> Helpful
+                                                </button>
+                                                <button className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 hover:text-rose-500 transition-colors transition-transform active:scale-90">
+                                                    Report
+                                                </button>
+                                            </div>
+                                            <div className="flex -space-x-2">
+                                                {[1, 2, 3].map(i => (
+                                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center overflow-hidden">
+                                                        <div className={`w-full h-full bg-slate-${200 + i * 100}`}></div>
+                                                    </div>
+                                                ))}
+                                                <div className="text-[8px] font-black text-slate-400 flex items-center ml-3">+4 found this helpful</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div> */}
+                </div> */}
+            </div>
 
             <Modal
                 isOpen={isConfirmModalOpen}
@@ -133,9 +259,17 @@ export default function ProductDetails() {
                 <div className="space-y-4">
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                         <p className="text-sm text-slate-600 leading-relaxed">
-                            Are you sure you want to update the status of this property to <span className={`font-black uppercase tracking-widest ${statusToUpdate === 'verified' ? 'text-emerald-600' : 'text-rose-600'}`}>{statusToUpdate}</span>?
+                            Are you sure you want to update the status of this property to <span className={`font-black uppercase tracking-widest ${statusToUpdate === 'verified' ? 'text-emerald-600' : 'text-rose-600'}`}> {statusToUpdate}</span>?
                         </p>
                     </div>
+                    {statusToUpdate === 'rejected' && (
+                        <textarea
+                            placeholder="Reason for status update"
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200/80 rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all duration-300 placeholder:text-slate-300"
+                        />
+                    )}
                     <div className="flex items-center gap-3 justify-end">
                         <button
                             onClick={() => setIsConfirmModalOpen(false)}
@@ -147,7 +281,7 @@ export default function ProductDetails() {
                             onClick={confirmStatusUpdate}
                             className={`px-6 py-2.5 rounded-xl text-white font-black text-[10px] uppercase tracking-widest shadow-lg transition-all active:scale-95 ${statusToUpdate === 'verified' ? 'bg-emerald-500 shadow-emerald-500/20 hover:bg-emerald-600' : 'bg-rose-500 shadow-rose-500/20 hover:bg-rose-600'}`}
                         >
-                            Confirm Update
+                            {statusToUpdate === 'verified' ? 'Confirm Update' : 'Reject Property'}
                         </button>
                     </div>
                 </div>
