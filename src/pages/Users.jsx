@@ -97,14 +97,16 @@ export default function Users() {
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-40">
-            <Select
-              value={roleFilter}
-              onChange={e => dispatch(setRoleFilter(e.target.value))}
-              options={['All', 'Agent', 'Seller', 'Buyer']}
-              placeholder="Filter Role"
-            />
-          </div>
+          {isSellerOrAgent && (
+            <div className="w-40">
+              <Select
+                value={roleFilter}
+                onChange={e => dispatch(setRoleFilter(e.target.value))}
+                options={isSellerOrAgent ? ['Seller', 'Agent'] : ['All', 'Agent', 'Seller', 'Buyer']}
+                placeholder="Filter Role"
+              />
+            </div>
+          )}
 
           <div className="w-40">
             <Select
