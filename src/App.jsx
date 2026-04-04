@@ -45,7 +45,6 @@ export default function App() {
             <Route path="support" element={<Support />} />
             <Route path="support/:id" element={<TicketDetails />} />
             <Route path="banners" element={<Banners />} />
-            <Route path="transactions" element={<Transactions />} />
             <Route path="reviews" element={<Reviews />} />
             <Route path="staff/roles" element={<StaffRoles />} />
             <Route path="staff/members" element={<StaffMembers />} />
