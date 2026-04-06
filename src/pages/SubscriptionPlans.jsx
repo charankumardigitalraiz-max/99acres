@@ -92,97 +92,133 @@ export default function SubscriptionPlans() {
           const pc = planColors[plan.name.includes('Premium') ? 'Premium' : plan.name.includes('Standard') ? 'Standard' : 'Basic'];
           const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
           const isPopular = plan.popular;
+          const totalSubscribers = plans.reduce((a, p) => a + p.subscribers, 0);
+          const marketShare = Math.round((plan.subscribers / totalSubscribers) * 100);
 
           return (
             <div
               key={plan.id}
-              className={`bg-white rounded-3xl relative flex flex-col transition-all duration-500 border overflow-hidden p-8 ${isPopular ? 'border-primary/30 shadow-2xl shadow-primary/5 ring-1 ring-primary/20 pt-14' : 'border-slate-100 shadow-sm hover:border-primary/20 hover:shadow-xl hover:shadow-slate-200/40'
-                } ${plan.status === 'inactive' ? 'opacity-60 grayscale-[0.5]' : ''}`}
+              className={`bg-white rounded-[2.5rem] relative flex flex-col transition-all duration-500 border overflow-hidden group p-8 ${isPopular
+                ? 'border-primary/40 shadow-2xl shadow-primary/5 ring-1 ring-primary/20 pt-16'
+                : 'border-slate-100 shadow-sm hover:border-primary/20 hover:shadow-xl hover:shadow-slate-200/40'
+                } ${plan.status === 'inactive' ? 'opacity-60 grayscale-[0.6]' : ''}`}
             >
-              {/* Status Toggle - Top Right */}
-              <div className="absolute top-6 right-8 flex items-center gap-2 z-20">
-                <Switch
-                  checked={plan.status === 'active'}
-                  onChange={() => dispatch(togglePlanStatus({ type: 'seller', id: plan.id }))}
-                />
-                <span className={`text-[8px] font-black uppercase tracking-widest transition-colors ${plan.status === 'inactive' ? 'text-slate-400' : 'text-primary'}`}>
-                  {plan.status === 'inactive' ? 'Inactive' : 'Active'}
-                </span>
+              {/* Control Cluster - Top Right */}
+              <div className="absolute top-6 right-8 flex items-center gap-3 z-20">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl shadow-sm group-hover:border-primary/20 transition-all">
+                  <Switch
+                    checked={plan.status === 'active'}
+                    onChange={() => dispatch(togglePlanStatus({ type: 'seller', id: plan.id }))}
+                  />
+                  <span className={`text-[8px] font-black uppercase tracking-widest transition-colors ${plan.status === 'inactive' ? 'text-slate-400' : 'text-primary'}`}>
+                    {plan.status === 'inactive' ? 'Inactive' : 'Active'}
+                  </span>
+                </div>
+                <button
+                  onClick={() => openEdit(plan)}
+                  className="w-10 h-10 rounded-xl  flex items-center justify-center border border-primary/20  transition-all active:scale-95 group-hover:rotate-6"
+                >
+                  <Edit2 size={14} className="text-primary" />
+                </button>
               </div>
 
               {isPopular && (
                 <div className="absolute top-0 left-0">
-                  <div className="bg-primary text-white text-[9px] font-bold uppercase tracking-[0.2em] px-6 py-2 rounded-br-2xl shadow-lg">
-                    Popular Plan
+                  <div className="bg-primary text-white text-[9px] font-black uppercase tracking-[0.2em] px-8 py-2.5 rounded-br-2xl shadow-xl animate-in slide-in-from-left-4 duration-500">
+                    Most Popular
                   </div>
                 </div>
               )}
 
-              <div className="mb-8">
-                <div className="flex justify-between items-start mb-6 pr-12">
+              <div className="mb-10">
+                <div className="flex justify-between items-start mb-6">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">{plan.name}</h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Entity Analytics Package</p>
+                    <h3 className="text-2xl font-black text-slate-900 tracking-tighter mb-1">{plan.name}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Tier Administration Level</p>
                   </div>
                 </div>
 
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-bold text-slate-400">₹</span>
-                  <span className="text-4xl font-bold text-slate-900 tracking-tighter tabular-nums">{price.toLocaleString()}</span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">/ {billingCycle.slice(0, 2)}</span>
+                  <span className="text-2xl font-black text-primary/40 tracking-tighter">₹</span>
+                  <span className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums leading-none">
+                    {price.toLocaleString()}
+                  </span>
+                  <div className="flex flex-col ml-1">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">/ {billingCycle}</span>
+                    <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Verified Rate</span>
+                  </div>
                 </div>
+
                 {billingCycle === 'annual' && (
-                  <div className="inline-flex items-center gap-2 mt-4 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100 shadow-sm">
-                    <Check size={10} className="stroke-[3]" />
-                    <span className="text-[9px] font-bold uppercase tracking-widest">Savings: ₹{(plan.monthlyPrice * 12 - plan.annualPrice).toLocaleString()}</span>
+                  <div className="inline-flex items-center gap-2 mt-6 px-4 py-1.5 bg-emerald-50/50 text-emerald-600 rounded-xl border border-emerald-100/50 shadow-sm backdrop-blur-sm">
+                    <Check size={10} strokeWidth={4} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Efficiency Savings: ₹{(plan.monthlyPrice * 12 - plan.annualPrice).toLocaleString()}</span>
                   </div>
                 )}
               </div>
 
-              <div className="flex-1 space-y-4 mb-8">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Included Features</p>
+              <div className="flex-1 space-y-4 mb-2">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                  Service Portfolio
+                  <div className="h-px flex-1 bg-slate-100" />
+                </p>
+
                 {plan.features.map((f, i) => (
-                  <div key={i} className="flex items-start gap-4 group">
-                    <div className="w-5 h-5 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
-                      <Check size={10} className="text-emerald-600" strokeWidth={3} />
+                  <div key={i} className="flex items-start gap-4 group/item">
+                    <div className="w-5 h-5 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform shadow-sm">
+                      <Check size={10} className="text-emerald-600" strokeWidth={4} />
                     </div>
-                    <span className="text-[11px] font-bold text-slate-600 leading-tight group-hover:text-slate-900 transition-colors">{f}</span>
+                    <span className="text-xs font-bold text-slate-600 leading-tight group-hover/item:text-slate-900 transition-colors">{f}</span>
                   </div>
                 ))}
+
                 {plan.notIncluded?.map((f, i) => (
-                  <div key={i} className="flex items-start gap-4 opacity-30 grayscale group">
-                    <div className="w-5 h-5 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <X size={10} className="text-slate-400" strokeWidth={3} />
+                  <div key={i} className="flex items-start gap-4 opacity-40 grayscale group/item hover:opacity-100 hover:grayscale-0 transition-all">
+                    <div className="w-5 h-5 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:rotate-12 transition-transform">
+                      <X size={10} className="text-slate-400" strokeWidth={4} />
                     </div>
-                    <span className="text-[11px] font-bold text-slate-400 line-through leading-tight">{f}</span>
+                    <span className="text-xs font-bold text-slate-400 line-through leading-tight group-hover/item:text-slate-800 group-hover/item:no-underline transition-all">{f}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-auto">
-                <div className="bg-slate-50/50 rounded-2xl p-5 border border-slate-100 flex flex-col gap-4 group">
+              {/* <div className="mt-auto">
+                <div className="bg-slate-50/80 rounded-[2rem] p-6 border border-slate-100/50 flex flex-col gap-5 group/meter relative overflow-hidden backdrop-blur-sm">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-primary/20 overflow-hidden">
+                    <div className="h-full bg-primary transition-all duration-1000" style={{ height: `${marketShare}%` }} />
+                  </div>
+
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                        <Users size={14} className="text-slate-300 group-hover:text-primary transition-colors" />
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm group-hover/meter:scale-110 transition-all group-hover/meter:shadow-primary/10 group-hover/meter:border-primary/20">
+                        <Users size={16} className="text-slate-300 group-hover/meter:text-primary transition-colors" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-slate-900 tabular-nums">{plan.subscribers.toLocaleString()}</p>
-                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Subscribers</p>
+                        <p className="text-lg font-black text-slate-900 tabular-nums tracking-tighter">{plan.subscribers.toLocaleString()}</p>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Market Volume</p>
                       </div>
                     </div>
-                    {/* <span className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10 uppercase tracking-widest tabular-nums">
-                      {Math.round((plan.subscribers / plans.reduce((a, p) => a + p.subscribers, 0)) * 100)}% Market Share
-                    </span> */}
+                    <div className="flex flex-col items-end">
+                      <span className="text-[11px] font-black text-primary tabular-nums drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.3)]">
+                        {marketShare}%
+                      </span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Share</span>
+                    </div>
                   </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+
+                  <div className="h-2 bg-slate-200/50 rounded-full overflow-hidden shadow-inner relative">
                     <div
-                      className="h-full rounded-full bg-primary transition-all duration-1000 ease-out shadow-sm"
-                      style={{ width: `${Math.round((plan.subscribers / plans.reduce((a, p) => a + p.subscribers, 0)) * 100)}%` }}
+                      className="h-full rounded-full bg-primary transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)]"
+                      style={{ width: `${marketShare}%` }}
+                    />
+                    
+                    <div
+                      className="absolute top-0 right-0 h-full aspect-square bg-white/40 blur-[2px] animate-pulse rounded-full"
+                      style={{ left: `calc(${marketShare}% - 8px)` }}
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           );
         })}

@@ -32,7 +32,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className={`bg-white rounded-xl shadow-xl w-full ${sizeClass} overflow-hidden animate-in fade-in zoom-in duration-200`}>
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
           <h3 className="text-lg font-bold text-slate-800 tracking-tight">{title}</h3>
