@@ -5,7 +5,7 @@ import { toggleSidebar } from '../../features/ui/uiSlice';
 import {
   LayoutDashboard, CreditCard, Users, Star,
   Building2, BarChart3, MessageCircle, MessageSquareText, UserCircle, ChevronLeft,
-  ChevronRight, Home, ShieldCheck, UserCog, Users2, Headset, Store, ShoppingCart, Image as ImageIcon
+  ChevronRight, Home, ShieldCheck, UserCog, Users2, Headset, Store, ShoppingCart, Image as ImageIcon, LayoutList
 } from 'lucide-react';
 
 const navItems = [
@@ -20,6 +20,7 @@ const navItems = [
       { path: '/customers/buyer', label: 'Buyer', icon: ShoppingCart } // purchasing
     ]
   },
+  { path: '/sections', label: 'Sections', icon: LayoutList },
 
   { path: '/subscribers', label: 'Subscribers', icon: Star },
 

@@ -331,6 +331,11 @@ export default function SubscriptionPlans() {
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Annual Price (₹)</label>
               <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="24999" />
             </div>
+
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Proprties List Limit</label>
+              <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="enter the properties limit of this plan" />
+            </div>
           </div>
           <div>
             <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Features (one per line)</label>

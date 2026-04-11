@@ -10,6 +10,7 @@ import supportReducer from '../features/support/supportSlice';
 import roleReducer from '../features/staff/roleSlice';
 import staffReducer from '../features/staff/staffMember';
 import reviewReducer from '../features/reviews/reviewSlice';
+import sectionsReducer from '../features/sections/sectionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     roles: roleReducer,
     staff: staffReducer,
     reviews: reviewReducer,
+    sections: sectionsReducer,
   },
 });
 
