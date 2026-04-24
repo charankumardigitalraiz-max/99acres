@@ -62,6 +62,7 @@ export const agentPlans = [
   {
     id: 'a1',
     name: 'Basic Agent',
+    type: 'regular',
     monthlyPrice: 1499,
     annualPrice: 14999,
     color: 'slate',
@@ -78,6 +79,7 @@ export const agentPlans = [
   {
     id: 'a2',
     name: 'Standard Agent',
+    type: 'regular',
     monthlyPrice: 3499,
     annualPrice: 34999,
     color: 'amber',
@@ -97,6 +99,7 @@ export const agentPlans = [
   {
     id: 'a3',
     name: 'Premium Agent',
+    type: 'regular',
     monthlyPrice: 6999,
     annualPrice: 69999,
     color: 'dark',
@@ -114,6 +117,15 @@ export const agentPlans = [
     ],
     notIncluded: [],
   },
+  {
+    id: 'at1',
+    name: 'Featured Booster',
+    type: 'topup',
+    monthlyPrice: 999,
+    color: 'blue',
+    subscribers: 120,
+    features: ['10 Extra Featured Listings', '7-Day Priority Placement', 'Boosted Search Visibility'],
+  }
 ];
 
 // ─── Subscription Plans (Seller) ──────────────────────────────────────────────
@@ -121,6 +133,7 @@ export const sellerPlans = [
   {
     id: 's1',
     name: 'Basic Seller',
+    type: 'regular',
     monthlyPrice: 999,
     annualPrice: 9999,
     color: 'slate',
@@ -137,6 +150,7 @@ export const sellerPlans = [
   {
     id: 's2',
     name: 'Standard Seller',
+    type: 'regular',
     monthlyPrice: 2499,
     annualPrice: 24999,
     color: 'amber',
@@ -156,6 +170,7 @@ export const sellerPlans = [
   {
     id: 's3',
     name: 'Premium Seller',
+    type: 'regular',
     monthlyPrice: 4999,
     annualPrice: 49999,
     color: 'dark',
@@ -171,6 +186,15 @@ export const sellerPlans = [
     ],
     notIncluded: [],
   },
+  {
+    id: 'st1',
+    name: 'Urgent Tag Pack',
+    type: 'topup',
+    monthlyPrice: 499,
+    color: 'rose',
+    subscribers: 85,
+    features: ['5 Urgent Tags', 'Valid for 30 Days', 'Red Highlight Border'],
+  }
 ];
 
 // ─── Users ────────────────────────────────────────────────────────────────────

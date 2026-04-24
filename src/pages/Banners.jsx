@@ -171,7 +171,7 @@ export default function Banners() {
                 <form className="space-y-6">
                     <div className="grid grid-cols-1 gap-6">
                         <div>
-                            <label className="form-label">Banner Name</label>
+                            <label className="form-label">Banner Subscription Name</label>
                             <input
                                 type="text"
                                 className="form-input"
@@ -200,15 +200,26 @@ export default function Banners() {
                                 placeholder={null}
                             />
                         </div>
-
-                        <Select
-                            label="Status"
-                            value={selectedBanner?.status || 'Active'}
-                            onChange={e => setSelectedBanner(prev => ({ ...prev, status: e.target.value }))}
-                            options={['Active', 'Inactive']}
-                            placeholder={null}
-                        />
-
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <Select
+                                label="Position"
+                                value={selectedBanner?.position || 'top'}
+                                onChange={e => setSelectedBanner(prev => ({ ...prev, position: e.target.value }))}
+                                options={[
+                                    { value: 'top', label: 'Top' },
+                                    { value: 'middle', label: 'Middle' },
+                                    { value: 'bottom', label: 'Bottom' }
+                                ]}
+                                placeholder={null}
+                            />
+                            <Select
+                                label="Status"
+                                value={selectedBanner?.status || 'Active'}
+                                onChange={e => setSelectedBanner(prev => ({ ...prev, status: e.target.value }))}
+                                options={['Active', 'Inactive']}
+                                placeholder={null}
+                            />
+                        </div>
                         <div>
                             <label className="form-label">Description</label>
                             <textarea
@@ -218,7 +229,7 @@ export default function Banners() {
                                 placeholder="Enter banner description"
                             />
                         </div>
-                        <div>
+                        {/* <div>
                             <div className="flex items-center justify-between mb-2 ml-1">
                                 <label className="form-label !mb-0">Image Source</label>
                                 <div className="flex bg-slate-100/80 rounded-lg p-0.5 gap-1">
@@ -250,13 +261,13 @@ export default function Banners() {
                                     className="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-primary/5 file:text-primary hover:file:bg-primary/10 file:transition-all outline-none"
                                 />
                             )}
-                            {/* Preview */}
+                     
                             {selectedBanner?.image && (
                                 <div className="mt-4 overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
                                     <img src={selectedBanner.image} alt="Preview" className="h-40 w-full object-cover" />
                                 </div>
                             )}
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100">
