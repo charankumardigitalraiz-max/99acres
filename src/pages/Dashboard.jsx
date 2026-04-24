@@ -21,7 +21,7 @@ export default function Dashboard() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-normal mb-1.5">
             <span>Admin</span>
             <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
             <span className="text-primary/80">Overview</span>
@@ -32,10 +32,10 @@ export default function Dashboard() {
           <div className="px-5 py-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-4 shadow-sm">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/40" />
-              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Live Updates</span>
+              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-normal">Live Updates</span>
             </div>
             <div className="w-px h-4 bg-slate-200" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update: 12:45</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-normal">Update: 12:45</span>
           </div>
         </div>
       </div>
@@ -50,11 +50,11 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden flex flex-col">
           <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
             <div>
-              <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em]  flex items-center gap-3">
+              <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal  flex items-center gap-3">
                 <IndianRupee size={16} className="text-primary" /> Revenue Summary
               </h3>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-emerald-100 shadow-sm">
+            <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase tracking-normal border border-emerald-100 shadow-sm">
               <TrendingUp size={12} /> +3.7% Growth
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function Dashboard() {
         {/* Subscription Breakdown */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
           <div className="px-6 py-5 bg-white border-b border-slate-200">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
               <Star size={16} className="text-amber-500" /> Subscription Plans
             </h3>
           </div>
@@ -80,17 +80,17 @@ export default function Dashboard() {
       {/* User Growth */}
       {/* <div className="bg-white rounded-xl border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden flex flex-col">
           <div className="px-6 py-5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
               <Users size={16} className="text-blue-500" /> User Growth
             </h3>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-slate-900" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Total Users</span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">Total Users</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-0.5 bg-primary rounded-full" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">New Users</span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">New Users</span>
               </div>
             </div>
           </div>
@@ -103,10 +103,10 @@ export default function Dashboard() {
         {/* Recent Activity */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
           <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
               <Clock size={16} className="text-slate-500" /> Recent Activity
             </h3>
-            <button className="text-[9px] font-bold text-primary uppercase tracking-widest hover:underline">View All</button>
+            <button className="text-[9px] font-bold text-primary uppercase tracking-normal hover:underline">View All</button>
           </div>
           <div className="divide-y divide-slate-50 overflow-y-auto max-h-[350px]">
             {recentActivity.map(item => {
@@ -121,7 +121,7 @@ export default function Dashboard() {
                     <p className="text-[11px] font-bold text-slate-700 leading-tight mb-1">{item.message}</p>
                     <div className="flex items-center gap-1.5">
                       <Clock size={10} className="text-slate-300" />
-                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest tabular-nums">{item.time}</span>
+                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-normal tabular-nums">{item.time}</span>
                     </div>
                   </div>
                 </div>
@@ -133,10 +133,10 @@ export default function Dashboard() {
         {/* Top Cities */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden lg:col-span-2">
           <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] flex items-center gap-3">
+            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
               <MapPin size={16} className="text-rose-500" /> Top Cities
             </h3>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-[9px] font-bold uppercase tracking-widest text-slate-500 hover:shadow-md transition-all active:scale-95">
+            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-[9px] font-bold uppercase tracking-normal text-slate-500 hover:shadow-md transition-all active:scale-95">
               <ArrowUpRight size={12} className="text-primary" /> View Report
             </button>
           </div>
@@ -144,12 +144,12 @@ export default function Dashboard() {
             <table className="data-table">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200">
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">#</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">City</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">Active Listings</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">Revenue</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">Trend</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">Share</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">#</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">City</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Active Listings</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Revenue</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Trend</th>
+                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Share</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -172,7 +172,7 @@ export default function Dashboard() {
                       <td className="px-6 py-4 text-xs font-bold text-slate-600 tabular-nums">{city.listings.toLocaleString()}</td>
                       <td className="px-6 py-4 text-xs font-bold text-slate-900 tabular-nums">{city.revenue}</td>
                       <td className="px-6 py-4">
-                        <span className="text-[8px] font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 shadow-sm">{city.growth}</span>
+                        <span className="text-[8px] font-bold text-emerald-600 uppercase tracking-normal bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 shadow-sm">{city.growth}</span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">

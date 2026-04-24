@@ -134,20 +134,20 @@ export default function SubscriptionPlans() {
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Subscription Plans</h2>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-            <button
-              onClick={() => setActiveTab('agent')}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'agent' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
-                }`}
-            >
-              Agent Plans
-            </button>
-            <button
-              onClick={() => setActiveTab('seller')}
-              className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'seller' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
-                }`}
-            >
-              Seller Plans
-            </button>
+          <button
+            onClick={() => setActiveTab('agent')}
+            className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'agent' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
+              }`}
+          >
+            Agent Plans
+          </button>
+          <button
+            onClick={() => setActiveTab('seller')}
+            className={`px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${activeTab === 'seller' ? 'bg-white shadow-sm text-primary shadow-slate-200/50' : 'text-slate-400 hover:text-slate-600'
+              }`}
+          >
+            Seller Plans
+          </button>
           <button onClick={openAdd} className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-95">
             <Plus size={16} />
             Add Plan
@@ -228,7 +228,7 @@ export default function SubscriptionPlans() {
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="data-table">
             <thead>
               <tr className="bg-slate-50/20 border-b border-slate-100">
                 <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Plan Name</th>
@@ -303,12 +303,12 @@ export default function SubscriptionPlans() {
         <div className="space-y-6 pt-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="col-span-1 sm:col-span-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Plan Type</label>
+              <label className="form-label">Plan Type</label>
               <select
                 value={planType}
                 onChange={(e) => setPlanType(e.target.value)}
                 name='subscriptiontype'
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer shadow-sm"
+                className="form-select"
               >
                 <option value="">Select Plan Type</option>
                 <option value="regular">Regular Plan</option>
@@ -319,15 +319,15 @@ export default function SubscriptionPlans() {
             {planType && (
               <>
                 <div className="col-span-1 sm:col-span-2">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Plan Name</label>
-                  <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" defaultValue={editPlan?.name || ''} placeholder="e.g. Pro Business" />
+                  <label className="form-label">Plan Name</label>
+                  <input className="form-input" defaultValue={editPlan?.name || ''} placeholder="e.g. Pro Business" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Subscription For</label>
+                  <label className="form-label">Subscription For</label>
                   <select
                     defaultValue={editPlan?.role || activeTab}
                     name='subscriptiontype'
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer shadow-sm"
+                    className="form-select"
                   >
                     <option value="agent">Agent</option>
                     <option value="seller">Seller</option>
@@ -336,25 +336,25 @@ export default function SubscriptionPlans() {
 
                 {planType === 'topup' && (
                   <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Price (₹)</label>
-                    <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
+                    <label className="form-label">Price (₹)</label>
+                    <input className="form-input" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
                   </div>
                 )}
                 {planType !== 'topup' && (
                   <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Monthly Price (₹)</label>
-                    <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
+                    <label className="form-label">Monthly Price (₹)</label>
+                    <input className="form-input" type="number" defaultValue={editPlan?.monthlyPrice || ''} placeholder="2499" />
                   </div>
                 )}
                 {planType !== 'topup' && (
                   <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Annual Price (₹)</label>
-                    <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="24999" />
+                    <label className="form-label">Annual Price (₹)</label>
+                    <input className="form-input" type="number" defaultValue={editPlan?.annualPrice || ''} placeholder="24999" />
                   </div>
                 )}
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Properties List Limit</label>
-                  <input className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-bold placeholder:text-slate-300" type="number" defaultValue={editPlan?.propertiesLimit || ''} placeholder="enter the properties limit of this plan" />
+                  <label className="form-label">Properties List Limit</label>
+                  <input className="form-input" type="number" defaultValue={editPlan?.propertiesLimit || ''} placeholder="enter the properties limit of this plan" />
                 </div>
               </>
             )}
@@ -362,9 +362,9 @@ export default function SubscriptionPlans() {
           {planType && (
             <>
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Features (one per line)</label>
+                <label className="form-label">Features (one per line)</label>
                 <textarea
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium h-32 resize-none placeholder:text-slate-300"
+                  className="form-input h-32 resize-none"
                   defaultValue={editPlan?.features?.join('\n') || ''}
                   placeholder="Enter features..."
                 />

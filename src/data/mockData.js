@@ -801,78 +801,18 @@ export const supportTickets = [
 
 // ─── Reviews ──────────────────────────────────────────────────────────────────
 export const reviewsData = [
-  // Property 1: Luxury 4BHK Villa in Palm Springs
-  { id: 1, propertyId: 1, property: 'Palm Springs Villa', user: 'Ananya K.', rating: 5, comment: 'Amazing property and very smooth process. The architecture is just stunning.', date: '2024-03-15', avatar: 'AK' },
-  { id: 6, propertyId: 1, property: 'Palm Springs Villa', user: 'Rahul S.', rating: 5, comment: 'The pool area is spectacular. Perfect for hosting weekend parties.', date: '2024-03-10', avatar: 'RS' },
-  { id: 7, propertyId: 1, property: 'Palm Springs Villa', user: 'Sanjay D.', rating: 4, comment: 'Beautiful interiors. The living room is huge and well-lit.', date: '2024-03-05', avatar: 'SD' },
-  { id: 8, propertyId: 1, property: 'Palm Springs Villa', user: 'Priya M.', rating: 5, comment: 'High-end finishes everywhere. Worth every penny for the luxury.', date: '2024-02-28', avatar: 'PM' },
-  { id: 9, propertyId: 1, property: 'Palm Springs Villa', user: 'Vijay K.', rating: 5, comment: 'The garden is meticulously maintained. Very peaceful neighborhood.', date: '2024-02-20', avatar: 'VK' },
-  { id: 10, propertyId: 1, property: 'Palm Springs Villa', user: 'Deepa M.', rating: 4, comment: 'Modern design with traditional touches. Very spacious kitchen.', date: '2024-02-15', avatar: 'DM' },
-  { id: 11, propertyId: 1, property: 'Palm Springs Villa', user: 'Rohan S.', rating: 5, comment: 'The view from the terrace at sunset is breathtaking.', date: '2024-02-10', avatar: 'RS' },
-  { id: 12, propertyId: 1, property: 'Palm Springs Villa', user: 'Aarti P.', rating: 5, comment: 'Safe and secure. The security staff is very professional.', date: '2024-02-05', avatar: 'AP' },
-  { id: 13, propertyId: 1, property: 'Palm Springs Villa', user: 'Kavita B.', rating: 4, comment: 'Excellent location near the hospital, yet very quiet.', date: '2024-01-30', avatar: 'KB' },
-  { id: 14, propertyId: 1, property: 'Palm Springs Villa', user: 'Amit V.', rating: 5, comment: 'The best villa in Powai. Exceptional build quality.', date: '2024-01-25', avatar: 'AV' },
-
-  // Property 2: Modern 3BHK Flat near Tech Park
-  { id: 2, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rohit G.', rating: 4, comment: 'Great location, but the price is a bit high. Connectivity is excellent.', date: '2024-03-18', avatar: 'RG' },
-  { id: 15, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Sneha P.', rating: 5, comment: 'Walking distance to my office. Super convenient for IT professionals.', date: '2024-03-12', avatar: 'SP' },
-  { id: 16, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Vikram S.', rating: 4, comment: 'The gym and pool are top-notch. Well-maintained society.', date: '2024-03-08', avatar: 'VS' },
-  { id: 17, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Meena I.', rating: 5, comment: 'Beautiful lake view from the balcony. Very well-ventilated flat.', date: '2024-03-01', avatar: 'MI' },
-  { id: 18, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Suresh N.', rating: 4, comment: 'Efficient layout. No wasted space in the bedrooms or kitchen.', date: '2024-02-22', avatar: 'SN' },
-  { id: 19, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Divya R.', rating: 5, comment: 'The developer has done a great job with the landscaping.', date: '2024-02-15', avatar: 'DR' },
-  { id: 20, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Manoj K.', rating: 4, comment: 'Quick response from the maintenance team for minor fixes.', date: '2024-02-08', avatar: 'MK' },
-  { id: 21, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Kiran R.', rating: 5, comment: 'Safe for families. The dedicated play area for kids is great.', date: '2024-02-01', avatar: 'KR' },
-  { id: 22, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Rahul S.', rating: 4, comment: 'Parking is a bit tight but manageable. Overall a great stay.', date: '2024-01-25', avatar: 'RS' },
-  { id: 23, propertyId: 2, property: 'Prestige Lakeside Flat', user: 'Ananya K.', rating: 5, comment: 'Value for money considering the amenities and location.', date: '2024-01-18', avatar: 'AK' },
-
-  // Property 3: Commercial Retail Space in Mall
-  { id: 3, propertyId: 3, property: 'Commercial Retail Space', user: 'Meena I.', rating: 3, comment: 'The area is good, but maintenance is lacking. High footfall though.', date: '2024-03-20', avatar: 'MI' },
-  { id: 24, propertyId: 3, property: 'Commercial Retail Space', user: 'Amit V.', rating: 4, comment: 'Great visibility for my brand. The mall entrance attracts many customers.', date: '2024-03-15', avatar: 'AV' },
-  { id: 25, propertyId: 3, property: 'Commercial Retail Space', user: 'Vikram S.', rating: 5, comment: 'Top-tier location in Saket. The management is professional.', date: '2024-03-10', avatar: 'VS' },
-  { id: 26, propertyId: 3, property: 'Commercial Retail Space', user: 'Sneha P.', rating: 4, comment: 'Ample parking for customers. Air conditioning works perfectly.', date: '2024-03-05', avatar: 'SP' },
-  { id: 27, propertyId: 3, property: 'Commercial Retail Space', user: 'Rahul S.', rating: 3, comment: 'Loading dock access could be better for inventory restock.', date: '2024-02-28', avatar: 'RS' },
-  { id: 28, propertyId: 3, property: 'Commercial Retail Space', user: 'Priya M.', rating: 5, comment: 'Excellent signage opportunities. High conversion rates here.', date: '2024-02-20', avatar: 'PM' },
-  { id: 29, propertyId: 3, property: 'Commercial Retail Space', user: 'Kiran R.', rating: 4, comment: 'Security is tight, which is good for retail. Very clean mall.', date: '2024-02-15', avatar: 'KR' },
-  { id: 30, propertyId: 3, property: 'Commercial Retail Space', user: 'Ananya K.', rating: 4, comment: 'Rent is high but justified by the volume of shoppers.', date: '2024-02-10', avatar: 'AK' },
-  { id: 31, propertyId: 3, property: 'Commercial Retail Space', user: 'Suresh N.', rating: 5, comment: 'Strategic location near the food court. Maximum exposure.', date: '2024-02-05', avatar: 'SN' },
-  { id: 32, propertyId: 3, property: 'Commercial Retail Space', user: 'Rohit G.', rating: 3, comment: 'Common area maintenance charges are a bit on the higher side.', date: '2024-01-30', avatar: 'RG' },
-
-  // Property 4: Residential Plot in Green Acres
-  { id: 4, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Suresh N.', rating: 5, comment: 'Excellent investment opportunity. The area is developing fast.', date: '2024-03-22', avatar: 'SN' },
-  { id: 33, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Manoj K.', rating: 4, comment: 'Clear titles and easy documentation process. Very professional team.', date: '2024-03-17', avatar: 'MK' },
-  { id: 34, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Divya R.', rating: 5, comment: 'Beautiful location next to the Botanical Garden. Very peaceful.', date: '2024-03-12', avatar: 'DR' },
-  { id: 35, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Rahul S.', rating: 4, comment: 'Wide roads and good street lighting in the layout.', date: '2024-03-07', avatar: 'RS' },
-  { id: 36, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Priya M.', rating: 5, comment: 'Great appreciation potential. Secured gated community.', date: '2024-03-01', avatar: 'PM' },
-  { id: 37, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Amit V.', rating: 4, comment: 'Water and electricity connections are already in place.', date: '2024-02-25', avatar: 'AV' },
-  { id: 38, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Sneha P.', rating: 5, comment: 'Perfect for building a dream home. Very quiet neighborhood.', date: '2024-02-18', avatar: 'SP' },
-  { id: 39, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Vikram S.', rating: 4, comment: 'The park inside the layout is well-designed for morning walks.', date: '2024-02-10', avatar: 'VS' },
-  { id: 40, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Kiran R.', rating: 5, comment: 'Close to the IT corridor but far enough from the hustle.', date: '2024-02-05', avatar: 'KR' },
-  { id: 41, propertyId: 4, property: 'Residential Plot Gachibowli', user: 'Ananya K.', rating: 4, comment: 'Slightly pricey but the location advantages are worth it.', date: '2024-01-28', avatar: 'AK' },
-
-  // Property 5: Penthouse with Terrace Garden
-  { id: 5, propertyId: 5, property: 'Ocean View Penthouse', user: 'Divya R.', rating: 2, comment: 'Multiple issues with the plumbing initially, but fixed now.', date: '2024-03-25', avatar: 'DR' },
-  { id: 42, propertyId: 5, property: 'Ocean View Penthouse', user: 'Rahul S.', rating: 5, comment: 'The terrace garden is a dream. Best sea view in Mumbai.', date: '2024-03-20', avatar: 'RS' },
-  { id: 43, propertyId: 5, property: 'Ocean View Penthouse', user: 'Priya M.', rating: 4, comment: 'Luxury at its peak. The private elevator is a great feature.', date: '2024-03-15', avatar: 'PM' },
-  { id: 44, propertyId: 5, property: 'Ocean View Penthouse', user: 'Amit V.', rating: 5, comment: 'Spacious and grand. The interior woodwork is exceptional.', date: '2024-03-10', avatar: 'AV' },
-  { id: 45, propertyId: 5, property: 'Ocean View Penthouse', user: 'Sneha P.', rating: 4, comment: 'Very exclusive. Only one penthouse per floor ensures privacy.', date: '2024-03-05', avatar: 'SP' },
-  { id: 46, propertyId: 5, property: 'Ocean View Penthouse', user: 'Vikram S.', rating: 5, comment: 'The home automation system works flawlessly. Pure luxury.', date: '2024-03-01', avatar: 'VS' },
-  { id: 47, propertyId: 5, property: 'Ocean View Penthouse', user: 'Kiran R.', rating: 3, comment: 'High maintenance costs, but expected for a property like this.', date: '2024-02-22', avatar: 'KR' },
-  { id: 48, propertyId: 5, property: 'Ocean View Penthouse', user: 'Ananya K.', rating: 5, comment: 'Waking up to the sea view is priceless. Truly elite living.', date: '2024-02-15', avatar: 'AK' },
-  { id: 49, propertyId: 5, property: 'Ocean View Penthouse', user: 'Suresh N.', rating: 4, comment: 'The swimming pool on the terrace is the highlight for me.', date: '2024-02-08', avatar: 'SN' },
-  { id: 50, propertyId: 5, property: 'Ocean View Penthouse', user: 'Rohit G.', rating: 5, comment: 'Excellent security and concierge service. Very well-managed.', date: '2024-02-01', avatar: 'RG' },
-
-  // Property 6: Independent Villa in Jubilee Hills
-  { id: 51, propertyId: 6, property: 'Elite Enclave Villa', user: 'Nitesh S.', rating: 5, comment: 'Grand architecture and elite neighborhood. Best in Jubilee Hills.', date: '2024-03-25', avatar: 'NS' },
-  { id: 52, propertyId: 6, property: 'Elite Enclave Villa', user: 'Sanjana R.', rating: 4, comment: 'The home theatre room is amazing. Perfect for family movie nights.', date: '2024-03-20', avatar: 'SR' },
-  { id: 53, propertyId: 6, property: 'Elite Enclave Villa', user: 'Vijay K.', rating: 5, comment: 'Extensive lawn and beautiful landscaping. Very serene environment.', date: '2024-03-15', avatar: 'VK' },
-  { id: 54, propertyId: 6, property: 'Elite Enclave Villa', user: 'Aavriti G.', rating: 5, comment: 'The kitchen is a chef\'s dream. High-end appliances included.', date: '2024-03-10', avatar: 'AG' },
-  { id: 55, propertyId: 6, property: 'Elite Enclave Villa', user: 'Vikram A.', rating: 4, comment: 'Massive bedrooms with walk-in closets. Truly a palatial home.', date: '2024-03-05', avatar: 'VA' },
-  { id: 56, propertyId: 6, property: 'Elite Enclave Villa', user: 'Rahul S.', rating: 5, comment: 'The gym and sauna are private and well-equipped.', date: '2024-03-01', avatar: 'RS' },
-  { id: 57, propertyId: 6, property: 'Elite Enclave Villa', user: 'Priya M.', rating: 5, comment: 'Extremely secure and private. The location is very prestigious.', date: '2024-02-22', avatar: 'PM' },
-  { id: 58, propertyId: 6, property: 'Elite Enclave Villa', user: 'Amit V.', rating: 4, comment: 'Beautiful marble flooring throughout. Very elegant design.', date: '2024-02-15', avatar: 'AV' },
-  { id: 59, propertyId: 6, property: 'Elite Enclave Villa', user: 'Sneha P.', rating: 5, comment: 'The guest house is a nice addition. Lots of parking space.', date: '2024-02-08', avatar: 'SP' },
-  { id: 60, propertyId: 6, property: 'Elite Enclave Villa', user: 'Ananya K.', rating: 5, comment: 'The perfect blend of luxury and comfort. Highly recommended.', date: '2024-02-01', avatar: 'AK' },
+  { id: 1, user: 'Ananya K.', rating: 5, comment: 'The app is incredibly fast and finding a property has never been easier. The user interface is very intuitive.', date: '2024-03-15', avatar: 'AK', target: 'Website' },
+  { id: 6, user: 'Rahul S.', rating: 5, comment: 'I love how smooth the mobile experience is. Finding my dream home was just a few taps away.', date: '2024-03-10', avatar: 'RS', target: 'Mobile App' },
+  { id: 7, user: 'Sanjay D.', rating: 4, comment: 'The performance on the web version is top-notch. Very reliable and detailed listings.', date: '2024-03-05', avatar: 'SD', target: 'Website' },
+  { id: 8, user: 'Priya M.', rating: 5, comment: 'Excellent filter options on the mobile app. It saved me so much time in my search.', date: '2024-02-28', avatar: 'PM', target: 'Mobile App' },
+  { id: 9, user: 'Vijay K.', rating: 5, comment: 'The website is very clean and professional. The high-quality images load instantly.', date: '2024-02-20', avatar: 'VK', target: 'Website' },
+  { id: 10, user: 'Deepa M.', rating: 4, comment: 'Very stable application. I haven\'t faced any crashes or bugs during my browsing.', date: '2024-02-15', avatar: 'DM', target: 'Mobile App' },
+  { id: 11, user: 'Rohan S.', rating: 5, comment: 'Great job on the latest update. The map view is much more responsive now.', date: '2024-02-10', avatar: 'RS', target: 'Website' },
+  { id: 12, user: 'Aarti P.', rating: 5, comment: 'The secure login and notification features on mobile keep me updated in real-time.', date: '2024-02-05', avatar: 'AP', target: 'Mobile App' },
+  { id: 13, user: 'Kavita B.', rating: 4, comment: 'The website layout is perfect for comparing different properties side by side.', date: '2024-01-30', avatar: 'KB', target: 'Website' },
+  { id: 14, user: 'Amit V.', rating: 5, comment: 'Finding a rental was so easy with this platform. The communication tools are great.', date: '2024-01-25', avatar: 'AV', target: 'Mobile App' },
 ];
+
 
 // ─── Staff ────────────────────────────────────────────────────────────────────
 export const staffRoles = [

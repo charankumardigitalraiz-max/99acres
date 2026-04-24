@@ -52,7 +52,7 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-5">
               <div className="group">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Email Address</label>
+                <label className="form-label ml-0">Email Address</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors duration-300" size={18} />
                   <input
@@ -60,7 +60,7 @@ export default function Login() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50/50 border border-slate-200/80 rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all duration-300 placeholder:text-slate-300"
+                    className="form-input pl-12"
                     placeholder="admin@antigravity.io"
                   />
                 </div>
@@ -68,7 +68,7 @@ export default function Login() {
 
               <div className="group">
                 <div className="flex justify-between items-end mb-2 px-1">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Password</label>
+                  <label className="form-label ml-0">Password</label>
                   {/* <button type="button" className="text-[10px] font-black text-primary uppercase tracking-widest hover:text-slate-900 transition-colors">Forgot?</button> */}
                 </div>
                 <div className="relative">
@@ -78,7 +78,7 @@ export default function Login() {
                     required
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full pl-12 pr-12 py-3 bg-slate-50/50 border border-slate-200/80 rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all duration-300 placeholder:text-slate-300"
+                    className="form-input pl-12 pr-12"
                     placeholder="••••••••"
                   />
                   <button

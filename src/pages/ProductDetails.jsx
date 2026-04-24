@@ -267,7 +267,7 @@ export default function ProductDetails() {
                             placeholder="Reason for status update"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200/80 rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all duration-300 placeholder:text-slate-300"
+                            className="form-input"
                         />
                     )}
                     <div className="flex items-center gap-3 justify-end">

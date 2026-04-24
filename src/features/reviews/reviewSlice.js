@@ -24,6 +24,15 @@ const reviewSlice = createSlice({
         },
         showById: (state, action) => {
             return state.reviews.find(review => review.id === action.payload.id);
+        },
+        deleteReview: (state, action) => {
+            state.reviews = state.reviews.filter(review => review.id !== action.payload);
+        },
+        updateReview: (state, action) => {
+            const index = state.reviews.findIndex(review => review.id === action.payload.id);
+            if (index !== -1) {
+                state.reviews[index] = action.payload;
+            }
         }
     },
 });
@@ -43,5 +52,5 @@ export const selectReviewsByPropertyId = (state, id) => {
     return state.reviews.reviews.filter(review => review.propertyId === id);
 };
 
-export const { addReview, showById, setStatusFilter, setPropertyFilter } = reviewSlice.actions;
+export const { addReview, showById, setStatusFilter, setPropertyFilter, deleteReview, updateReview } = reviewSlice.actions;
 export default reviewSlice.reducer;

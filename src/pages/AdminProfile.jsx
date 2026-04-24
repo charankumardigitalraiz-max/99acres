@@ -137,11 +137,11 @@ export default function AdminProfile() {
                     { label: 'Department Vector', key: 'department', icon: MapPin, type: 'text' },
                   ].map(({ label, key, icon: Icon, type }) => (
                     <div key={key}>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">{label}</label>
+                      <label className="form-label">{label}</label>
                       {editMode ? (
                         <input
                           type={type}
-                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+                          className="form-input"
                           value={profile[key]}
                           onChange={e => setProfile({ ...profile, [key]: e.target.value })}
                         />
@@ -154,10 +154,10 @@ export default function AdminProfile() {
                     </div>
                   ))}
                   <div className="col-span-1 sm:col-span-2">
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Narrative Dossier</label>
+                    <label className="form-label">Narrative Dossier</label>
                     {editMode ? (
                       <textarea
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all h-28 resize-none"
+                        className="form-input h-28 resize-none"
                         value={profile.bio}
                         onChange={e => setProfile({ ...profile, bio: e.target.value })}
                       />
@@ -195,8 +195,8 @@ export default function AdminProfile() {
                     { label: 'Validate New', placeholder: 'Re-input for parity' },
                   ].map(({ label, placeholder }) => (
                     <div key={label}>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">{label}</label>
-                      <input type="password" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-mono" placeholder={placeholder} />
+                      <label className="form-label">{label}</label>
+                      <input type="password" className="form-input font-mono" placeholder={placeholder} />
                     </div>
                   ))}
                   <div className="flex items-end">

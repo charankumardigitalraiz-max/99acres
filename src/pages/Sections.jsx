@@ -54,7 +54,7 @@ function PropertyMultiSelect({ allProperties, selected, onChange }) {
             <button
                 type="button"
                 onClick={() => setOpen(o => !o)}
-                className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all hover:border-primary/30 min-h-[44px]"
+                className="search-input flex items-center justify-between px-4 py-2.5 cursor-pointer min-h-[44px]"
             >
                 {selectedProps.length === 0 ? (
                     <span className="text-slate-400">Select properties to include…</span>
@@ -96,7 +96,7 @@ function PropertyMultiSelect({ allProperties, selected, onChange }) {
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 placeholder="Search by title, type, city…"
-                                className="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/10 font-medium"
+                                className="search-input pl-8 pr-3 py-2 text-xs"
                             />
                         </div>
                     </div>
@@ -293,7 +293,7 @@ export default function Sections() {
                     <input
                         type="text"
                         placeholder="Search by title or subtitle..."
-                        className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium"
+                        className="search-input pl-11 pr-4 py-2.5"
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                     />
@@ -317,7 +317,7 @@ export default function Sections() {
             {/* ── Data Table ── */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="data-table">
                         <thead>
                             <tr className="border-b border-slate-100 bg-slate-50/60">
                                 <th className="text-left px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">#</th>

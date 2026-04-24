@@ -74,11 +74,11 @@ export default function Subscribers() {
           {/* Enhanced Filter Bar */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-wrap gap-6 items-end">
             <div className="flex-1 min-w-[300px]">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2.5 block ml-1">Search Customers</label>
+              <label className="form-label">Search Customers</label>
               <div className="relative">
                 <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
-                  className="w-full pl-12 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold text-slate-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  className="search-input pl-12 pr-4 py-2.5 text-xs"
                   placeholder="Enter name or email..."
                   value={searchQuery}
                   onChange={e => dispatch(setSearch(e.target.value))}
@@ -88,7 +88,7 @@ export default function Subscribers() {
 
             <div className="flex flex-wrap gap-6 items-end">
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2.5 block ml-1">Subscription Plan</label>
+                <label className="form-label">Subscription Plan</label>
                 <div className="flex bg-slate-50 p-1.5 rounded-lg gap-1 border border-slate-100">
                   {plans.map(p => (
                     <button

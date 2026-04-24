@@ -32,9 +32,9 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <div className={`bg-white rounded-xl shadow-xl w-full ${sizeClass} overflow-hidden animate-in fade-in zoom-in duration-200`}>
+      <div className={`bg-white rounded-xl shadow-xl w-full ${sizeClass} animate-in fade-in zoom-in duration-200`}>
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white rounded-t-xl">
           <h3 className="text-lg font-bold text-slate-800 tracking-tight">{title}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X size={20} />
@@ -42,7 +42,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
         </div>
 
         {/* Body */}
-        <div className="p-6 max-h-[85vh] overflow-y-auto">
+        <div className="p-6 max-h-[85vh] overflow-y-auto custom-scrollbar overflow-x-visible">
           {children}
         </div>
       </div>

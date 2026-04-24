@@ -74,7 +74,7 @@ export default function Properties() {
         <div className="relative flex-1 min-w-48 group">
           <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" />
           <input
-            className="w-full pl-10 pr-4 py-2.5 text-xs border border-transparent rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
+            className="search-input pl-10 pr-4 py-2.5 text-xs"
             placeholder="Search property or uploader..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}
@@ -95,7 +95,7 @@ export default function Properties() {
 
         <div className="flex items-center gap-2">
           <select
-            className="px-4 py-2.5 text-[10px] font-bold text-slate-600 bg-white border border-transparent shadow-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer uppercase tracking-widest"
+            className="search-input py-2.5 px-4 cursor-pointer text-[10px] font-bold uppercase tracking-widest w-auto"
             value={statusFilter}
             onChange={e => dispatch(setStatusFilter(e.target.value))}
           >
@@ -103,7 +103,7 @@ export default function Properties() {
           </select>
 
           <select
-            className="px-4 py-2.5 text-[10px] font-bold text-slate-600 bg-white border border-transparent shadow-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all cursor-pointer uppercase tracking-widest"
+            className="search-input py-2.5 px-4 cursor-pointer text-[10px] font-bold uppercase tracking-widest w-auto"
             value={cityFilter}
             onChange={e => dispatch(setCityFilter(e.target.value))}
           >

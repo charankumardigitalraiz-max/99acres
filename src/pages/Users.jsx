@@ -89,7 +89,7 @@ export default function Users() {
         <div className="relative flex-1 min-w-[280px]">
           <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
+            className="search-input pl-11 pr-4 py-2.5 text-xs"
             placeholder="Search by name, email or city..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}

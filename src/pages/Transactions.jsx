@@ -73,14 +73,14 @@ export default function Transactions() {
                     <input
                         type="text"
                         placeholder="Search by ID or User Name..."
-                        className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all font-medium"
+                        className="search-input pl-11 pr-4 py-2.5"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
                     <select
-                        className="flex-1 md:flex-none px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-600 focus:outline-none"
+                        className="flex-1 md:flex-none search-input py-2.5 px-4 cursor-pointer text-[10px] font-bold uppercase tracking-widest"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >

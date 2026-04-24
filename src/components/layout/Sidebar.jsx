@@ -33,7 +33,7 @@ const navItems = [
   // ✅ New Sections
   { path: '/support', label: 'Support', icon: MessageCircle },
 
-  { path: '/reviews', label: 'Reviews', icon: MessageSquareText },
+  { path: '/reviews', label: 'Testimonials', icon: MessageSquareText },
   { path: '/banners', label: 'Banners', icon: ImageIcon },
   { path: '/transactions', label: 'Transactions', icon: CreditCard },
 
@@ -149,8 +149,10 @@ export default function Sidebar() {
     >
       {/* Logo */}
       <div className={`flex items-center gap-2.5 px-4 py-4 border-b border-slate-100 ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/20">
-          <Home size={15} className="text-white" />
+        {/* <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/20"> */}
+        <div className="w-8 h-8 rounded-lg  flex items-center justify-center flex-shrink-0 shadow-sm shadow-primary/20">
+          <img src="/sherla-properties-text.png" alt="logo" className="w-15 h-15" />
+          {/* </div> */}
         </div>
         {!collapsed && (
           <div>
