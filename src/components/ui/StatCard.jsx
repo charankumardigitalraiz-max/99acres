@@ -17,29 +17,31 @@ const colorMap = {
 
 export default function StatCard({ label, value, change, trend, icon, color = 'blue' }) {
   const Icon = iconMap[icon] || BarChart3;
-  const colors = colorMap[color];
+  const colors = colorMap[color] || colorMap.blue;
   const isUp = trend === 'up';
 
   return (
-    <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-primary/30 transition-all cursor-pointer group">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{label}</p>
-          <p className="text-xl font-bold text-slate-900 leading-none">{value}</p>
-        </div>
-        <div className={`w-10 h-10 rounded-xl ${colors.bg} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-          <Icon size={16} className={colors.icon} />
+    <div className="bg-white rounded-lg border border-slate-200 p-5 shadow-sm hover:border-primary/30 transition-all duration-300 cursor-default group">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{label}</p>
+        <div className={`w-8 h-8 rounded-md ${colors.bg} ${colors.icon} border border-slate-100 flex items-center justify-center transition-transform group-hover:scale-110`}>
+          <Icon size={16} />
         </div>
       </div>
-      {change && (
-        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-50">
-          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md ${isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'} text-[10px] font-bold`}>
-            {isUp ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-            <span>{change}</span>
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-2xl font-bold text-slate-900 tabular-nums leading-none">{value}</p>
+          <div className="flex items-center gap-1.5 mt-2">
+            {change && (
+              <span className={`flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md border ${isUp ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
+                {isUp ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                {change}
+              </span>
+            )}
+            <span className="text-[9px] font-bold text-slate-300 uppercase tracking-wider">vs last cycle</span>
           </div>
-          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">vs baseline</span>
         </div>
-      )}
+      </div>
     </div>
   );
 }

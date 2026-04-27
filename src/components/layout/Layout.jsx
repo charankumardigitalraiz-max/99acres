@@ -11,7 +11,7 @@ export default function Layout() {
       <Sidebar />
       <Topbar />
       <main
-        className={`transition-all duration-300 pt-14 min-h-screen ${collapsed ? 'ml-16' : 'ml-56'}`}
+        className={`transition-all duration-500 ease-in-out pt-20 min-h-screen ${collapsed ? 'ml-20' : 'ml-64'}`}
       >
         <div className="p-5 animate-fade-in">
           <Outlet />

@@ -21,113 +21,89 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 relative overflow-hidden">
-      {/* Subtle Background Elements */}
-      <div className="absolute inset-0 z-0">
-        {/* <img
-          src={loginBg}
-          alt="Background"
-          className="w-full h-full object-cover opacity-[0.03] scale-110"
-        /> */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white via-transparent to-slate-100/50"></div>
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 relative overflow-hidden font-inter">
+      {/* Background Decor */}
+      <div className="absolute inset-0 z-0 bg-[#f8fafc]">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[120px] -ml-64 -mb-64 animate-pulse duration-1000"></div>
+        <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
       </div>
 
-      {/* Floating Decorative Blur */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-[120px] animate-pulse-slow"></div>
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] animate-pulse-slow"></div>
-
       <div className="relative z-10 w-full max-w-[420px] px-6">
-        <div className="bg-white rounded-3xl border border-slate-200/60 shadow-2xl shadow-slate-200/50 p-8 transition-all duration-500">
-          <div className="flex flex-col items-center mb-8 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-xl shadow-primary/20 mb-4 group hover:scale-110 transition-transform duration-500">
-              <Shield className="text-white" size={24} strokeWidth={2.5} />
+        <div className="bg-white rounded-lg border border-slate-200 shadow-xl shadow-slate-200/50 p-10">
+          <div className="flex flex-col items-center mb-10 text-center">
+            <div className="w-16 h-16 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20 mb-6 group transition-all hover:scale-110">
+              <Shield className="text-white group-hover:scale-110 transition-transform" size={32} />
             </div>
-            <h1 className="text-xl font-black text-slate-900 uppercase mb-1 flex items-center justify-center gap-[10px]">
-              <span>Sherla</span>
-              <span>Properties</span>
-            </h1>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Command Center Access</p>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Access Control</h1>
+            <p className="text-xs text-slate-400 mt-2 font-bold uppercase tracking-[0.2em]">Administrative Interface Layer</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-5">
-              <div className="group">
-                <label className="form-label ml-0">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors duration-300" size={18} />
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Electronic Identity</label>
+                <div className="relative group">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={16} />
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="form-input pl-12"
-                    placeholder="admin@antigravity.io"
+                    className="w-full pl-10 pr-4 py-3 text-sm border border-slate-200 rounded-md outline-none focus:border-primary transition-all bg-slate-50/30 font-medium"
+                    placeholder="admin@sherlac.com"
                   />
                 </div>
               </div>
 
-              <div className="group">
-                <div className="flex justify-between items-end mb-2 px-1">
-                  <label className="form-label ml-0">Password</label>
-                  {/* <button type="button" className="text-[10px] font-black text-primary uppercase tracking-widest hover:text-slate-900 transition-colors">Forgot?</button> */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Access Key</label>
+                  <button type="button" className="text-[10px] font-bold text-primary uppercase tracking-wider hover:underline">Reset Key?</button>
                 </div>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors duration-300" size={18} />
+                <div className="relative group">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={16} />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="form-input pl-12 pr-12"
+                    className="w-full pl-10 pr-10 py-3 text-sm border border-slate-200 rounded-md outline-none focus:border-primary transition-all bg-slate-50/30 font-medium"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors"
                   >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* <div className="flex items-center py-1">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input type="checkbox" className="sr-only peer" />
-                <div className="w-5 h-5 border-2 border-slate-200 rounded-lg bg-white peer-checked:bg-primary peer-checked:border-primary transition-all shadow-sm flex items-center justify-center">
-                  <CheckSquare size={12} className="text-white opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={4} />
-                </div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-slate-600 transition-colors">Remember Session</span>
-              </label>
-            </div> */}
-
             <button
               type="submit"
               disabled={isLoading}
-              className="size-fit mx-auto bg-primary text-white py-4 px-10 rounded-2xl text-xs font-black uppercase  shadow-xl shadow-primary/20 active:translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-slate-900 text-white py-3.5 rounded-md text-[11px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-slate-900/10 hover:bg-primary transition-all flex items-center justify-center gap-2 disabled:opacity-70 active:scale-95 group"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                <>Login <ArrowRight size={16} /></>
+                <>Initialize Session <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></>
               )}
             </button>
           </form>
 
-          {/* <p className="mt-10 text-center text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">
-            Authorized Personnel Only
-          </p> */}
-        </div>
-
-        {/* Global Details */}
-        <div className="mt-8 flex justify-center items-center gap-6 opacity-30">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
-            <Globe size={12} /> NODE-GLOBAL
-          </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
-            <Shield size={12} /> SECURE GATEWAY
-          </span>
+          <div className="mt-10 pt-8 border-t border-slate-100 flex items-center justify-center gap-6 text-slate-300">
+            <span className="text-[9px] font-bold uppercase tracking-[0.15em] flex items-center gap-2">
+              <Globe size={14} className="text-primary/40" /> Nexus
+            </span>
+            <div className="w-1 h-1 rounded-full bg-slate-200"></div>
+            <span className="text-[9px] font-bold uppercase tracking-[0.15em] flex items-center gap-2">
+              <Shield size={14} className="text-primary/40" /> Vault
+            </span>
+          </div>
         </div>
       </div>
     </div>

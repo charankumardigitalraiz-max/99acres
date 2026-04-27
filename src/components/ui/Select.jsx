@@ -14,7 +14,7 @@ const Select = ({
     return (
         <div className={`flex flex-col gap-2.5 ${containerClassName}`}>
             {label && (
-                <label className={`text-[10px] font-medium text-slate-400 uppercase tracking-widest ml-1 ${labelClassName}`}>
+                <label className={`text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 ${labelClassName}`}>
                     {label}
                 </label>
             )}
@@ -22,7 +22,7 @@ const Select = ({
                 <select
                     value={value}
                     onChange={onChange}
-                    className={`w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl text-[11px] font-bold uppercase tracking-widest text-slate-700 appearance-none cursor-pointer outline-none transition-all focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary/30 ${className}`}
+                    className={`w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-md text-[11px] font-bold uppercase tracking-widest text-slate-700 appearance-none cursor-pointer outline-none transition-all focus:ring-4 focus:ring-primary/10 focus:bg-white focus:border-primary/30 ${className}`}
                 >
                     {placeholder && <option value="" disabled>{placeholder}</option>}
                     {options.map((option) => {

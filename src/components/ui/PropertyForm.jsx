@@ -1,23 +1,40 @@
 import React, { useState, useRef } from 'react';
 import {
     User, Building, MapPin, IndianRupee, Image as ImageIcon,
-    ShieldCheck, Check, Layout, Calendar, Image, Play, XCircle, CheckCircle, Briefcase, Plus, UploadCloud, Trash2
+    ShieldCheck, Check, Layout, Calendar, Image, Play, XCircle, CheckCircle, Briefcase, Plus, UploadCloud, Trash2, Maximize2, Globe, Heart, Zap, Phone, Mail, Landmark, Scale, Clock
 } from 'lucide-react';
 import Modal from './Modal';
 
-export default function PropertyForm({ initialData }) {
+export default function PropertyForm({ initialData, isEditing = false, onCancel, onSubmit }) {
     const [openStep, setOpenStep] = useState(1);
-    const [formData, setFormData] = useState(initialData || {});
+    const [formData, setFormData] = useState(initialData || {
+        location: {},
+        pricing: {},
+        smartAlbum: {},
+        ownershipProofs: {},
+        lawyerDetails: {},
+        bankerDetails: [],
+        amenities: [],
+        locationAdvantages: []
+    });
     const [lightboxMedia, setLightboxMedia] = useState(null); // { type: 'image' | 'video', url: string }
     const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
     const [tempVideoLink, setTempVideoLink] = useState('');
-    const handleVideoLinkChange = (e) => {
-        setFormData({ ...formData, video: e.target.value });
-    };
 
-    const handleRemoveVideo = (e) => {
-        if (e) e.stopPropagation();
-        setFormData({ ...formData, video: '' });
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target;
+        if (name.includes('.')) {
+            const [parent, child] = name.split('.');
+            setFormData({
+                ...formData,
+                [parent]: {
+                    ...formData[parent],
+                    [child]: value
+                }
+            });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleSaveVideoLink = () => {
@@ -25,356 +42,203 @@ export default function PropertyForm({ initialData }) {
         setIsVideoModalOpen(false);
     };
 
-    const openVideoModal = (e) => {
-        if (e) e.stopPropagation();
-        setTempVideoLink(formData.video || '');
-        setIsVideoModalOpen(true);
-    };
-
-    const getYouTubeID = (url) => {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    };
-
-    const getYouTubeThumbnail = (url) => {
-        const id = getYouTubeID(url);
-        return id ? `https://img.youtube.com/vi/${id}/maxresdefault.jpg` : null;
-    };
-
-    const getEmbedUrl = (url) => {
-        const id = getYouTubeID(url);
-        return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : url;
-    };
-
     const steps = [
-        { id: 1, title: 'Property Details', icon: <Building size={16} /> },
-        { id: 2, title: 'Pricing & Specs', icon: <IndianRupee size={16} /> },
-        { id: 3, title: 'Media Assets', icon: <ImageIcon size={16} /> },
-        { id: 4, title: 'Verification', icon: <ShieldCheck size={16} /> }
+        { id: 1, title: 'Asset Details', icon: <Building size={18} /> },
+        { id: 2, title: 'Specs & Features', icon: <Zap size={18} /> },
+        { id: 3, title: 'Visual Media', icon: <ImageIcon size={18} /> },
+        { id: 4, title: 'Legal & Verification', icon: <ShieldCheck size={18} /> }
     ];
 
-    return (
-        <div className="bg-white  border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col">
-            {/* <div className="p-6 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                    <Building size={18} className="text-primary" />
-                    Property Listing Details
-                </h2>
-                <div className="px-3 py-1 bg-white border border-slate-200 rounded-lg shadow-sm">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Read Only Form</span>
-                </div>
-            </div> */}
-
-            {/* Premium Horizontal Stepper / Tabs */}
-            <div className="flex items-center justify-between px-6 py-6 bg-white border-b border-slate-100 overflow-x-auto scrollbar-hide relative">
-                {steps.map((step, index) => (
-                    <React.Fragment key={step.id}>
-                        <button
-                            onClick={() => setOpenStep(step.id)}
-                            className={`flex items-center gap-3 relative z-10 transition-all ${openStep === step.id ? 'text-primary scale-105' : 'text-slate-400 hover:text-slate-600 hover:scale-105'}`}
+    const Field = ({ label, value, name, type = 'text', options = [], placeholder }) => {
+        return (
+            <div className="group/field">
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-2 transition-colors group-hover/field:text-primary">{label}</p>
+                {isEditing ? (
+                    type === 'select' ? (
+                        <select
+                            name={name}
+                            value={value || ''}
+                            onChange={handleFieldChange}
+                            className="w-full px-4 py-3 text-[13px] border border-slate-100 rounded-xl focus:border-primary/40 focus:ring-4 focus:ring-primary/5 outline-none font-bold text-slate-700 bg-slate-50/50 transition-all capitalize"
                         >
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm shrink-0 border ${openStep === step.id ? 'bg-primary text-white border-primary shadow-primary/30' : 'bg-slate-50 text-slate-400 border-slate-200 hover:bg-white'}`}>
+                            <option value="">Select Option</option>
+                            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                    ) : type === 'textarea' ? (
+                        <textarea
+                            name={name}
+                            value={value || ''}
+                            onChange={handleFieldChange}
+                            placeholder={placeholder}
+                            className="w-full px-4 py-3 text-[13px] border border-slate-100 rounded-xl focus:border-primary/40 focus:ring-4 focus:ring-primary/5 outline-none font-bold text-slate-700 bg-slate-50/50 transition-all min-h-[100px] resize-none"
+                        />
+                    ) : (
+                        <input
+                            type={type}
+                            name={name}
+                            value={value || ''}
+                            onChange={handleFieldChange}
+                            placeholder={placeholder}
+                            className="w-full px-4 py-3 text-[13px] border border-slate-100 rounded-xl focus:border-primary/40 focus:ring-4 focus:ring-primary/5 outline-none font-bold text-slate-700 bg-slate-50/50 transition-all"
+                        />
+                    )
+                ) : (
+                    <div className="p-4 bg-slate-50/40 border border-slate-100/50 rounded-xl hover:border-primary/20 hover:bg-white transition-all cursor-default shadow-sm shadow-slate-100/30 group-hover/field:shadow-lg group-hover/field:shadow-primary/5 group-hover/field:-translate-y-1">
+                        <p className={`text-[13px] font-black tracking-tight capitalize leading-tight ${value ? 'text-slate-900' : 'text-slate-300 italic font-medium'}`}>
+                            {value || 'DATA NOT RECORDED'}
+                        </p>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <div className="bg-white border border-slate-200 shadow-2xl shadow-slate-200/40 rounded-2xl overflow-hidden flex flex-col transition-all duration-500">
+            {/* Premium Horizontal Stepper */}
+            <div className="px-10 pt-10 pb-8 bg-white border-b border-slate-50 relative overflow-hidden">
+                <div className="flex items-center justify-between relative">
+                    {/* Background Progress Line */}
+                    <div className="absolute top-6 left-0 right-0 h-[2px] bg-slate-100 hidden md:block rounded-full mx-8"></div>
+                    <div
+                        className="absolute top-6 left-0 h-[2px] bg-primary transition-all duration-1000 ease-in-out hidden md:block rounded-full mx-8 shadow-[0_0_10px_rgba(var(--color-primary),0.3)]"
+                        style={{ width: `calc(${((openStep - 1) / (steps.length - 1)) * 100}% - 4rem)` }}
+                    ></div>
+
+                    {steps.map((step, index) => (
+                        <button
+                            key={step.id}
+                            onClick={() => setOpenStep(step.id)}
+                            className={`flex flex-col items-center gap-4 relative z-10 transition-all duration-500 group ${openStep === step.id ? 'scale-105' : 'scale-100 opacity-60 hover:opacity-100'}`}
+                        >
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-700 shadow-sm shrink-0 border-2 ${openStep === step.id ? 'bg-primary text-white border-primary shadow-xl shadow-primary/20 scale-110' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-200 group-hover:text-slate-600'}`}>
                                 {step.icon}
                             </div>
-                            <div className="text-left hidden md:block">
-                                <p className={`text-[9px] font-black uppercase tracking-widest ${openStep === step.id ? 'text-primary/70' : 'text-slate-400'}`}>Step {step.id}</p>
-                                <p className={`text-xs font-black tracking-tight whitespace-nowrap ${openStep === step.id ? 'text-primary' : 'text-slate-600'}`}>{step.title}</p>
+                            <div className="text-center hidden md:block">
+                                <p className={`text-[9px] font-black uppercase tracking-[0.25em] mb-1.5 ${openStep === step.id ? 'text-primary' : 'text-slate-400'}`}>PHASE {step.id}</p>
+                                <p className={`text-xs font-black tracking-tight whitespace-nowrap ${openStep === step.id ? 'text-slate-900' : 'text-slate-500'}`}>{step.title}</p>
                             </div>
                         </button>
-                        {index < steps.length - 1 && (
-                            <div className="flex-1 min-w-[2rem] mx-4 h-0.5 rounded-full bg-slate-100 relative">
-                                <div className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-500 ${openStep > step.id ? 'bg-primary w-full' : 'w-0'}`}></div>
-                            </div>
-                        )}
-                    </React.Fragment>
-                ))}
+                    ))}
+                </div>
             </div>
 
             <div className="bg-white">
-                {/* STEP 1: PROPERTY & LOCATION DETAILS */}
+                {/* PHASE 1: ASSET & GEOSPATIAL */}
                 {openStep === 1 && (
-                    <div className="p-10 space-y-7 animate-in fade-in slide-in-from-right-4 duration-500">
-                        {/* Basic Section */}
-                        <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                <User size={12} className="text-primary" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Basic Information
-                                </h4>
+                    <div className="p-10 space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-inner">
+                                    <Building size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">CORE SPECIFICATIONS</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Foundational asset registry data</p>
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">You Are</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.uploadertype || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Title</p>
-                                    <p className="text-sm font-bold text-slate-800">{formData.title || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Kind of Property</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.propertyType || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Property Length / Area</p>
-                                    <p className="text-sm font-bold text-slate-800">{formData.propertyLength || 'Not Provided'}</p>
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <Field label="UPLOADER TYPE" name="uploadertype" value={formData.uploadertype} type="select" options={['Owner', 'Agent', 'Builder']} />
+                                <Field label="REGISTRY TITLE" name="title" value={formData.title} placeholder="Asset identifier" />
+                                <Field label="ASSET CATEGORY" name="propertyType" value={formData.propertyType} type="select" options={['Flat', 'Villa', 'Independent House', 'Plot', 'Commercial']} />
+                                <Field label="TOTAL DIMENSIONS" name="propertyLength" value={formData.propertyLength} placeholder="e.g. 2400 Sq.Ft" />
                             </div>
                         </div>
 
-                        {/* Location Section */}
-                        <div className="pt-4 border-t border-slate-100">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                <MapPin size={12} className="text-blue-500" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Location Details
-                                </h4>
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100 shadow-inner">
+                                    <MapPin size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">GEOSPATIAL COORDINATES</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Physical asset positioning system</p>
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">City</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.city || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Locality, Area</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.location?.locality || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Project / Building Name</p>
-                                    <p className="text-sm font-bold text-slate-800">{formData.location?.projectName || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Landmark</p>
-                                    <p className="text-sm font-bold text-slate-800">{formData.location?.landmark || 'Not Provided'}</p>
-                                </div>
-                                <div className="md:col-span-2 pt-4 border-t border-slate-100">
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Full Address</p>
-                                    <p className="text-sm font-bold text-slate-800 leading-relaxed max-w-3xl">{formData.location?.fullAddress || 'Not Provided'}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <Field label="CITY / PROVINCE" name="location.city" value={formData.location?.city} />
+                                <Field label="LOCALITY / ZONE" name="location.locality" value={formData.location?.locality} />
+                                <Field label="PROJECT NODE" name="location.projectName" value={formData.location?.projectName} />
+                                <Field label="IDENTIFIER / LANDMARK" name="location.landmark" value={formData.location?.landmark} />
+                                <div className="md:col-span-2 lg:col-span-4 pt-4">
+                                    <Field label="FULL REGISTRY ADDRESS" name="location.fullAddress" value={formData.location?.fullAddress} type="textarea" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* STEP 2: PRICING & ADVANTAGES */}
+                {/* PHASE 2: PRICING & FEATURES */}
                 {openStep === 2 && (
-                    <div className="p-10 space-y-7 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-3 transition-all hover:bg-white hover:shadow-sm">
-                                <IndianRupee size={12} className="text-emerald-500" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Financial Structure
-                                </h4>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-y-6 gap-x-8">
+                    <div className="p-10 space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 shadow-inner">
+                                    <IndianRupee size={18} />
+                                </div>
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Expected Price</p>
-                                    <p className="text-xl font-black text-slate-800 tracking-tight">{formData.pricing?.expectedPrice || 'Not Provided'}</p>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">FINANCIAL PARAMETERS</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Market valuation and pricing matrix</p>
                                 </div>
-                                <div className="md:border-l border-slate-100 md:pl-8">
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Price per SqFt</p>
-                                    <p className="text-base font-black text-emerald-600">{formData.pricing?.pricePerSqft || 'Not Provided'}</p>
-                                </div>
-                                <div className="md:border-l border-slate-100 md:pl-8">
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Maintenance</p>
-                                    <p className="text-sm font-bold text-slate-800">{formData.pricing?.maintenanceCharges || 'Included'}</p>
-                                </div>
-                                <div className="md:border-l border-slate-100 md:pl-8">
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Flexibility</p>
-                                    <p className={`text-sm font-black ${formData.pricing?.negotiable === 'true' || formData.pricing?.negotiable === true ? 'text-primary' : 'text-slate-600'}`}>
-                                        {formData.pricing?.negotiable === 'true' || formData.pricing?.negotiable === true ? 'Negotiable' : 'Fixed Price'}
-                                    </p>
-                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <Field label="MARKET PRICE" name="price" value={formData.price} />
+                                <Field label="PRICE PER SQ.FT" name="pricing.pricePerSqft" value={formData.pricing?.pricePerSqft} />
+                                <Field label="AVAILABILITY STATUS" name="availabilityStatus" value={formData.availabilityStatus} type="select" options={['Ready to Move', 'Under Construction']} />
+                                <Field label="MAINTENANCE" name="pricing.maintenance" value={formData.pricing?.maintenance} />
                             </div>
                         </div>
 
-                        {/* Divider Line 1 */}
-                        <div className="border-t border-slate-100 pt-5">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                <Layout size={12} className="text-blue-500" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Specifications & Availability
-                                </h4>
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 border border-amber-100 shadow-inner">
+                                    <Layout size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">TECHNICAL DOSSIER</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Internal architecture and specifications</p>
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Furnishing</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.furnishingStatus || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Direction</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.direction || 'Not Provided'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Availability</p>
-                                    <p className="text-sm font-bold text-slate-800 capitalize">{formData.availabilityStatus || 'Not Provided'}</p>
-                                </div>
-                                {formData.availabilityStatus === 'under construction' && (
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Available From</p>
-                                        <p className="text-sm font-bold text-slate-800">{formData.availableFrom || 'Not Provided'}</p>
-                                    </div>
-                                )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                <Field label="BEDROOM COUNT" name="bedrooms" value={formData.bedrooms} />
+                                <Field label="BATHROOMS" name="bathrooms" value={formData.bathrooms} />
+                                <Field label="FURNISHING" name="furnishingStatus" value={formData.furnishingStatus} type="select" options={['Furnished', 'Semi-Furnished', 'Unfurnished']} />
+                                <Field label="PARKING BAYS" name="parking" value={formData.parking} />
                             </div>
                         </div>
 
-                        {/* Divider Line 2 */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-5 border-t border-slate-100">
-                            <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-4 transition-all hover:bg-white hover:shadow-sm">
-                                    <CheckCircle size={12} className="text-primary" />
-                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                        Amenities
-                                    </h4>
+                        {/* Amenities Section */}
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500 border border-purple-100 shadow-inner">
+                                    <Zap size={18} />
                                 </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {(formData.amenities || []).map(amenity => (
-                                        <span
-                                            key={amenity}
-                                            className="px-3 py-1 rounded-md text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200"
-                                        >
-                                            {amenity}
-                                        </span>
-                                    ))}
-                                    {!(formData.amenities?.length > 0) && (
-                                        <span className="text-xs font-bold text-slate-400 italic">No amenities specified</span>
-                                    )}
+                                <div>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">ASSET AMENITIES</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">On-site features and lifestyle supplements</p>
                                 </div>
                             </div>
-                            <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-4 transition-all hover:bg-white hover:shadow-sm">
-                                    <MapPin size={12} className="text-emerald-500" />
-                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                        Location Advantages
-                                    </h4>
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                    {(formData.locationAdvantages || []).map(adv => (
-                                        <span
-                                            key={adv}
-                                            className="px-3 py-1 rounded-md text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200"
-                                        >
-                                            {adv}
-                                        </span>
-                                    ))}
-                                    {!(formData.locationAdvantages?.length > 0) && (
-                                        <span className="text-xs font-bold text-slate-400 italic">No advantages specified</span>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* STEP 3: IMAGES AND VIDEOS */}
-                {openStep === 3 && (
-                    <div className="p-7 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Cover Photo</p>
-                                {formData.coverPhoto || (formData.images && formData.images[0]) ? (
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                                {['Security', 'Pool', 'Gym', 'Garden', 'Power Backup', 'Club House', 'Intercom', 'Water Plant'].map(amenity => (
                                     <div
-                                        className="w-full h-[260px] rounded-[2rem] overflow-hidden border border-slate-200 cursor-pointer group"
-                                        onClick={() => setLightboxMedia({ type: 'image', url: formData.coverPhoto || formData.images[0] })}
+                                        key={amenity}
+                                        onClick={() => {
+                                            if (!isEditing) return;
+                                            const amenities = formData.amenities || [];
+                                            const newAmenities = amenities.includes(amenity)
+                                                ? amenities.filter(a => a !== amenity)
+                                                : [...amenities, amenity];
+                                            setFormData({ ...formData, amenities: newAmenities });
+                                        }}
+                                        className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer ${(formData.amenities || []).includes(amenity)
+                                            ? 'bg-primary/10 border-primary text-primary shadow-sm'
+                                            : 'bg-slate-50 border-slate-100 text-slate-400 grayscale hover:grayscale-0'
+                                            }`}
                                     >
-                                        <img src={formData.coverPhoto || formData.images[0]} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    </div>
-                                ) : (
-                                    <p className="text-sm font-bold text-slate-400 italic">No cover photo uploaded</p>
-                                )}
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Property Video Tour</p>
-
-                                {formData.video ? (
-                                    <div className="space-y-4">
-                                        <div
-                                            className="relative rounded-[2rem] overflow-hidden bg-slate-900 border border-slate-800 shadow-xl group/preview cursor-pointer h-[260px]"
-                                            onClick={() => setLightboxMedia({ type: 'video', url: formData.video })}
-                                        >
-                                            {getYouTubeThumbnail(formData.video) ? (
-                                                <img
-                                                    src={getYouTubeThumbnail(formData.video)}
-                                                    className="absolute inset-0 w-full h-full object-cover transition-transform group-hover/preview:scale-105 duration-700 opacity-60"
-                                                    alt="Video Thumbnail"
-                                                    onError={(e) => {
-                                                        e.target.src = `https://img.youtube.com/vi/${getYouTubeID(formData.video)}/0.jpg`;
-                                                    }}
-                                                />
-                                            ) : null}
-                                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover/preview:bg-black/10 transition-all">
-                                                <div className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transform group-hover/preview:scale-110 transition-transform">
-                                                    <Play size={24} fill="white" />
-                                                </div>
-                                                <p className="text-[10px] font-black uppercase tracking-widest text-white mt-4 shadow-sm opacity-80">Play Property Tour</p>
-                                            </div>
-
-                                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/preview:opacity-100 transition-opacity z-10">
-                                                <button
-                                                    onClick={openVideoModal}
-                                                    className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all"
-                                                    title="Change Link"
-                                                >
-                                                    <Plus size={14} />
-                                                </button>
-                                                <button
-                                                    onClick={(e) => { e.stopPropagation(); handleRemoveVideo(); }}
-                                                    className="w-8 h-8 rounded-lg bg-rose-500/80 backdrop-blur-md border border-rose-400/20 text-white flex items-center justify-center hover:bg-rose-600 transition-all"
-                                                    title="Remove Video"
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            </div>
+                                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${(formData.amenities || []).includes(amenity) ? 'bg-primary text-white' : 'bg-slate-200 text-slate-400'}`}>
+                                            <Check size={12} strokeWidth={4} />
                                         </div>
-                                        <p className="text-[10px] font-bold text-slate-400 truncate px-2 italic">Source: {formData.video}</p>
-                                    </div>
-                                ) : (
-                                    <button
-                                        onClick={openVideoModal}
-                                        className="w-full h-[260px] border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50 hover:bg-white hover:border-primary/50 transition-all group flex flex-col items-center justify-center"
-                                    >
-                                        <div className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-primary group-hover:bg-primary/5 transition-all">
-                                            <Play size={20} className="text-slate-400 group-hover:text-primary transition-colors translate-x-0.5" />
-                                        </div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-primary transition-colors">Add Video Tour Link</p>
-                                        <p className="text-[9px] font-bold text-slate-400 mt-1 opacity-60">YouTube, Vimeo, or Direct URL</p>
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="pt-7 border-t border-slate-100">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                <ImageIcon size={12} className="text-primary" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Smart Album Assets
-                                </h4>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-7">
-                                {Object.keys(formData.smartAlbum || {}).map(room => (
-                                    <div key={room}>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">{room}</p>
-                                            <span className="text-[9px] font-bold text-slate-400">({formData.smartAlbum[room]?.length || 0})</span>
-                                        </div>
-                                        <div className="grid grid-cols-5 gap-1.5 py-1">
-                                            {formData.smartAlbum[room]?.map((img, i) => (
-                                                <img
-                                                    key={i}
-                                                    src={img}
-                                                    onClick={() => setLightboxMedia({ type: 'image', url: img })}
-                                                    className="aspect-square w-full object-cover rounded-lg border border-slate-200 cursor-pointer hover:opacity-80 transition-opacity"
-                                                    alt=""
-                                                />
-                                            ))}
-                                            {!(formData.smartAlbum[room]?.length > 0) && (
-                                                <div className="col-span-5 py-2">
-                                                    <p className="text-[10px] text-slate-400 italic">No assets uploaded</p>
-                                                </div>
-                                            )}
-                                        </div>
+                                        <span className="text-[11px] font-black uppercase tracking-tight">{amenity}</span>
                                     </div>
                                 ))}
                             </div>
@@ -382,266 +246,223 @@ export default function PropertyForm({ initialData }) {
                     </div>
                 )}
 
-                {/* STEP 4: VERIFICATION */}
-                {openStep === 4 && (
-                    <div className="p-7 space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Identity Verification</p>
-                                <div className="mt-3">
-                                    {formData.ownerVerification?.photo ? (
-                                        <div
-                                            className="w-full h-32 rounded-xl overflow-hidden border border-slate-200 cursor-pointer group relative"
-                                            onClick={() => setLightboxMedia({ type: 'image', url: formData.ownerVerification.photo })}
-                                        >
-                                            <img src={formData.ownerVerification.photo} alt="Verification" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <span className="text-white text-[10px] font-bold px-3 py-1.5 bg-black/50 rounded-full flex items-center gap-2">
-                                                    <ImageIcon size={12} /> View {formData.ownerVerification?.type || 'Proof'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-32 rounded-xl bg-slate-50 border border-slate-200 border-dashed flex flex-col items-center justify-center text-slate-400">
-                                            <XCircle size={20} className="mb-2 text-slate-300" />
-                                            <span className="text-[9px] font-black uppercase tracking-widest">No Proof Uploaded</span>
-                                        </div>
-                                    )}
+                {/* PHASE 3: VISUAL REPOSITORY */}
+                {openStep === 3 && (
+                    <div className="p-10 space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500 border border-purple-100">
+                                        <ImageIcon size={18} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">VISUAL REPOSITORY</h4>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">High-fidelity asset imagery</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Owner Photograph</p>
-                                {formData.uploader?.photo ? (
-                                    <div
-                                        className="w-24 h-24 overflow-hidden border-2 border-slate-200 cursor-pointer hover:border-primary/50 transition-colors"
-                                        onClick={() => setLightboxMedia({ type: 'image', url: formData.uploader.photo })}
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setIsVideoModalOpen(true)}
+                                        className="px-4 py-2 bg-slate-900 text-white rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
                                     >
-                                        <img src={formData.uploader.photo} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" alt="Owner" />
-                                    </div>
-                                ) : (
-                                    <div className="w-24 h-24 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center">
-                                        <User size={32} className="text-slate-300" />
-                                    </div>
-                                )}
+                                        <Play size={12} /> Configure Video
+                                    </button>
+                                </div>
                             </div>
 
-                            {/* Legal Details */}
-                            <div className="pt-4 border-t lg:border-t-0 lg:pt-0">
-                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                    <Briefcase size={12} className="text-blue-500" />
-                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                        Legal / Lawyer Details
-                                    </h4>
-                                </div>
-                                {formData.lawyerDetails ? (
-                                    <div className="space-y-6">
-                                        <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Lawyer Name</p>
-                                            <p className="text-sm font-bold text-slate-800">{formData.lawyerDetails.name || 'Not Provided'}</p>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Mobile</p>
-                                                <p className="text-sm font-bold text-slate-800">{formData.lawyerDetails.mobile || 'Not Provided'}</p>
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Email</p>
-                                                <p className="text-sm font-bold text-slate-800">{formData.lawyerDetails.email || 'Not Provided'}</p>
-                                            </div>
-                                        </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                {(formData.images || []).map((img, idx) => (
+                                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group shadow-sm hover:shadow-xl transition-all border border-slate-100">
+                                        <img src={img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Asset" />
+                                        <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/20 transition-all"></div>
+                                        <button
+                                            onClick={() => setLightboxMedia({ type: 'image', url: img })}
+                                            className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-md rounded-lg text-slate-900 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0"
+                                        >
+                                            <Maximize2 size={12} />
+                                        </button>
+                                        {isEditing && (
+                                            <button className="absolute bottom-2 right-2 p-1.5 bg-rose-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 shadow-lg">
+                                                <Trash2 size={12} />
+                                            </button>
+                                        )}
                                     </div>
-                                ) : (
-                                    <div className="p-6 rounded-xl border border-slate-200 bg-slate-50 border-dashed flex items-center justify-center">
-                                        <p className="text-xs font-bold text-slate-400 italic">No lawyer details provided</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Banker Details */}
-                            <div className="pt-4 border-t lg:border-t-0 lg:pt-0">
-                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                    <Building size={12} className="text-amber-500" />
-                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                        Banker Details
-                                    </h4>
-                                </div>
-                                {formData.bankerDetails?.length > 0 ? (
-                                    <div className="space-y-4">
-                                        {formData.bankerDetails.map((banker, idx) => (
-                                            <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-white shadow-sm flex justify-between items-center">
-                                                <div>
-                                                    <p className="text-sm font-bold text-slate-800">{banker.name}</p>
-                                                </div>
-                                                <div className="text-right text-slate-600">
-                                                    <p className="text-xs font-bold tracking-widest uppercase">{banker.number}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="p-6 rounded-xl border border-slate-200 bg-slate-50 border-dashed flex items-center justify-center">
-                                        <p className="text-xs font-bold text-slate-400 italic">No banker details provided</p>
-                                    </div>
+                                ))}
+                                {isEditing && (
+                                    <button className="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-2 text-slate-400 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all group">
+                                        <Plus size={24} className="group-hover:scale-110 transition-transform" />
+                                        <span className="text-[9px] font-black uppercase tracking-widest">Add Asset</span>
+                                    </button>
                                 )}
                             </div>
                         </div>
+                    </div>
+                )}
 
-                        <div className="pt-7 border-t border-slate-100">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60 mb-6 transition-all hover:bg-white hover:shadow-sm">
-                                <ShieldCheck size={12} className="text-slate-500" />
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-                                    Property Ownership Proofs
-                                </h4>
+                {/* PHASE 4: LEGAL & VERIFICATION */}
+                {openStep === 4 && (
+                    <div className="p-10 space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
+                        {/* Documents Section */}
+                        <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100 shadow-inner">
+                                    <ShieldCheck size={18} />
+                                </div>
+                                <div>
+                                    <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">VERIFICATION PROTOCOL</h4>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Official compliance and legal proofs</p>
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {[
-                                    { id: 'saleDeed', label: 'Sale Deed / Title Deed', req: true },
-                                    { id: 'encumbranceCert', label: 'Encumbrance Certificate', req: true },
-                                    { id: 'propertyTaxReceipt', label: 'Property Tax Receipt', req: true },
-                                    { id: 'legalOpinion', label: 'Legal Opinion Document', req: false },
-                                    { id: 'lawyerCert', label: 'Lawyer Certificate', req: false }
-                                ].map(doc => {
-                                    const proofImg = formData.ownershipProofs?.[doc.id];
-                                    return (
-                                        <div key={doc.id} className="p-3 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-all flex flex-col gap-3">
-                                            {proofImg ? (
-                                                <div
-                                                    className="w-full h-32 rounded-lg overflow-hidden border border-slate-200 cursor-pointer group relative"
-                                                    onClick={() => setLightboxMedia({ type: 'image', url: proofImg })}
-                                                >
-                                                    <img src={proofImg} alt={doc.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <span className="text-white text-[10px] font-bold px-3 py-1.5 bg-black/50 rounded-full flex items-center gap-2"><ImageIcon size={12} /> View Image</span>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="w-full h-32 rounded-lg bg-slate-50 border border-slate-200 border-dashed flex flex-col items-center justify-center text-slate-400">
-                                                    <XCircle size={20} className="mb-2 text-slate-300" />
-                                                    <span className="text-[9px] font-black uppercase tracking-widest">Not Uploaded</span>
-                                                </div>
-                                            )}
-                                            <div className="px-1">
-                                                <p className="text-xs font-bold text-slate-800">{doc.label}</p>
-                                                <p className={`text-[9px] font-bold uppercase tracking-widest mt-1 ${doc.req ? 'text-rose-400' : 'text-slate-400'}`}>
-                                                    {doc.req ? 'Required Verification' : 'Optional Support'}
-                                                </p>
-                                            </div>
+                                    { label: 'Ownership Certificate', key: 'ownershipProofs.certificate', date: '24 Oct 2024' },
+                                    { label: 'Tax Registry Log', key: 'ownershipProofs.taxReceipt', date: '12 Nov 2024' }
+                                ].map(doc => (
+                                    <div key={doc.key} className="p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group hover:border-emerald-200 hover:bg-emerald-50/30 transition-all">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 group-hover:text-emerald-600 transition-colors">{doc.label}</p>
+                                            <CheckCircle size={16} className="text-emerald-500" />
                                         </div>
-                                    );
-                                })}
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm">
+                                                <ImageIcon size={20} className="text-slate-300" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-xs font-black text-slate-900">registry_doc_{doc.key.split('.').pop()}.pdf</p>
+                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Status: Verified ({doc.date})</p>
+                                            </div>
+                                            {isEditing && <button className="p-2 text-slate-400 hover:text-rose-500 transition-colors"><Trash2 size={14} /></button>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Legal Representatives */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                                <div className="flex items-center gap-3 mb-8">
+                                    <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-500 border border-indigo-100">
+                                        <Scale size={18} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">LEGAL COUNSEL</h4>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Dossier certification attorney</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-6">
+                                    <Field label="ATTORNEY NAME" name="lawyerDetails.name" value={formData.lawyerDetails?.name} placeholder="Counsel identifier" />
+                                    <Field label="BAR ASSOCIATION ID" name="lawyerDetails.id" value={formData.lawyerDetails?.id} placeholder="License registry ID" />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Field label="SECURE PHONE" name="lawyerDetails.phone" value={formData.lawyerDetails?.phone} />
+                                        <Field label="SECURE EMAIL" name="lawyerDetails.email" value={formData.lawyerDetails?.email} />
+                                    </div>
+                                </div>
                             </div>
 
-
+                            <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm">
+                                <div className="flex items-center gap-3 mb-8">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 border border-amber-100">
+                                        <Landmark size={18} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-900">BANKING PROTOCOL</h4>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Financial clearing institution</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-6">
+                                    <Field label="INSTITUTION NAME" name="bankerDetails.name" value={formData.bankerDetails?.[0]?.name} placeholder="Entity identifier" />
+                                    <Field label="BRANCH CODE" name="bankerDetails.branch" value={formData.bankerDetails?.[0]?.branch} placeholder="IFSC / Branch ID" />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Field label="PROTOCOL OFFICER" name="bankerDetails.officer" value={formData.bankerDetails?.[0]?.officer} />
+                                        <Field label="CONTACT NODE" name="bankerDetails.phone" value={formData.bankerDetails?.[0]?.phone} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* Media Lightbox */}
-            <Modal
-                isOpen={!!lightboxMedia}
-                onClose={() => setLightboxMedia(null)}
-                title={lightboxMedia?.type === 'video' ? 'Property Video Tour' : 'Asset Inspection'}
-                size="xl"
-            >
-                {lightboxMedia && (
-                    <div className="bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-2xl relative w-full flex items-center justify-center min-h-[300px]">
-                        {lightboxMedia.type === 'video' ? (
-                            getYouTubeID(lightboxMedia.url) ? (
-                                <iframe
-                                    src={getEmbedUrl(lightboxMedia.url)}
-                                    className="w-full aspect-video border-none"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    title="Property Video Tour"
-                                ></iframe>
-                            ) : (
-                                <video
-                                    src={lightboxMedia.url}
-                                    controls
-                                    autoPlay
-                                    className="max-w-full max-h-[70vh] object-contain"
-                                >
-                                    Your browser does not support the video tag.
-                                </video>
-                            )
-                        ) : (
-                            <img
-                                src={lightboxMedia.url}
-                                alt="High Resolution Inspection"
-                                className="max-w-full max-h-[80vh] object-contain"
-                            />
-                        )}
-                    </div>
-                )}
-            </Modal>
+            {/* Stepper Footer */}
+            <div className="px-10 py-8 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+                <button
+                    disabled={openStep === 1}
+                    onClick={() => setOpenStep(Math.max(1, openStep - 1))}
+                    className="px-6 py-3 rounded-xl border border-slate-200 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:bg-white hover:text-slate-900 transition-all disabled:opacity-30 active:scale-95 flex items-center gap-2"
+                >
+                    <ChevronLeft size={14} /> Previous Phase
+                </button>
+                <div className="flex items-center gap-4">
+                    {isEditing && (
+                        <button
+                            onClick={onCancel}
+                            className="px-6 py-3 rounded-xl border border-slate-200 text-[10px] font-black uppercase tracking-[0.2em] text-rose-500 hover:bg-rose-50 transition-all active:scale-95"
+                        >
+                            Abort Modification
+                        </button>
+                    )}
+                    {openStep < 4 ? (
+                        <button
+                            onClick={() => setOpenStep(openStep + 1)}
+                            className="px-10 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all active:scale-95"
+                        >
+                            Next Phase
+                        </button>
+                    ) : (
+                        isEditing && (
+                            <button
+                                onClick={onSubmit}
+                                className="px-10 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all animate-pulse active:scale-95"
+                            >
+                                Commit Modifications
+                            </button>
+                        )
+                    )}
+                </div>
+            </div>
 
-            {/* Video Link Entry Modal */}
+            {/* Video Link Modal */}
             <Modal
                 isOpen={isVideoModalOpen}
                 onClose={() => setIsVideoModalOpen(false)}
-                title="Property Video Tour"
+                title="Configure Video Stream Link"
                 size="md"
             >
-                <div className="p-2 space-y-6">
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                            <Play size={32} fill="currentColor" />
-                        </div>
-                        <h3 className="text-xl font-black text-slate-900 tracking-tight mb-2">Video Presentation</h3>
-                        <p className="text-xs font-medium text-slate-500 max-w-[280px]">Paste a YouTube link or a direct video URL below to add a virtual tour to this property listing.</p>
+                <div className="p-8 space-y-6">
+                    <div className="p-5 bg-primary/5 border border-primary/10 rounded-2xl">
+                        <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">Technical Note</p>
+                        <p className="text-[11px] text-primary/70 leading-relaxed font-bold">Please provide a valid YouTube or direct video CDN link. The system will automatically generate thumbnails and visual overlays.</p>
                     </div>
-
-                    <div className="space-y-4">
-                        <div className="relative group">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
-                                <Plus size={14} />
-                            </div>
-                            <input
-                                type="text"
-                                autoFocus
-                                value={tempVideoLink}
-                                onChange={(e) => setTempVideoLink(e.target.value)}
-                                placeholder="https://www.youtube.com/watch?v=..."
-                                className="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-[2rem] text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all shadow-sm"
-                            />
-                        </div>
-
-                        {tempVideoLink && getYouTubeThumbnail(tempVideoLink) && (
-                            <div className="relative rounded-[2rem] overflow-hidden aspect-video border border-slate-200 bg-slate-100 animate-in fade-in zoom-in-95 duration-500">
-                                <img
-                                    src={getYouTubeThumbnail(tempVideoLink)}
-                                    className="w-full h-full object-cover"
-                                    alt="Manual Preview"
-                                    onError={(e) => e.target.src = `https://img.youtube.com/vi/${getYouTubeID(tempVideoLink)}/0.jpg`}
-                                />
-                                <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center">
-                                    <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
-                                        <Play size={16} fill="white" />
-                                    </div>
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-white mt-2 shadow-sm">Verified Preview</p>
-                                </div>
-                            </div>
-                        )}
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Protocol URL</p>
+                        <input
+                            type="text"
+                            value={tempVideoLink}
+                            onChange={(e) => setTempVideoLink(e.target.value)}
+                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-[13px] font-black text-slate-900 outline-none focus:border-primary transition-all shadow-inner"
+                            placeholder="https://youtube.com/watch?v=..."
+                        />
                     </div>
-
-                    <div className="grid grid-cols-2 gap-3 pt-2">
-                        <button
-                            onClick={() => setIsVideoModalOpen(false)}
-                            className="px-6 py-4 rounded-xl border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all font-black"
-                        >
-                            Discard
-                        </button>
-                        <button
-                            onClick={handleSaveVideoLink}
-                            disabled={!tempVideoLink.trim()}
-                            className="px-6 py-4 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50 disabled:grayscale"
-                        >
-                            Update
-                        </button>
+                    <div className="flex justify-end gap-4 pt-6">
+                        <button onClick={() => setIsVideoModalOpen(false)} className="px-6 py-3 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Cancel</button>
+                        <button onClick={handleSaveVideoLink} className="px-10 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20">Apply Link</button>
                     </div>
+                </div>
+            </Modal>
+
+            {/* Lightbox Modal */}
+            <Modal isOpen={!!lightboxMedia} onClose={() => setLightboxMedia(null)} title="Asset Analysis" size="xl">
+                <div className="relative bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center min-h-[500px]">
+                    <img src={lightboxMedia?.url} className="w-full h-auto max-h-[85vh] object-contain mx-auto" alt="Asset Analysis" />
                 </div>
             </Modal>
         </div>
     );
 }
+
+// Helper icon component
+const ChevronLeft = ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+);

@@ -17,45 +17,36 @@ export default function Dashboard() {
   const { kpis, revenueData, userGrowthData, recentActivity, topCities } = useSelector(s => s.dashboard);
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-20">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white px-6 py-4 rounded-lg border border-slate-200 shadow-sm gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-normal mb-1.5">
-            <span>Admin</span>
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-            <span className="text-primary/80">Overview</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
+          <h2 className="text-xl font-semibold text-slate-900 leading-none">Dashboard Overview</h2>
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">Live analytics and marketplace synthesis telemetry</p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="px-5 py-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-4 shadow-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/40" />
-              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-normal">Live Updates</span>
-            </div>
-            <div className="w-px h-4 bg-slate-200" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-normal">Update: 12:45</span>
+        <div className="flex gap-2">
+          <div className="bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> SYSTEM: OPERATIONAL
           </div>
         </div>
       </div>
+
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {kpis.map(kpi => <StatCard key={kpi.id} {...kpi} />)}
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden flex flex-col">
-          <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden flex flex-col hover:border-primary/20 transition-all">
+          <div className="px-6 py-4 bg-white border-b border-slate-50 flex items-center justify-between">
             <div>
-              <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal  flex items-center gap-3">
-                <IndianRupee size={16} className="text-primary" /> Revenue Summary
-              </h3>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue Synthesis</h3>
+              <p className="text-lg font-bold text-slate-900 mt-0.5 leading-none">Market Performance</p>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase tracking-normal border border-emerald-100 shadow-sm">
-              <TrendingUp size={12} /> +3.7% Growth
+            <div className="flex items-center gap-2 px-2 py-1 bg-emerald-50 text-emerald-600 rounded-md text-[10px] font-bold uppercase tracking-wider border border-emerald-100">
+              <TrendingUp size={12} /> +3.7% Momentum
             </div>
           </div>
           <div className="p-6 flex-1">
@@ -64,11 +55,10 @@ export default function Dashboard() {
         </div>
 
         {/* Subscription Breakdown */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="px-6 py-5 bg-white border-b border-slate-200">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
-              <Star size={16} className="text-amber-500" /> Subscription Plans
-            </h3>
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:border-primary/20 transition-all">
+          <div className="px-6 py-4 bg-white border-b border-slate-50">
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tier Distribution</h3>
+            <p className="text-lg font-bold text-slate-900 mt-0.5 leading-none">Subscription Plans</p>
           </div>
           <div className="p-6 flex-1 flex items-center justify-center">
             <SubscriptionPieChart data={subscriptionPieData} />
@@ -77,51 +67,30 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom Row */}
-      {/* User Growth */}
-      {/* <div className="bg-white rounded-xl border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden flex flex-col">
-          <div className="px-6 py-5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
-              <Users size={16} className="text-blue-500" /> User Growth
-            </h3>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-slate-900" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">Total Users</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-0.5 bg-primary rounded-full" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-normal">New Users</span>
-              </div>
-            </div>
-          </div>
-          <div className="p-6 flex-1">
-            <UserGrowthChart data={userGrowthData} />
-          </div>
-        </div> */}
-      {/* Bottom Row - Side by Side */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
-              <Clock size={16} className="text-slate-500" /> Recent Activity
-            </h3>
-            <button className="text-[9px] font-bold text-primary uppercase tracking-normal hover:underline">View All</button>
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:border-primary/20 transition-all">
+          <div className="px-6 py-4 bg-white border-b border-slate-50 flex items-center justify-between">
+            <div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Event Stream</h3>
+              <p className="text-sm font-bold text-slate-900 mt-1.5 leading-none">Recent Activity</p>
+            </div>
+            <button className="text-[10px] font-bold text-primary uppercase tracking-wider hover:underline">Full Log</button>
           </div>
-          <div className="divide-y divide-slate-50 overflow-y-auto max-h-[350px]">
+          <div className="divide-y divide-slate-50 overflow-y-auto max-h-[380px] custom-scrollbar">
             {recentActivity.map(item => {
               const config = activityIcons[item.type] || activityIcons.new_user;
               const Icon = config.icon;
               return (
-                <div key={item.id} className="flex items-start gap-4 px-6 py-4 hover:bg-slate-50 transition-all group">
-                  <div className={`w-8 h-8 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                    <Icon size={12} className={config.text} />
+                <div key={item.id} className="flex items-start gap-4 px-6 py-4 hover:bg-slate-50/50 transition-all group">
+                  <div className={`w-8 h-8 rounded-md ${config.bg} ${config.text} border border-white flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform`}>
+                    <Icon size={14} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-bold text-slate-700 leading-tight mb-1">{item.message}</p>
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={10} className="text-slate-300" />
-                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-normal tabular-nums">{item.time}</span>
+                    <p className="text-[13px] font-bold text-slate-700 leading-snug mb-1 group-hover:text-slate-900 transition-colors">{item.message}</p>
+                    <div className="flex items-center gap-1.5 opacity-60">
+                      <Clock size={10} className="text-slate-400" />
+                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{item.time}</span>
                     </div>
                   </div>
                 </div>
@@ -131,25 +100,26 @@ export default function Dashboard() {
         </div>
 
         {/* Top Cities */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden lg:col-span-2">
-          <div className="px-6 py-5 bg-white border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-[10px] font-bold text-slate-900 uppercase tracking-normal flex items-center gap-3">
-              <MapPin size={16} className="text-rose-500" /> Top Cities
-            </h3>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-[9px] font-bold uppercase tracking-normal text-slate-500 hover:shadow-md transition-all active:scale-95">
-              <ArrowUpRight size={12} className="text-primary" /> View Report
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden lg:col-span-2 hover:border-primary/20 transition-all">
+          <div className="px-6 py-4 bg-white border-b border-slate-50 flex items-center justify-between">
+            <div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Geospatial Data</h3>
+              <p className="text-sm font-bold text-slate-900 mt-1.5 leading-none">Market Concentration</p>
+            </div>
+            <button className="flex items-center gap-1 text-[10px] font-bold text-primary uppercase tracking-wider hover:text-primary-600 transition-colors">
+              DETAILED REPORT <ArrowUpRight className="h-3 w-3" />
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="data-table">
+            <table className="w-full text-left">
               <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-200">
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">#</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">City</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Active Listings</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Revenue</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Trend</th>
-                  <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-normal">Share</th>
+                <tr className="bg-slate-50/30 border-b border-slate-50">
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">#</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Units</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Momentum</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Penetration</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -157,27 +127,31 @@ export default function Dashboard() {
                   const maxListings = Math.max(...topCities.map(c => c.listings));
                   const pct = Math.round((city.listings / maxListings) * 100);
                   return (
-                    <tr key={city.city} className="hover:bg-slate-50 transition-colors group">
+                    <tr key={city.city} className="hover:bg-slate-50/30 transition-all group">
                       <td className="px-6 py-4">
-                        <span className="text-[10px] font-bold text-slate-300 italic tabular-nums">#0{i + 1}</span>
+                        <span className="text-[10px] font-bold text-slate-200 tabular-nums">0{i + 1}</span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-100 flex items-center justify-center p-1 group-hover:rotate-3 transition-transform">
-                            <Building2 size={14} className="text-slate-400" />
+                          <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center p-1 group-hover:scale-110 transition-all">
+                            <Building2 size={14} className="text-slate-300" />
                           </div>
-                          <span className="text-xs font-bold text-slate-800">{city.city}</span>
+                          <span className="text-[13px] font-bold text-slate-700 group-hover:text-primary transition-colors">{city.city}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-xs font-bold text-slate-600 tabular-nums">{city.listings.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-xs font-bold text-slate-900 tabular-nums">{city.revenue}</td>
                       <td className="px-6 py-4">
-                        <span className="text-[8px] font-bold text-emerald-600 uppercase tracking-normal bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 shadow-sm">{city.growth}</span>
+                        <span className="text-sm font-bold text-slate-600 tabular-nums">{city.listings.toLocaleString()}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-bold text-slate-900 tabular-nums">{city.revenue}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-600 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">{city.growth}</span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden min-w-[80px] shadow-inner">
-                            <div className="h-full bg-primary rounded-full transition-all duration-1000 shadow-sm" style={{ width: `${pct}%` }} />
+                          <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden min-w-[80px]">
+                            <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${pct}%` }} />
                           </div>
                           <span className="text-[10px] font-bold text-slate-400 tabular-nums">{(pct * 0.4).toFixed(1)}%</span>
                         </div>

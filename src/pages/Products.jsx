@@ -69,214 +69,217 @@ export default function Products() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-20">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white px-6 py-4 rounded-lg border border-slate-200 shadow-sm gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5">
-            <span>Admin</span>
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-            <span className="text-primary/80">Properties</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Property Management</h2>
+          <h2 className="text-xl font-semibold text-slate-900 leading-none">Property Management</h2>
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">Global listings management and approval repository</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:shadow-sm transition-all active:scale-95 shadow-sm">
+        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
           <Download size={14} className="text-primary" /> Export Data
         </button>
       </div>
 
-      {/* Premium KPI Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+      {/* KPI Metrics */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
-          { label: 'Total Properties', value: counts.all, icon: Building2, color: 'slate' },
-          { label: 'New', value: counts.new, icon: TrendingUp, color: 'blue' },
-          { label: 'Processing', value: counts.processing, icon: Clock, color: 'amber' },
-          { label: 'Verified', value: counts.verified, icon: CheckCircle, color: 'emerald' },
-          { label: 'Rejected', value: counts.rejected, icon: XCircle, color: 'rose' },
-          { label: 'Draft', value: counts.draft, icon: Filter, color: 'slate' },
+          { label: 'Total Units', value: counts.all, icon: Building2, color: 'text-blue-500' },
+          { label: 'New', value: counts.new, icon: TrendingUp, color: 'text-indigo-500' },
+          { label: 'Processing', value: counts.processing, icon: Clock, color: 'text-amber-500' },
+          { label: 'Verified', value: counts.verified, icon: CheckCircle, color: 'text-emerald-500' },
+          { label: 'Rejected', value: counts.rejected, icon: XCircle, color: 'text-rose-500' },
+          { label: 'Draft', value: counts.draft, icon: Filter, color: 'text-slate-400' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-pointer">
-            <div className={`w-10 h-10 rounded-lg bg-${s.color === 'slate' ? 'slate' : s.color}-50 flex items-center justify-center text-${s.color === 'slate' ? 'slate-500' : s.color + '-600'} mb-4 group-hover:scale-110 transition-transform`}>
-              <s.icon size={16} />
+          <div key={s.label} className="bg-white rounded-lg p-4 border border-slate-200 shadow-sm hover:border-primary/30 transition-all cursor-default">
+            <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center mb-3">
+              <s.icon size={16} className={s.color} />
             </div>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{s.label}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{s.label}</p>
             <p className="text-xl font-bold text-slate-900 tabular-nums leading-none">{s.value.toLocaleString()}</p>
           </div>
         ))}
       </div>
 
-      {/* Modern Filter Interface */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-wrap gap-4 items-center">
-        <div className="relative flex-1 min-w-[280px]">
-          <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+      {/* Filters Interface */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-4 flex flex-col xl:flex-row gap-4 items-center justify-between">
+        <div className="relative w-full xl:w-96">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
-            placeholder="Search by property or uploader..."
+            className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-md outline-none focus:border-primary transition-all"
+            placeholder="Search properties or uploaders..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}
           />
         </div>
 
-        <div className="flex gap-4">
-          <div className="w-40">
-            <Select
+        <div className="flex flex-wrap gap-3 w-full xl:w-auto">
+          <div className="flex-1 sm:w-40 sm:flex-none">
+            <select
+              className="w-full px-3 py-2 text-xs font-bold border border-slate-200 rounded-md outline-none bg-white transition-all cursor-pointer"
               value={typeFilter}
               onChange={e => dispatch(setTypeFilter(e.target.value))}
-              options={types}
-            />
+            >
+              {types.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
           </div>
-          <div className="w-40">
-            <Select
+          <div className="flex-1 sm:w-40 sm:flex-none">
+            <select
+              className="w-full px-3 py-2 text-xs font-bold border border-slate-200 rounded-md outline-none bg-white transition-all cursor-pointer"
               value={statusFilter}
               onChange={e => dispatch(setStatusFilter(e.target.value))}
-              options={statuses}
-            />
+            >
+              {statuses.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
           </div>
-          <div className="w-40">
-            <Select
+          <div className="flex-1 sm:w-40 sm:flex-none">
+            <select
+              className="w-full px-3 py-2 text-xs font-bold border border-slate-200 rounded-md outline-none bg-white transition-all cursor-pointer"
               value={cityFilter}
               onChange={e => dispatch(setCityFilter(e.target.value))}
-              options={cities}
-            />
+            >
+              {cities.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Property Repository Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      {/* Table Section */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200">
-                <th>Property</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Price</th>
-                <th>Uploaded By</th>
-                <th>Status</th>
-                <th className="text-right">Actions</th>
+              <tr className="bg-primary border-b border-slate-100">
+                <th className="px-6 py-4 text-[10px] font-bold text-white uppercase tracking-wider">Property</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-white uppercase tracking-wider hidden md:table-cell">Type</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-white uppercase tracking-wider hidden lg:table-cell">Location</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-white uppercase tracking-wider">Price</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden sm:table-cell">Uploaded By</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Status</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {paginated.map(prop => (
-                <tr key={prop.id} className="group hover:bg-slate-50/80 transition-all">
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center p-1 group-hover:rotate-3 transition-transform overflow-hidden shadow-sm">
-                        {prop.coverPhoto ? (
-                          <img src={prop.coverPhoto} className="w-full h-full object-cover rounded-lg" alt="Prop" />
-                        ) : (
-                          <Building2 size={16} className="text-slate-300" />
-                        )}
+              {paginated.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-20 text-center">
+                    <Building2 size={40} className="mx-auto mb-3 text-slate-100" />
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">No matching properties discovered</p>
+                  </td>
+                </tr>
+              ) : (
+                paginated.map(prop => (
+                  <tr key={prop.id} className="group hover:bg-slate-50/30 transition-all">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                          {prop.coverPhoto ? (
+                            <img src={prop.coverPhoto} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Prop" />
+                          ) : (
+                            <Building2 size={16} className="text-slate-300" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 leading-none text-sm truncate group-hover:text-primary transition-colors">{prop.title}</p>
+                          <p className="text-[10px] text-slate-500 mt-1.5 font-medium flex items-center gap-1.5">
+                            <span className="text-primary/70 font-bold">#{prop.id.toString().padStart(4, '0')}</span>
+                            {prop.bedrooms && <><span className="w-1 h-1 rounded-full bg-slate-300" /> {prop.bedrooms} BHK</>}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors mb-0.5">{prop.title}</p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-                          #{prop.id} {prop.bedrooms && <><div className="w-1 h-1 rounded-full bg-slate-300" /> {prop.bedrooms} BHK</>}
-                        </p>
+                    </td>
+                    <td className="px-6 py-4 hidden md:table-cell">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-50 border border-slate-100 text-slate-500 group-hover:bg-primary/5 group-hover:text-primary group-hover:border-primary/10 transition-all">
+                        {prop.propertyType}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 hidden lg:table-cell">
+                      <div className="flex items-center gap-1.5 text-slate-500">
+                        <MapPin size={12} className="text-slate-300" />
+                        <span className="text-[11px] font-medium">{prop.city}</span>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-5">
-                    <Badge variant={typeVariants[prop.propertyType]}>
-                      {prop.propertyType}
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-2">
-                      <MapPin size={10} className="text-primary/50" />
-                      <span className="text-xs font-bold text-slate-600">{prop.city}</span>
-                    </div>
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{prop.area}</p>
-                  </td>
-                  <td className="px-6 py-5 tabular-nums">
-                    <div className="font-bold text-slate-900 text-sm">{prop.price}</div>
-                    <div className="text-[8px] text-emerald-600 font-bold uppercase tracking-[0.1em] mt-1 flex items-center gap-1">
-                      <TrendingUp size={8} /> Verified
-                    </div>
-                  </td>
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[8px] font-bold">
-                        {prop.uploadedBy ? prop.uploadedBy.split(' ').map(n => n[0]).join('') : 'U'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <p className="font-bold text-slate-900 tabular-nums">{prop.price}</p>
+                    </td>
+                    <td className="px-6 py-4 hidden sm:table-cell">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center text-[10px] font-bold">
+                          {prop.uploadedBy ? prop.uploadedBy.split(' ').map(n => n[0]).join('') : 'U'}
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-700 leading-none">{prop.uploadedBy}</p>
+                          <p className="text-[9px] text-slate-400 mt-1 font-bold">{prop.date}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-xs font-bold text-slate-700 leading-none">{prop.uploadedBy}</p>
-                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1">{prop.date}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 text-center">
-                    <Badge variant={
-                      prop.status?.toLowerCase() === 'verified' ? 'green' :
-                        prop.status?.toLowerCase() === 'processing' ? 'amber' :
-                          prop.status?.toLowerCase() === 'new' ? 'blue' :
-                            prop.status?.toLowerCase() === 'rejected' ? 'red' :
-                              'slate'
-                    } className="text-[8px] font-bold uppercase tracking-widest px-3 py-1 shadow-sm">
-                      {prop.status}
-                    </Badge>
-                  </td>
-                  <td>
-                    <div className="flex items-center justify-end gap-1.5 opacity-100 transition-opacity">
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${prop.status?.toLowerCase() === 'verified' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        prop.status?.toLowerCase() === 'processing' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                          prop.status?.toLowerCase() === 'rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                            'bg-slate-50 text-slate-500 border-slate-100'
+                        }`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${prop.status?.toLowerCase() === 'verified' ? 'bg-emerald-500' :
+                          prop.status?.toLowerCase() === 'processing' ? 'bg-amber-500' :
+                            prop.status?.toLowerCase() === 'rejected' ? 'bg-rose-500' :
+                              'bg-slate-300'
+                          }`} />
+                        {prop.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => navigate(`/properties/${prop.id}`)}
-                        className="btn-action btn-action-view"
+                        className="p-2 rounded-xl btn-action-view shadow-sm"
                         title="View Details"
                       >
-                        <Eye size={14} />
+                        <Eye size={13} />
                       </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {paginated.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="text-center py-20">
-                    <div className="flex flex-col items-center justify-center text-slate-400">
-                      <Building2 size={32} className="mb-4 opacity-20" />
-                      <p className="text-xs font-bold uppercase tracking-widest">No property listings found</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
+                    </td>
+                  </tr>
+                )
+                ))}
             </tbody>
           </table>
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border">
-          <p className="text-xs text-slate-500">
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-50/30 border-t border-slate-100">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
           </p>
           <div className="flex items-center gap-1">
             <button
               onClick={() => dispatch(setPage(currentPage - 1))}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 disabled:opacity-30 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
             >
               <ChevronLeft size={14} />
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-              <button
-                key={p}
-                onClick={() => dispatch(setPage(p))}
-                className={`w-7 h-7 rounded-md text-xs font-medium transition-colors ${p === currentPage ? 'bg-primary text-white' : 'hover:bg-slate-100 text-slate-600'}`}
-              >
-                {p}
-              </button>
-            ))}
+
+            <div className="flex items-center gap-1 mx-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, currentPage - 2), Math.min(totalPages, currentPage + 1)).map(p => (
+                <button
+                  key={p}
+                  onClick={() => dispatch(setPage(p))}
+                  className={`w-8 h-8 rounded-md text-[10px] font-bold transition-all shadow-sm border ${p === currentPage ? 'bg-primary border-primary text-white' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
             <button
               onClick={() => dispatch(setPage(currentPage + 1))}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 disabled:opacity-30 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
             >
               <ChevronRight size={14} />
             </button>
           </div>
         </div>
       </div>
-
     </div>
   );
 }
+

@@ -20,16 +20,16 @@ export default function DeleteModel({ isOpen, onClose, onConfirm, itemType = '',
                     </div>
                 )}
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 mt-4">
+                <div className="flex justify-end gap-3 pt-6 border-t border-slate-100">
                     <button
                         onClick={onClose}
-                        className="px-5 py-2.5 border border-border bg-white rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest hover:bg-slate-50 transition-all"
+                        className="px-5 py-2.5 border border-slate-200 bg-white rounded-md text-[10px] font-bold text-slate-500 uppercase tracking-wider hover:bg-slate-50 transition-all"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={onConfirm}
-                        className="px-5 py-2.5 bg-red-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all active:scale-95"
+                        className="px-5 py-2.5 bg-rose-500 text-white rounded-md text-[10px] font-bold uppercase tracking-wider hover:bg-rose-600 shadow-sm transition-all active:scale-95"
                     >
                         Delete
                     </button>

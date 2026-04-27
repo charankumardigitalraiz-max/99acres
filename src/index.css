@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -18,7 +18,7 @@
   }
 
   body {
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
     letter-spacing: -0.01em;
     background-color: #f8fafc;
     color: #0f172a;
@@ -37,12 +37,12 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     background: #cbd5e1;
-    border-radius: 99px;
+    border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -52,15 +52,19 @@
 
 @layer components {
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all duration-150 cursor-pointer;
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200 cursor-pointer;
   }
 
   .sidebar-link.active {
-    @apply bg-primary/10 text-primary border-r-0;
+    @apply bg-primary text-white shadow-md shadow-primary/20 scale-[1.02];
   }
 
   .stat-card {
-    @apply bg-white rounded-xl p-5 shadow-sm border border-slate-200 transition-all duration-200 hover:border-primary/20;
+    @apply bg-white rounded-lg p-6 shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-premium hover:border-primary/20;
+  }
+
+  .premium-border {
+    @apply border border-slate-100 shadow-sm hover:border-primary/30 transition-all;
   }
 
   .data-table {
@@ -85,19 +89,19 @@
   }
 
   .btn-action-view {
-    @apply bg-indigo-50 border-indigo-100 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-200;
+    @apply bg-indigo-50 border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all duration-300;
   }
 
   .btn-action-edit {
-    @apply bg-amber-50 border-amber-100 text-amber-600 hover:bg-amber-100 hover:border-amber-200;
+    @apply bg-amber-50 border-amber-100 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-300;
   }
 
   .btn-action-approve {
-    @apply bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100 hover:border-emerald-200;
+    @apply bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all duration-300;
   }
 
   .btn-action-reject {
-    @apply bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100 hover:border-rose-200;
+    @apply bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-600 hover:text-white transition-all duration-300;
   }
 
   .data-table tbody tr {
@@ -172,11 +176,11 @@
   }
 
   .form-input {
-    @apply w-full px-5 py-3.5 bg-slate-50/80 border border-slate-200 rounded-xl text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 placeholder:text-slate-300 font-medium;
+    @apply w-full px-5 py-3.5 bg-slate-50/80 border border-slate-200 rounded-lg text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 placeholder:text-slate-300 font-medium;
   }
 
   .form-select {
-    @apply w-full px-5 py-3.5 bg-slate-50/80 border border-slate-200 rounded-xl text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 font-medium appearance-none cursor-pointer;
+    @apply w-full px-5 py-3.5 bg-slate-50/80 border border-slate-200 rounded-lg text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 font-medium appearance-none cursor-pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1.25rem center;
@@ -188,7 +192,7 @@
   }
 
   .search-input {
-    @apply w-full bg-slate-50/80 border border-slate-200 rounded-xl text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 placeholder:text-slate-300 font-medium;
+    @apply w-full bg-slate-50/80 border border-slate-200 rounded-lg text-sm transition-all outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 focus:bg-white text-slate-800 placeholder:text-slate-300 font-medium;
   }
 
   .section-title {
@@ -204,11 +208,11 @@
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden;
+    @apply bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden;
   }
 
   .card-header {
-    @apply flex items-center justify-between px-5 py-3.5 border-b border-border;
+    @apply flex items-center justify-between px-5 py-3.5 border-b border-slate-100;
   }
 
   .card-body {

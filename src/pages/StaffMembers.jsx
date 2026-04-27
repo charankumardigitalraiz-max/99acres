@@ -58,82 +58,80 @@ export default function StaffMembers() {
   };
 
   return (
-    <div className="space-y-8 pb-20">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="space-y-6 pb-20">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white px-6 py-4 rounded-lg border border-slate-200 shadow-sm gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
-            <span className="text-primary/80">Command Staff</span>
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-            <span>Personnel Registry</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Access Directory</h2>
+          <h2 className="text-xl font-semibold text-slate-900 leading-none">Access Directory</h2>
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">Manage administrative personnel and access levels</p>
         </div>
-        <button onClick={handleAddMember} className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
-          <UserPlus size={16} />
-          Authorize Staff
+        <button onClick={handleAddMember} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-md text-xs font-bold transition-all shadow-sm hover:opacity-90 active:scale-95">
+          <UserPlus size={16} />Authorize Staff
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="data-table">
+          <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200">
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Staff Member</th>
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Role</th>
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Status</th>
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Email Address</th>
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Joined Date</th>
-                <th className="px-8 py-5 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
+              <tr className="bg-slate-50/50 border-b border-slate-100">
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff Member</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Joined Date</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {members.map((member) => (
-                <tr key={member.id} className="group hover:bg-slate-50/50 transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <Avatar name={member.name} size="md" className="ring-4 ring-slate-50 shadow-sm" />
+                <tr key={member.id} className="group hover:bg-slate-50/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">
+                        {member.name.substring(0, 1)}
+                      </div>
                       <div>
                         <p className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{member.name}</p>
-                        <p className="text-[10px] font-bold text-slate-400 font-mono tracking-widest mt-1 uppercase">Hash: {member.id}</p>
+                        <p className="text-[10px] font-bold text-slate-400 mt-0.5">ID: #USR-{member.id.toString().padStart(4, '0')}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 w-fit">
-                      <Shield size={12} className="text-primary/60" />
-                      <span className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">{member.role}</span>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 w-fit">
+                      <Shield size={12} className="text-slate-400" />
+                      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">{member.role}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <span className={`text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border shadow-sm ${member.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
+                  <td className="px-6 py-4">
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border ${member.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
                       {member.status}
                     </span>
                   </td>
-                  <td className="px-8 py-6">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-slate-600 font-medium">
-                      <Mail size={12} className="text-slate-300" />
+                      <Mail size={12} className="text-slate-400" />
                       <span className="text-xs">{member.email}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-slate-400 font-bold tabular-nums">
-                      <Calendar size={12} className="text-slate-200" />
-                      <span className="text-[10px] uppercase tracking-widest">{member.joined}</span>
+                      <Calendar size={12} />
+                      <span className="text-[10px] uppercase tracking-wider">{member.joined}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-6 text-right">
-                    <div className="flex items-center justify-end gap-2.5">
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleEditMember(member)}
-                        className="btn-action btn-action-edit"
+                        className="p-2 rounded-md bg-slate-100 hover:bg-primary/10 hover:text-primary text-slate-500 transition-all"
                         title="Edit"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => handleDeleteMember(member)}
-                        className="btn-action btn-action-reject"
+                        className="p-2 rounded-md bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 transition-all"
                         title="Delete"
                       >
                         <Trash2 size={14} />
@@ -149,15 +147,15 @@ export default function StaffMembers() {
 
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalMode === 'add' ? 'Add Staff Member' : 'Edit Staff Member'} size="md">
-        <form onSubmit={handleSave} className="space-y-6">
+        <form onSubmit={handleSave} className="space-y-5">
           <div>
-            <label className="form-label">Full Name</label>
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Full Name</label>
             <input
               type="text"
               required
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="form-input"
+              className="w-full px-4 py-2.5 rounded-md border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none text-sm font-medium"
               placeholder="Enter full name"
             />
           </div>
@@ -178,20 +176,20 @@ export default function StaffMembers() {
             />
           </div>
           <div>
-            <label className="form-label">Email Address</label>
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Email Address</label>
             <input
               type="email"
               required
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
-              className="form-input"
+              className="w-full px-4 py-2.5 rounded-md border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none text-sm font-medium"
               placeholder="email@example.com"
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100">
-            <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-slate-200 bg-white rounded-lg text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-all">Cancel</button>
-            <button type="submit" className="px-6 py-3 bg-slate-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-md active:scale-95">
+          <div className="flex justify-end gap-3 pt-6 border-t border-slate-100">
+            <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 border border-slate-200 bg-white rounded-md text-xs font-bold text-slate-500 hover:bg-slate-50 transition-all">Cancel</button>
+            <button type="submit" className="px-4 py-2 bg-primary text-white rounded-md text-xs font-bold transition-all shadow-sm hover:opacity-90 active:scale-95">
               {modalMode === 'add' ? 'Add Member' : 'Save Changes'}
             </button>
           </div>

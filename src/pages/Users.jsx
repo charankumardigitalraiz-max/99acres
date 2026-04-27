@@ -50,55 +50,51 @@ export default function Users() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-20">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white px-6 py-4 rounded-lg border border-slate-200 shadow-sm gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5">
-            <span>Admin</span>
-            <div className="w-1 h-1 rounded-full bg-slate-300" />
-            <span className="text-primary/80">User Management</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">{role ? role.toUpperCase() : 'ALL'} CUSTOMERS</h2>
+          <h2 className="text-xl font-semibold text-slate-900 leading-none">{role ? role.toUpperCase() : 'ALL'} PERSONNEL</h2>
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">Manage and monitor platform user base and activity streams</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:shadow-md transition-all active:scale-95 shadow-sm">
+        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-md text-[10px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
           <Download size={14} className="text-primary" /> Export Data
         </button>
       </div>
 
-      {/* Premium KPI Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Total Users', value: users.length, icon: UsersIcon, color: 'slate' },
-          { label: 'Active Users', value: users.filter(u => u.status === 'Active').length, icon: Activity, color: 'emerald' },
-          { label: 'Growth', value: '+12%', icon: TrendingUp, color: 'primary' },
-          { label: 'Suspended Users', value: users.filter(u => u.status === 'Suspended').length, icon: UserX, iconColor: 'rose' },
+          { label: 'Total Users', value: users.length, icon: UsersIcon, color: 'text-primary', bg: 'bg-primary/5' },
+          { label: 'Active Status', value: users.filter(u => u.status === 'Active').length, icon: Activity, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+          { label: 'Growth Vector', value: '+12%', icon: TrendingUp, color: 'text-blue-500', bg: 'bg-blue-50' },
+          { label: 'Suspended', value: users.filter(u => u.status === 'Suspended').length, icon: UserX, color: 'text-rose-500', bg: 'bg-rose-50' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-pointer">
-            <div className={`w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center text-${s.iconColor ? s.iconColor + '-500' : 'slate-500'} mb-4 group-hover:scale-110 transition-transform`}>
-              <s.icon size={16} className='text-primary' />
+          <div key={s.label} className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm group hover:border-primary/30 transition-all cursor-default">
+            <div className={`w-10 h-10 rounded-md ${s.bg} ${s.color} border border-slate-100 flex items-center justify-center mb-4 transition-transform group-hover:scale-110`}>
+              <s.icon size={18} />
             </div>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{s.label}</p>
-            <p className="text-xl font-bold text-slate-900 tabular-nums leading-none">{s.value}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">{s.label}</p>
+            <p className="text-2xl font-bold text-slate-900 leading-none tabular-nums">{s.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Modern Filter Interface */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-wrap gap-4 items-center">
+      {/* Filter Interface */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-4 flex flex-wrap gap-4 items-center">
         <div className="relative flex-1 min-w-[280px]">
           <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
-            className="search-input pl-11 pr-4 py-2.5 text-xs"
-            placeholder="Search by name, email or city..."
+            className="w-full pl-11 pr-4 py-2.5 text-sm border border-slate-200 rounded-md outline-none focus:border-primary transition-all bg-slate-50/30 font-medium"
+            placeholder="Search by name, email or location..."
             value={searchQuery}
             onChange={e => dispatch(setSearch(e.target.value))}
           />
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {isSellerOrAgent && (
-            <div className="w-40">
+            <div className="w-44">
               <Select
                 value={roleFilter}
                 onChange={e => dispatch(setRoleFilter(e.target.value))}
@@ -108,7 +104,7 @@ export default function Users() {
             </div>
           )}
 
-          <div className="w-40">
+          <div className="w-44">
             <Select
               value={statusFilter}
               onChange={e => dispatch(setStatusFilter(e.target.value))}
@@ -119,131 +115,108 @@ export default function Users() {
         </div>
       </div>
 
-      {/* Enhanced Intelligence Grid Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      {/* Table Section */}
+      <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Contact</th>
-                <th>Location</th>
-                <th>Role</th>
-                <th style={{ display: roleFilter === "Buyer" ? 'none' : 'table-cell' }}>Properties</th>
-                <th>Joined</th>
-                <th className="text-center">Status</th>
-                <th className="text-right">Actions</th>
+              <tr className="bg-slate-50/30 border-b border-slate-50">
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Reference</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Identity</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Interface</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Location</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Designation</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider" style={{ display: roleFilter === "Buyer" ? 'none' : 'table-cell' }}>Assets</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Registry Date</th>
+                <th className="px-6 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-[10px] font-bold text-slate-400 uppercase tracking-wider">Operations</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {paginated.map(user => (
-                <tr key={user.id}>
-                  <td>
-                    <span className="text-[10px] font-bold text-slate-400 tabular-nums">#{user.id.toString().padStart(4, '0')}</span>
+                <tr key={user.id} className="group hover:bg-slate-50/30 transition-all">
+                  <td className="px-6 py-4">
+                    <span className="text-[10px] font-bold text-slate-300 tabular-nums">#{user.id.toString().padStart(4, '0')}</span>
                   </td>
-                  <td>
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <Avatar initials={user.avatar} size="sm" className="shadow-sm border border-white ring-1 ring-slate-100" />
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border-2 border-white ${user.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                      <div className="w-9 h-9 rounded-full bg-slate-50 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
+                        <Avatar initials={user.avatar} size="sm" className="w-full h-full" />
                       </div>
                       <div>
-                        <p className="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors leading-none">{user.name}</p>
-                        <p className="text-[9px] text-slate-400 font-bold tracking-tight mt-1">{user.email}</p>
+                        <p className="text-[13px] font-bold text-slate-700 leading-none group-hover:text-primary transition-colors">{user.name}</p>
+                        <p className="text-[11px] text-slate-400 mt-1.5 font-medium">{user.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-2">
-                      <Phone size={10} className="text-primary/50" />
-                      <span className="text-[11px] font-bold text-slate-600">{user.phone}</span>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 text-slate-500">
+                      <div className="w-6 h-6 rounded-md bg-slate-50 flex items-center justify-center">
+                        <Phone size={12} className="text-slate-300" />
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider tabular-nums">{user.phone}</span>
                     </div>
                   </td>
-                  <td>
-                    <div className="flex items-center gap-2">
-                      <MapPin size={10} className="text-primary/50" />
-                      <span className="text-xs font-bold text-slate-600">{user.city}</span>
-                    </div>
+                  <td className="px-6 py-4">
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{user.city}</span>
                   </td>
-                  <td className="px-6 py-5 text-center">
-                    <span className={`text-[8px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border shadow-sm ${usertypeBadge(user.role)}`}>
+                  <td className="px-6 py-4">
+                    <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md border ${usertypeBadge(user.role)}`}>
                       {user.role}
                     </span>
                   </td>
                   <td
-                    className="px-6 py-5 text-center"
+                    className="px-6 py-4"
                     style={{ display: roleFilter === "Buyer" ? 'none' : 'table-cell' }}
                   >
-                    <div className="flex items-center justify-center gap-1.5">
-                      <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-bold text-slate-700 shadow-inner">
-                        {user.properties}
-                      </div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Properties</span>
+                    <div className="flex items-center gap-2 font-bold text-slate-600">
+                      <Building2 size={14} className="text-slate-300" />
+                      <span className="text-[13px] tabular-nums">{user.properties}</span>
                     </div>
                   </td>
-                  <td>
-                    <p className="text-[10px] font-bold text-slate-500 tabular-nums">{user.joined}</p>
+                  <td className="px-6 py-4">
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider tabular-nums">{user.joined}</span>
                   </td>
-                  <td className="px-6 py-5 text-center">
-                    <Badge variant={user.status === 'Active' ? 'green' : user.status === 'Suspended' ? 'red' : 'amber'} className="text-[8px] font-bold uppercase tracking-widest px-3 py-1 shadow-sm">
+                  <td className="px-6 py-4 text-center">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border shadow-sm ${user.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : user.status === 'Suspended' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                      <div className={`w-1 h-1 rounded-full ${user.status === 'Active' ? 'bg-emerald-500' : user.status === 'Suspended' ? 'bg-rose-500' : 'bg-amber-500'}`} />
                       {user.status}
-                    </Badge>
+                    </span>
                   </td>
-                  <td className="px-6 py-5 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => navigate(`/customers/details/${user.id}`)}
-                        className="btn-action btn-action-view"
-                        title="View Details"
+                        className="p-2 rounded-xl btn-action-view shadow-sm"
+                        title="View Protocol"
                       >
                         <Eye size={14} />
                       </button>
-                      {user.status !== 'Suspended' ? (
-                        <button
-                          onClick={() => dispatch(updateUserStatus({ id: user.id, status: 'Suspended' }))}
-                          className="btn-action btn-action-reject"
-                          title="Suspend User"
-                        >
-                          <XCircle size={14} />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => dispatch(updateUserStatus({ id: user.id, status: 'Active' }))}
-                          className="btn-action btn-action-approve"
-                          title="Activate User"
-                        >
-                          <CheckCircle size={14} />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => dispatch(updateUserStatus({ id: user.id, status: user.status === 'Suspended' ? 'Active' : 'Suspended' }))}
+                        className={`w-8 h-8 rounded-md transition-all flex items-center justify-center border ${user.status === 'Suspended' ? 'bg-emerald-50 text-emerald-400 border-emerald-100 hover:bg-emerald-500 hover:text-white' : 'bg-rose-50 text-rose-400 border-rose-100 hover:bg-rose-500 hover:text-white'}`}
+                        title={user.status === 'Suspended' ? 'Authorize' : 'Restrict'}
+                      >
+                        {user.status === 'Suspended' ? <CheckCircle size={14} /> : <XCircle size={14} />}
+                      </button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {paginated.length === 0 && (
-                <tr>
-                  <td colSpan={9} className="text-center py-20">
-                    <div className="flex flex-col items-center justify-center text-slate-400">
-                      <UsersIcon size={32} className="mb-4 opacity-20" />
-                      <p className="text-xs font-bold uppercase tracking-widest">No Users Found</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border">
-          <p className="text-xs text-slate-500">
-            Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length}
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-50/30 border-t border-slate-100">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Showing {Math.min((currentPage - 1) * pageSize + 1, filtered.length)}–{Math.min(currentPage * pageSize, filtered.length)} <span className="text-slate-300 mx-1">/</span> {filtered.length} Records
           </p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => dispatch(setPage(currentPage - 1))}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="w-8 h-8 rounded-md flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 disabled:opacity-30 transition-all"
             >
               <ChevronLeft size={14} />
             </button>
@@ -251,7 +224,7 @@ export default function Users() {
               <button
                 key={p}
                 onClick={() => dispatch(setPage(p))}
-                className={`w-7 h-7 rounded-md text-xs font-medium transition-colors ${p === currentPage ? 'bg-primary text-white' : 'hover:bg-slate-100 text-slate-600'}`}
+                className={`w-8 h-8 rounded-md text-[10px] font-bold uppercase transition-all border ${p === currentPage ? 'bg-primary text-white border-primary shadow-md shadow-primary/20' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}
               >
                 {p}
               </button>
@@ -259,7 +232,7 @@ export default function Users() {
             <button
               onClick={() => dispatch(setPage(currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="w-8 h-8 rounded-md flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:bg-slate-50 disabled:opacity-30 transition-all"
             >
               <ChevronRight size={14} />
             </button>
@@ -268,21 +241,25 @@ export default function Users() {
       </div>
 
       {/* User Detail Modal */}
-      <Modal isOpen={!!viewUser} onClose={() => setViewUser(null)} title="User Details" size="md">
+      <Modal isOpen={!!viewUser} onClose={() => setViewUser(null)} title="Personnel Dossier" size="md">
         {viewUser && (
           <div className="space-y-6">
             {/* 1. Header Section */}
-            <div className="flex items-start gap-4 pb-4 border-b border-border">
-              <Avatar initials={viewUser.avatar} size="xl" />
+            <div className="flex items-start gap-5 pb-6 border-b border-slate-100">
+              <div className="w-20 h-20 rounded-full bg-slate-50 border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
+                <Avatar initials={viewUser.avatar} size="xl" className="w-full h-full" />
+              </div>
               <div className="flex-1 mt-1">
-                <p className="text-lg font-bold text-slate-800 leading-tight">{viewUser.name}</p>
-                <div className="flex items-center gap-1.5 mt-1 text-slate-500">
-                  <Mail size={12} />
-                  <p className="text-xs">{viewUser.email}</p>
+                <p className="text-lg font-bold text-slate-900 leading-tight">{viewUser.name}</p>
+                <div className="flex items-center gap-1.5 mt-1.5 text-slate-400">
+                  <Mail size={12} className="text-primary/60" />
+                  <p className="text-[11px] font-medium uppercase tracking-wider">{viewUser.email}</p>
                 </div>
-                <div className="flex items-center gap-2 mt-3">
-                  <Badge>{viewUser.status}</Badge>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-border/60">
+                <div className="flex items-center gap-2 mt-4">
+                  <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border shadow-sm ${viewUser.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
+                    {viewUser.status}
+                  </span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 px-2 py-0.5 rounded-md border border-slate-100">
                     {viewUser.role}
                   </span>
                 </div>
@@ -290,105 +267,74 @@ export default function Users() {
             </div>
 
             {/* 2. Key Metrics */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-slate-50 rounded-xl p-3 border border-border/60 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-white border border-border/50 flex items-center justify-center text-slate-400 shadow-sm">
-                  <Calendar size={14} />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-50/50 rounded-lg p-4 border border-slate-100 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-md bg-white border border-slate-100 flex items-center justify-center text-slate-300 shadow-sm">
+                  <Calendar size={16} />
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Joined Date</p>
-                  <p className="text-sm font-semibold text-slate-800">{viewUser.joined}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Registry Date</p>
+                  <p className="text-sm font-bold text-slate-700 mt-0.5">{viewUser.joined}</p>
                 </div>
               </div>
-              <div className="bg-slate-50 rounded-xl p-3 border border-border/60 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-white border border-border/50 flex items-center justify-center text-slate-400 shadow-sm">
-                  <Building2 size={14} />
+              <div className="bg-slate-50/50 rounded-lg p-4 border border-slate-100 flex items-center gap-4">
+                <div className="w-10 h-10 rounded-md bg-white border border-slate-100 flex items-center justify-center text-slate-300 shadow-sm">
+                  <Building2 size={16} />
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Listed Properties</p>
-                  <p className="text-sm font-semibold text-slate-800">{viewUser.properties}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Asset Count</p>
+                  <p className="text-sm font-bold text-slate-700 mt-0.5">{viewUser.properties} Units</p>
                 </div>
               </div>
             </div>
 
-            {/* 3. Contact Numbers */}
+            {/* 3. Contact Matrix */}
             <div>
-              <h4 className="text-xs font-bold text-slate-800 mb-2 border-b border-border pb-1.5 flex items-center gap-1.5">
-                <Phone size={13} className="text-slate-400" /> Contact Numbers
+              <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Signal Links
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                <div className="flex flex-col gap-0.5">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Primary Mobile</p>
-                  <p className="text-xs font-medium text-slate-700 bg-slate-50 p-2 rounded-lg border border-border/40 inline-block w-full">{viewUser.phone}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-3 bg-slate-50/30 rounded-md border border-slate-100">
+                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">Primary Link</p>
+                  <p className="text-xs font-bold text-slate-700 tabular-nums">{viewUser.phone}</p>
                 </div>
                 {viewUser.altPhone && (
-                  <div className="flex flex-col gap-0.5">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Alt Mobile</p>
-                    <p className="text-xs font-medium text-slate-700 bg-slate-50 p-2 rounded-lg border border-border/40 inline-block w-full">{viewUser.altPhone}</p>
-                  </div>
-                )}
-                {viewUser.landline && (
-                  <div className="flex flex-col gap-0.5 sm:col-span-2">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Landline</p>
-                    <p className="text-xs font-medium text-slate-700 bg-slate-50 p-2 rounded-lg border border-border/40 inline-block w-full sm:w-1/2">{viewUser.landline}</p>
+                  <div className="p-3 bg-slate-50/30 rounded-md border border-slate-100">
+                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">Secondary Link</p>
+                    <p className="text-xs font-bold text-slate-700 tabular-nums">{viewUser.altPhone}</p>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* 4. Complete Address */}
+            {/* 4. Geospatial Data */}
             {viewUser.address && (
               <div>
-                <h4 className="text-xs font-bold text-slate-800 mb-2 border-b border-border pb-1.5 flex items-center gap-1.5">
-                  <MapPin size={13} className="text-slate-400" /> Address Location
+                <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Geospatial Location
                 </h4>
-                <div className="bg-slate-50 rounded-xl p-3.5 border border-border/60 mt-3">
-                  <div className="flex gap-2.5 items-start">
-                    <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm border border-border/40 text-primary">
-                      <MapPin size={12} />
+                <div className="bg-slate-50/50 rounded-lg p-4 border border-slate-100">
+                  <div className="flex gap-4 items-start">
+                    <div className="w-9 h-9 rounded-md bg-white flex items-center justify-center flex-shrink-0 shadow-sm border border-slate-100 text-primary/60">
+                      <MapPin size={16} />
                     </div>
-                    <div className="space-y-1 mt-0.5">
-                      <div className="flex gap-2 text-xs font-bold text-slate-700">
+                    <div className="space-y-1.5">
+                      <div className="flex gap-2 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                         <span>{viewUser.address.city}</span>
-                        <span className="text-slate-300">•</span>
+                        <span className="text-slate-200">/</span>
                         <span>{viewUser.address.location}</span>
                       </div>
-                      <p className="text-[11px] text-slate-500 leading-relaxed font-medium">{viewUser.address.fullAddress}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed font-medium">{viewUser.address.fullAddress}</p>
                     </div>
                   </div>
-                </div>
-              </div>
-            )}
-
-            {/* 5. User Activity Timeline */}
-            {viewUser.activity && viewUser.activity.length > 0 && (
-              <div>
-                <h4 className="text-xs font-bold text-slate-800 mb-4 border-b border-border pb-1.5 flex items-center gap-1.5">
-                  <Activity size={13} className="text-slate-400" /> Activity History
-                </h4>
-                <div className="space-y-4 px-2 max-h-40 overflow-y-auto">
-                  {viewUser.activity.map((act, index) => (
-                    <div key={index} className="flex gap-3">
-                      <div className="flex flex-col items-center">
-                        <div className="w-2 h-2 p-1.5 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center z-10">
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full" />
-                        </div>
-                        {index < viewUser.activity.length - 1 && <div className="w-px h-full bg-border -mt-1 -mb-3" />}
-                      </div>
-                      <div className="-mt-1 flex-1 pb-2">
-                        <p className="text-[11px] font-bold text-slate-700">{act.action}</p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5 shadow-sm">{act.time}</p>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             )}
 
             {/* Actions Footer */}
-            <div className="flex justify-end gap-2 pt-3 border-t border-border mt-2">
-              <button onClick={() => setViewUser(null)} className="btn-secondary text-xs px-4">Cancel</button>
-              <button className="btn-primary text-xs px-4 shadow-md">Message User</button>
+            <div className="flex justify-end gap-3 pt-6 border-t border-slate-100">
+              <button onClick={() => setViewUser(null)} className="px-5 py-2.5 border border-slate-200 bg-white rounded-md text-[10px] font-bold text-slate-500 uppercase tracking-wider hover:bg-slate-50 transition-all">Dismiss</button>
+              <button className="px-5 py-2.5 bg-slate-900 text-white rounded-md text-[10px] font-bold uppercase tracking-wider hover:bg-primary transition-all shadow-md active:scale-95">Initiate Signal</button>
             </div>
           </div>
         )}
